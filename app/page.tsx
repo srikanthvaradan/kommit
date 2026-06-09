@@ -167,13 +167,14 @@ export default function Home() {
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          padding: "8px 40px",
+          height: "64px",
+          padding: "0 40px",
           borderBottom: "1px solid #f0f0f0",
           backgroundColor: "#ffffff",
         }}
       >
         {/* Logo */}
-        <img src="/kommit_logo_light.svg" alt="KOMMIT" style={{height:'120px', width:'auto'}} />
+        <img src="/kommit_logo_light.svg" alt="KOMMIT" style={{height:'56px', width:'auto'}} />
 
         {/* Nav links */}
         <div style={{ display: "flex", alignItems: "center", gap: "24px" }}>
