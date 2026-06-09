@@ -4,9 +4,19 @@ import {
   StartTranscriptionJobCommand,
   GetTranscriptionJobCommand,
 } from "@aws-sdk/client-transcribe";
+import { S3Client } from "@aws-sdk/client-s3";
+import { GetObjectCommand } from "@aws-sdk/client-s3";
 import { uploadAudio, deleteAudio } from "@/lib/custodian";
 
 const transcribeClient = new TranscribeClient({
+  region: process.env.KOMMIT_TRANSCRIBE_REGION!,
+  credentials: {
+    accessKeyId: process.env.KOMMIT_AWS_KEY!,
+    secretAccessKey: process.env.KOMMIT_AWS_SECRET!,
+  },
+});
+
+const s3 = new S3Client({
   region: process.env.KOMMIT_TRANSCRIBE_REGION!,
   credentials: {
     accessKeyId: process.env.KOMMIT_AWS_KEY!,
@@ -67,36 +77,34 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         new GetTranscriptionJobCommand({ TranscriptionJobName: jobName })
       );
 
-      const job = jobResponse.TranscriptionJob;
-      if (!job) {
+      const job = jobResponse;
+      if (!job.TranscriptionJob) {
         throw new Error("Transcription job not found");
       }
 
-      const status = job.TranscriptionJobStatus;
+      const status = job.TranscriptionJob.TranscriptionJobStatus;
 
       if (status === "FAILED") {
         throw new Error(
-          "Transcription job failed: " + (job.FailureReason ?? "Unknown reason")
+          "Transcription job failed: " + (job.TranscriptionJob.FailureReason ?? "Unknown reason")
         );
       }
 
       if (status === "COMPLETED") {
-        const outputUri = job.Transcript?.TranscriptFileUri;
-        if (!outputUri) {
-          throw new Error("Transcript output URI is missing");
-        }
-
-        const transcriptResponse = await fetch(outputUri);
-        if (!transcriptResponse.ok) {
-          throw new Error(
-            "Failed to fetch transcript JSON: " + transcriptResponse.statusText
-          );
-        }
-
-        const transcriptJson = await transcriptResponse.json();
-        transcriptText =
-          transcriptJson?.results?.transcripts?.[0]?.transcript ?? "";
-        languageCode = job.LanguageCode ?? "";
+        const outputUri = job.TranscriptionJob?.Transcript?.TranscriptFileUri || "";
+        const uriPath = new URL(outputUri).pathname.slice(1);
+        const s3Key = uriPath.startsWith(process.env.KOMMIT_S3_BUCKET! + "/")
+          ? uriPath.slice((process.env.KOMMIT_S3_BUCKET! + "/").length)
+          : uriPath;
+        const s3Response = await s3.send(new GetObjectCommand({
+          Bucket: process.env.KOMMIT_S3_BUCKET!,
+          Key: s3Key
+        }));
+        const bodyText = await s3Response.Body?.transformToString();
+        if (!bodyText) throw new Error("Empty transcript response from S3");
+        const transcriptData = JSON.parse(bodyText);
+        transcriptText = transcriptData?.results?.transcripts?.[0]?.transcript || "";
+        languageCode = job.TranscriptionJob?.LanguageCode || "en-US";
         completed = true;
         break;
       }
