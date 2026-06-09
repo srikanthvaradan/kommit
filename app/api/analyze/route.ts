@@ -91,7 +91,8 @@ export async function POST(request: NextRequest): Promise<Response> {
           return;
         }
 
-        emit({ agent: "Bane", decision: "Location identified", detail: "Crisis resources mapped to your territory" });
+        const country = getCountryFromHeaders(request.headers);
+        emit({ agent: "Bane", decision: "Location identified", detail: "Crisis resources mapped to your territory", country });
 
         // ------------------------------------------------------------------
         // Step 1.5 — Bridge (Language Detection & Translation)
@@ -120,10 +121,10 @@ export async function POST(request: NextRequest): Promise<Response> {
 
         if (detectedLanguage !== "en") {
           processText = await translateToEnglish(text, detectedLanguage);
-          emit({ agent: "Agent Smith", decision: "translated", detail: `Detected ${detectedLanguage}, translated to English` });
+          emit({ agent: "Agent Smith", decision: "translated", detail: `Detected ${detectedLanguage}, translated to English`, language: detectedLanguage });
         }
 
-        emit({ agent: "Mike Ehrmantraut", decision: "Audio processed", detail: "No trace left. Voice deleted." });
+        emit({ agent: "Mike Ehrmantraut", decision: "Audio processed", detail: "Voice recording deleted from S3 after transcription. No audio data retained.", audioDeleted: true });
 
         // ------------------------------------------------------------------
         // Step 2 — Sensing
@@ -184,7 +185,7 @@ export async function POST(request: NextRequest): Promise<Response> {
 
         emit({ agent: "Thanos", truth: final.truth });
 
-        emit({ agent: "Ra's al Ghul", decision: "Commitment contract prepared", detail: "Your word will be binding." });
+        emit({ agent: "Ra's al Ghul", decision: "Commitment contract prepared", detail: "A $5 financial stake will be created via Stripe. If you follow through, it returns. If you don't, it stays with KOMMIT. Your word now has a cost." });
 
         // ------------------------------------------------------------------
         // Step 6.5 — Bridge (Back-Translation)
