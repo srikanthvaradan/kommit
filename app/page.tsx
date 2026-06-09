@@ -170,7 +170,7 @@ export default function Home() {
       >
         {/* Logo */}
         <div style={{display:'flex', alignItems:'center', gap:'10px'}}>
-          <img src="/logo_icon.png" alt="KOMMIT" style={{height:'36px', width:'36px', borderRadius:'6px', objectFit:'cover'}} />
+          <img src="/logo_icon.png" alt="KOMMIT" style={{height:'104px', width:'104px', borderRadius:'6px', objectFit:'cover'}} />
           <span style={{fontSize:'18px', fontWeight:'500', letterSpacing:'4px', color:'#1a1a1a'}}>KOMMIT</span>
         </div>
 
