@@ -167,40 +167,7 @@ export default function Home() {
         }}
       >
         {/* Logo */}
-        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-          <div
-            style={{
-              width: "30px",
-              height: "30px",
-              backgroundColor: "#545454",
-              borderRadius: "7px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <span
-              style={{
-                color: "#C4922A",
-                fontSize: "14px",
-                fontWeight: 700,
-                lineHeight: 1,
-              }}
-            >
-              K
-            </span>
-          </div>
-          <span
-            style={{
-              fontSize: "14px",
-              fontWeight: 500,
-              color: "#1a1a1a",
-              letterSpacing: "2px",
-            }}
-          >
-            OMMIT
-          </span>
-        </div>
+        <img src="/logo-light.svg" alt="KOMMIT" style={{height:'36px', width:'auto'}} />
 
         {/* Nav links */}
         <div style={{ display: "flex", alignItems: "center", gap: "24px" }}>
