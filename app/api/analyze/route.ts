@@ -124,7 +124,7 @@ export async function POST(request: NextRequest): Promise<Response> {
           emit({ agent: "Agent Smith", decision: "translated", detail: `Detected ${detectedLanguage}, translated to English`, language: detectedLanguage });
         }
 
-        emit({ agent: "Mike Ehrmantraut", decision: "Audio processed", detail: "Voice recording deleted from S3 after transcription. No audio data retained.", audioDeleted: true });
+        if (body.isVoice) emit({ agent: "Mike Ehrmantraut", decision: "Audio processed", detail: "Voice recording deleted from S3 after transcription. No audio data retained.", audioDeleted: true });
 
         // ------------------------------------------------------------------
         // Step 2 — Sensing

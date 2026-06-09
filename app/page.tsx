@@ -127,7 +127,7 @@ export default function Home() {
     const res = await fetch("/api/analyze", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ text: textToAnalyze, languageCode }),
+      body: JSON.stringify({ text: textToAnalyze, languageCode, isVoice: !!(languageCode) }),
     });
 
     const reader = res.body!.getReader();
@@ -199,11 +199,11 @@ export default function Home() {
       borderRadius: '6px',
       padding: '16px',
       marginTop: '8px',
-      borderLeft: '3px solid #C4922A',
+      borderLeft: '3px solid #ffde59',
     };
     const labelStyle: React.CSSProperties = {
       fontSize: '12px',
-      color: '#C4922A',
+      color: '#1a1a1a',
       fontWeight: 500,
       margin: '0 0 8px',
       letterSpacing: '1px',
@@ -230,7 +230,7 @@ export default function Home() {
                 <p style={{ fontSize: '13px', fontWeight: 700, color: '#1a1a1a', margin: '0 0 4px' }}>{src.title}</p>
                 {src.highlight && <p style={{ fontSize: '13px', color: '#555', margin: '0 0 4px', lineHeight: 1.5 }}>{src.highlight}</p>}
                 {src.url && (
-                  <a href={src.url} target="_blank" rel="noopener noreferrer" style={{ fontSize: '12px', color: '#C4922A', wordBreak: 'break-all' }}>{src.url}</a>
+                  <a href={src.url} target="_blank" rel="noopener noreferrer" style={{ fontSize: '12px', color: '#1a1a1a', wordBreak: 'break-all' }}>{src.url}</a>
                 )}
               </div>
             ))
@@ -288,7 +288,7 @@ export default function Home() {
         <div style={goldBorder}>
           <p style={labelStyle}>TYLER DURDEN</p>
           {p.weight && (
-            <p style={{ fontSize: '12px', fontWeight: 600, color: '#C4922A', margin: '0 0 8px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+            <p style={{ fontSize: '12px', fontWeight: 600, color: '#1a1a1a', margin: '0 0 8px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
               Weight: {p.weight}
             </p>
           )}
@@ -441,6 +441,8 @@ export default function Home() {
       }}
     >
       <style>{`
+        input::placeholder { color: #666; opacity: 1; }
+        input:focus::placeholder { opacity: 0; transition: opacity 0.2s; }
         @keyframes breathe {
           0%, 100% { transform: scale(1); }
           50% { transform: scale(1.05); }
@@ -458,7 +460,7 @@ export default function Home() {
           to { opacity: 1; transform: translateY(0); }
         }
         @keyframes o-pulse {
-          0%, 100% { background: #C4922A; }
+          0%, 100% { background: #ffde59; }
           50% { background: #E8B84B; }
         }
         @keyframes dot-pulse {
@@ -553,7 +555,7 @@ export default function Home() {
               </svg>
             </button>
             {input.trim() && (
-              <button onClick={() => handleSubmit()} style={{ background: '#C4922A', border: 'none', borderRadius: '50%', width: '32px', height: '32px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <button onClick={() => handleSubmit()} style={{ background: '#ffde59', border: 'none', borderRadius: '50%', width: '32px', height: '32px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: '#1a1a1a' }}>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
               </button>
             )}
@@ -566,9 +568,12 @@ export default function Home() {
             </p>
           )}
           {transcribing && (
-            <p style={{ fontSize: '14px', fontWeight: 400, color: '#8a8a8a', margin: '12px 0 0 0', textAlign: 'center', alignSelf: 'center' }}>
-              Transcribing…
-            </p>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', margin: '12px 0 0 0', justifyContent: 'center' }}>
+              <span style={{ fontSize: '13px', color: '#8a8a8a' }}>Transcribing</span>
+              {[0,1,2].map(i => (
+                <div key={i} style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#8a8a8a', animation: 'dot-pulse 1.4s ease-in-out infinite', animationDelay: `${i * 0.2}s` }} />
+              ))}
+            </div>
           )}
           {voiceError && (
             <p style={{ fontSize: '14px', fontWeight: 400, color: '#c0392b', margin: '12px 0 0 0', textAlign: 'center', alignSelf: 'center' }}>
@@ -587,7 +592,7 @@ export default function Home() {
               <div style={{display:'flex', gap:'8px', marginBottom:'16px'}}>
                 {[0,1,2].map(i => (
                   <div key={i} style={{
-                    width:'8px', height:'8px', borderRadius:'50%', background:'#C4922A',
+                    width:'8px', height:'8px', borderRadius:'50%', background:'#ffde59',
                     animation:'dot-pulse 1.4s ease-in-out infinite',
                     animationDelay:`${i * 0.2}s`
                   }}/>
@@ -634,7 +639,7 @@ export default function Home() {
                 return (
                   <div key={i} style={{display:'flex', gap:'12px', marginBottom:'0', position:'relative'}}>
                     <div style={{display:'flex', flexDirection:'column', alignItems:'center', width:'20px', flexShrink:0}}>
-                      <div style={{width:'20px', height:'20px', borderRadius:'50%', background:'#C4922A', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0}}>
+                      <div style={{width:'20px', height:'20px', borderRadius:'50%', background:'#ffde59', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0}}>
                         <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
                           <path d="M2 5l2 2 4-4" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                         </svg>
@@ -656,7 +661,7 @@ export default function Home() {
                           cursor: 'pointer',
                           padding: 0,
                           fontSize: '12px',
-                          color: '#C4922A',
+                          color: '#1a1a1a',
                           fontFamily: 'Inter, sans-serif',
                           textDecoration: 'underline',
                         }}
@@ -771,7 +776,7 @@ export default function Home() {
               {/* The truth */}
               <div
                 style={{
-                  border: "1px solid #C4922A",
+                  border: "1px solid #1a1a1a",
                   borderRadius: "8px",
                   padding: "24px 28px",
                   marginBottom: "24px",
@@ -783,7 +788,7 @@ export default function Home() {
                     margin: "0 0 12px 0",
                     fontSize: "14px",
                     fontWeight: 500,
-                    color: "#C4922A",
+                    color: "#1a1a1a",
                     textTransform: "uppercase",
                     letterSpacing: "2px",
                   }}
@@ -820,8 +825,8 @@ export default function Home() {
                 }
                 style={{
                   display: "block",
-                  backgroundColor: "#C4922A",
-                  color: "#fff",
+                  backgroundColor: "#ffde59",
+                  color: "#1a1a1a",
                   textDecoration: "none",
                   border: "none",
                   borderRadius: "6px",
