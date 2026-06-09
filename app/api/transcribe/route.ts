@@ -111,7 +111,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     }
 
     return NextResponse.json({ transcript: transcriptText, languageCode });
-  } catch (err: unknown) {
+  } catch (error: unknown) {
     if (key) {
       try {
         await deleteAudio(key);
@@ -120,8 +120,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       }
     }
 
-    const message =
-      err instanceof Error ? err.message : "An unknown error occurred";
-    return NextResponse.json({ error: message }, { status: 500 });
+    console.error("TRANSCRIBE ERROR:", error);
+    return NextResponse.json({ error: String(error) }, { status: 500 });
   }
 }
