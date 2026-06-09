@@ -32,6 +32,32 @@ export default function Home() {
   const [agentEvents, setAgentEvents] = useState<AgentEvent[]>([]);
   const [card, setCard] = useState<Card | null>(null);
   const [crisisResources, setCrisisResources] = useState<CrisisResources | null>(null);
+  const [recording, setRecording] = useState<boolean>(false);
+  const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
+
+  async function handleRecord() {
+    if (recording) {
+      mediaRecorder?.stop();
+      setRecording(false);
+      return;
+    }
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    const recorder = new MediaRecorder(stream);
+    const chunks: BlobPart[] = [];
+    recorder.ondataavailable = (e) => chunks.push(e.data);
+    recorder.onstop = async () => {
+      const blob = new Blob(chunks, { type: "audio/webm" });
+      const formData = new FormData();
+      formData.append("audio", blob, "recording.webm");
+      const res = await fetch("/api/transcribe", { method: "POST", body: formData });
+      const data = await res.json();
+      if (data.transcript) setInput(data.transcript);
+      stream.getTracks().forEach((t) => t.stop());
+    };
+    recorder.start();
+    setMediaRecorder(recorder);
+    setRecording(true);
+  }
 
   async function handleSubmit() {
     setStatus("processing");
@@ -150,24 +176,41 @@ export default function Home() {
           />
         </div>
 
-        <button
-          onClick={handleSubmit}
-          disabled={status === "processing"}
-          style={{
-            backgroundColor: status === "processing" ? "#aaa" : ACCENT,
-            color: "#fff",
-            border: "none",
-            borderRadius: "6px",
-            padding: "14px 32px",
-            fontSize: "1rem",
-            fontFamily: "Georgia, serif",
-            cursor: status === "processing" ? "not-allowed" : "pointer",
-            marginBottom: "32px",
-            letterSpacing: "0.02em",
-          }}
-        >
-          Find the truth
-        </button>
+        <div style={{ display: "flex", gap: "12px", marginBottom: "32px" }}>
+          <button
+            onClick={handleSubmit}
+            disabled={status === "processing"}
+            style={{
+              backgroundColor: status === "processing" ? "#aaa" : ACCENT,
+              color: "#fff",
+              border: "none",
+              borderRadius: "6px",
+              padding: "14px 32px",
+              fontSize: "1rem",
+              fontFamily: "Georgia, serif",
+              cursor: status === "processing" ? "not-allowed" : "pointer",
+              letterSpacing: "0.02em",
+            }}
+          >
+            Find the truth
+          </button>
+          <button
+            onClick={handleRecord}
+            style={{
+              backgroundColor: recording ? "#7a3a3a" : "#fff",
+              color: recording ? "#fff" : ACCENT,
+              border: `1.5px solid ${recording ? "#7a3a3a" : ACCENT}`,
+              borderRadius: "6px",
+              padding: "14px 32px",
+              fontSize: "1rem",
+              fontFamily: "Georgia, serif",
+              cursor: "pointer",
+              letterSpacing: "0.02em",
+            }}
+          >
+            {recording ? "Stop recording" : "🎤 Speak"}
+          </button>
+        </div>
 
         {/* Processing: agent events */}
         {status === "processing" && agentEvents.length > 0 && (

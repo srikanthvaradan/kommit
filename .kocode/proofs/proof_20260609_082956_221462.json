@@ -1,0 +1,21 @@
+{
+  "id": "20260609_082956_221391",
+  "version": "1.0.0",
+  "timestamp": "2026-06-09T08:29:56.221397",
+  "project": "kommit",
+  "task": "OBJECTIVE: Edit /Users/srini/Projects/kommit/app/page.tsx\n\nAdd voice recording capability. Keep all existing code exactly as is, just add these additions.\n\nAdd to state:\n- recording: boolean (default false)\n- mediaRecorder: MediaRecorder | null (default null)\n\nAdd handleRecord():\n1. If recording is true: stop \u2014 mediaRecorder?.stop(); setRecording(false); return.\n2. If recording is false: start \u2014\n   const stream = await navigator.mediaDevices.getUserMedia({ audio: true });\n   const recorder = new MediaRecorder(stream);\n   const chunks: BlobPart[] = [];\n   recorder.ondataavailable = (e) =&gt; chunks.push(e.data);\n   recorder.onstop = async () =&gt; {\n     const blob = new Blob(chunks, { type: &quot;audio/webm&quot; });\n     const formData = new FormData();\n     formData.append(&quot;audio&quot;, blob, &quot;recording.webm&quot;);\n     const res = await fetch(&quot;/api/transcribe&quot;, { method: &quot;POST&quot;, body: formData });\n     const data = await res.json();\n     if (data.transcript) setInput(data.transcript);\n     stream.getTracks().forEach(t =&gt; t.stop());\n   };\n   recorder.start();\n   setMediaRecorder(recorder);\n   setRecording(true);\n\nAdd a microphone button next to the submit button:\n- Label: recording ? &quot;Stop recording&quot; : &quot;\ud83c\udfa4 Speak&quot;\n- onClick: handleRecord\n- Style: same as submit button but secondary color\n\nFILES: /Users/srini/Projects/kommit/app/page.tsx\n\nACCEPTANCE CRITERIA:\nhandleRecord toggles recording state\nOn stop sends audio to /api/transcribe\nSets input to transcript on success\nMicrophone button renders next to submit\nNo TypeScript errors\n\nTEST: cd /Users/srini/Projects/kommit; npx tsc --noEmit\n\nDO NOT: change any existing logic\nDO NOT: use ast.parse",
+  "status": "completed",
+  "verified": true,
+  "files_changed": [
+    "/Users/srini/Projects/kommit/app/page.tsx"
+  ],
+  "lines_changed": 43,
+  "test_command": "cd /Users/srini/Projects/kommit; npx tsc --noEmit",
+  "test_output": "",
+  "elapsed_seconds": 19.7,
+  "why_context": null,
+  "model": "advanced",
+  "repo": "/Users/srini/Projects/kommit",
+  "agent": "KOCODE v1.0.0",
+  "commit_hash": null
+}
