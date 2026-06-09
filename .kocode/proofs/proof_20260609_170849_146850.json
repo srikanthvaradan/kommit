@@ -1,0 +1,21 @@
+{
+  "id": "20260609_170849_146789",
+  "version": "1.0.0",
+  "timestamp": "2026-06-09T17:08:49.146795",
+  "project": "kommit",
+  "task": "OBJECTIVE: Edit /Users/srini/Projects/kommit/app/page.tsx\n\nAdd AGENT_ROLES mapping and expandedAgents state. Add show/hide agents toggle.\n\nAdd near top of component after existing useState declarations:\nconst AGENT_ROLES: Record&lt;string, string&gt; = {\n  &#x27;Gus Fring&#x27;: &#x27;Safety Check&#x27;,\n  &#x27;Agent Smith&#x27;: &#x27;Translation&#x27;,\n  &#x27;Hannibal&#x27;: &#x27;Sentiment Analysis&#x27;,\n  &#x27;T-1000&#x27;: &#x27;Evidence Search&#x27;,\n  &#x27;Tyler Durden&#x27;: &#x27;Situation Analysis&#x27;,\n  &#x27;Joker&#x27;: &#x27;Challenge Analysis&#x27;,\n  &#x27;Thanos&#x27;: &#x27;Verdict&#x27;,\n  &#x27;Mike Ehrmantraut&#x27;: &#x27;Audio Processing&#x27;,\n  &#x27;Bane&#x27;: &#x27;Location Detection&#x27;,\n  &quot;Ra&#x27;s al Ghul&quot;: &#x27;Commitment Engine&#x27;\n};\nconst [expandedAgents, setExpandedAgents] = useState&lt;Set&lt;number&gt;&gt;(new Set());\n\nIn the agent timeline, replace:\n- Show functional name (AGENT_ROLES[name] || name) as the primary label in bold #1a1a1a\n- Keep current detail as summary below\n- Add &quot;show work&quot; link after summary that toggles expandedAgents for that index\n- When expanded: show character name in gold + full untruncated detail in a #f9f9f9 rounded box\n\nAdd show/hide agents toggle above the timeline. Default showAgents = false.\n\nFILES: /Users/srini/Projects/kommit/app/page.tsx\n\nACCEPTANCE CRITERIA:\nAGENT_ROLES mapping present\nexpandedAgents state present\nFunctional names shown as primary labels\nshow work toggle per agent\nshowAgents toggle above timeline\nNo TypeScript errors\n\nTEST: cd /Users/srini/Projects/kommit; npx tsc --noEmit\n\nDO NOT: change card display or submit logic\nDO NOT: use ast.parse",
+  "status": "completed",
+  "verified": true,
+  "files_changed": [
+    "/Users/srini/Projects/kommit/app/page.tsx"
+  ],
+  "lines_changed": 0,
+  "test_command": "cd /Users/srini/Projects/kommit; npx tsc --noEmit",
+  "test_output": "",
+  "elapsed_seconds": 7.3,
+  "why_context": null,
+  "model": "advanced",
+  "repo": "/Users/srini/Projects/kommit",
+  "agent": "KOCODE v1.0.0",
+  "commit_hash": null
+}
