@@ -75,7 +75,7 @@ export async function POST(request: NextRequest): Promise<Response> {
             ? "proceed"
             : "halt";
 
-        emit({ agent: "Gatekeeper", category, decision: gatekeeperDecision });
+        emit({ agent: "Gus Fring", category, decision: gatekeeperDecision });
 
         if (category === "crisis") {
           const country = getCountryFromHeaders(request.headers);
@@ -113,7 +113,7 @@ export async function POST(request: NextRequest): Promise<Response> {
 
         if (detectedLanguage !== "en") {
           processText = await translateToEnglish(text, detectedLanguage);
-          emit({ agent: "Bridge", decision: "translated", detail: `Detected ${detectedLanguage}, translated to English` });
+          emit({ agent: "Agent Smith", decision: "translated", detail: `Detected ${detectedLanguage}, translated to English` });
         }
 
         // ------------------------------------------------------------------
@@ -125,7 +125,7 @@ export async function POST(request: NextRequest): Promise<Response> {
         ]);
 
         emit({
-          agent: "Sensing",
+          agent: "Hannibal",
           sentiment: sentimentResult.sentiment,
           phrases: keyPhrases.slice(0, 4),
         });
@@ -136,7 +136,7 @@ export async function POST(request: NextRequest): Promise<Response> {
         const grounding = await groundSituation(keyPhrases, processText);
 
         emit({
-          agent: "Grounding",
+          agent: "T-1000",
           query: grounding.query,
           sources: grounding.sources.length,
           reformulated: grounding.reformulated,
@@ -152,7 +152,7 @@ export async function POST(request: NextRequest): Promise<Response> {
           grounding.sources
         );
 
-        emit({ agent: "Clarity", read: clarity.read });
+        emit({ agent: "Tyler Durden", read: clarity.read });
 
         // ------------------------------------------------------------------
         // Step 5 — Challenge
@@ -160,7 +160,7 @@ export async function POST(request: NextRequest): Promise<Response> {
         const challenge = await getChallenge(processText, clarity.read);
 
         emit({
-          agent: "Challenge",
+          agent: "Joker",
           avoided: challenge.avoided,
           question: challenge.question,
         });
@@ -170,7 +170,7 @@ export async function POST(request: NextRequest): Promise<Response> {
         // ------------------------------------------------------------------
         let final = await adjudicate(processText, clarity, challenge);
 
-        emit({ agent: "Adjudicator", truth: final.truth });
+        emit({ agent: "Thanos", truth: final.truth });
 
         // ------------------------------------------------------------------
         // Step 6.5 — Bridge (Back-Translation)
