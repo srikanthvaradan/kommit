@@ -214,8 +214,8 @@ export default function Home() {
           }}
         >
           {/* Logo */}
-          <div style={{display:'flex', justifyContent:'center', marginBottom:'48px', width:'100%'}}>
-            <img src="/logo_light.svg" alt="KOMMIT" style={{height:'64px', width:'auto', display:'block'}} />
+          <div style={{textAlign:'center', marginBottom:'48px'}}>
+            <span style={{fontSize:'48px', fontWeight:'300', letterSpacing:'12px', color:'#1a1a1a', fontFamily:'Inter,sans-serif'}}>KOMMIT</span>
           </div>
 
           {/* Pill input */}
