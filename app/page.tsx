@@ -53,6 +53,7 @@ export default function Home() {
       formData.append("audio", blob, "recording.webm");
       const res = await fetch("/api/transcribe", { method: "POST", body: formData });
       const data = await res.json();
+      console.log("TRANSCRIBE RESPONSE:", data);
       if (data.transcript) setInput(data.transcript);
       stream.getTracks().forEach((t) => t.stop());
       setTranscribing(false);
