@@ -181,7 +181,7 @@ export default function Home() {
           <a
             href="/dashboard"
             style={{
-              fontSize: "13px",
+              fontSize: "14px",
               fontWeight: 400,
               color: "#8a8a8a",
               textDecoration: "none",
@@ -193,7 +193,7 @@ export default function Home() {
           <a
             href="/login"
             style={{
-              fontSize: "13px",
+              fontSize: "14px",
               fontWeight: 400,
               color: "#8a8a8a",
               textDecoration: "none",
@@ -234,7 +234,7 @@ export default function Home() {
               onKeyDown={(e) => { if (e.key === 'Enter') handleSubmit(); }}
               style={{
                 flex: 1, border: 'none', background: 'transparent', color: '#fff',
-                fontSize: '14px', outline: 'none', fontFamily: 'Inter,sans-serif',
+                fontSize: '14px', outline: 'none', fontFamily: 'Inter, sans-serif',
                 textAlign: 'center',
               }}
               placeholder="What's weighing on you right now?"
@@ -271,7 +271,7 @@ export default function Home() {
           )}
 
           {/* Privacy note */}
-          <p style={{ fontSize: '12px', color: '#888', textAlign: 'center', marginTop: '12px', marginBottom: '40px' }}>
+          <p style={{ fontSize: '14px', color: '#888', textAlign: 'center', marginTop: '12px', marginBottom: '40px' }}>
             Private. Deleted after analysis.
           </p>
 
@@ -418,7 +418,7 @@ export default function Home() {
                 <p
                   style={{
                     margin: "0 0 12px 0",
-                    fontSize: "11px",
+                    fontSize: "14px",
                     fontWeight: 500,
                     color: "#9a9a9a",
                     textTransform: "uppercase",
@@ -445,7 +445,7 @@ export default function Home() {
                 <p
                   style={{
                     margin: "0 0 12px 0",
-                    fontSize: "11px",
+                    fontSize: "14px",
                     fontWeight: 500,
                     color: "#9a9a9a",
                     textTransform: "uppercase",
@@ -472,7 +472,7 @@ export default function Home() {
                 <p
                   style={{
                     margin: "0 0 12px 0",
-                    fontSize: "11px",
+                    fontSize: "14px",
                     fontWeight: 500,
                     color: "#C4922A",
                     textTransform: "uppercase",
