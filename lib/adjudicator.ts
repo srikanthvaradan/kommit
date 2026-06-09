@@ -51,9 +51,9 @@ export async function adjudicate(
 
     const response = await anthropic.messages.create({
       model: "claude-haiku-4-5-20251001",
-      max_tokens: 300,
+      max_tokens: 500,
       system:
-        "You are the final voice. Respond ONLY with valid JSON. No prose before or after. Each field must be under 40 words. Be brutal and direct.\n\nFormat:\n{\"truth\": \"one sentence — the hardest thing they need to hear\", \"commitment\": \"one specific action they can take today\", \"stake\": \"one phrase — what they risk by avoiding this\"}",
+        "You are the final voice. Respond ONLY with valid JSON. No prose before or after. Be specific to this exact situation — not generic advice.\n\nEach field: 2-3 sentences maximum. Direct. No softening.\n\nFormat:\n{\"truth\": \"2-3 sentences specific to their situation\", \"commitment\": \"1-2 sentences with a concrete specific action\", \"stake\": \"one sentence naming what they lose by avoiding this\"}",
       messages: [
         {
           role: "user",
