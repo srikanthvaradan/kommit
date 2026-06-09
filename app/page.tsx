@@ -233,184 +233,57 @@ export default function Home() {
           Speak or type. 10 agents. Zero judgment.
         </p>
 
-        {/* Speak button */}
-        <div style={{ position: "relative", marginBottom: "32px", alignSelf: "center" }}>
-          {/* Pulse ring */}
-          <div
-            style={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              width: "100px",
-              height: "100px",
-              borderRadius: "50%",
-              border: "1.5px solid #C4922A",
-              transform: "translate(-50%, -50%)",
-              animation: "ring 2.5s ease-out infinite",
-              pointerEvents: "none",
-            }}
-          />
-          {/* Button */}
-          <button
-            onClick={handleRecord}
-            style={{
-              width: "100px",
-              height: "100px",
-              borderRadius: "50%",
-              border: recording ? "2px solid #c0392b" : "1.5px solid #C4922A",
-              backgroundColor: "#ffffff",
-              cursor: "pointer",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "6px",
-              animation: "breathe 3s ease-in-out infinite",
-              position: "relative",
-              zIndex: 1,
-              padding: 0,
-            }}
-          >
-            <img src="/logo_icon.png" alt="Speak" style={{width:'60px',height:'60px',borderRadius:'50%',objectFit:'cover'}} />
-            <span style={{fontSize:'8px',letterSpacing:'2px',color:'#C4922A',fontWeight:500}}>SPEAK</span>
-          </button>
-        </div>
-
-        {/* Status text under button */}
-        {recording && (
-          <p
-            style={{
-              fontSize: "14px",
-              fontWeight: 400,
-              color: "#c0392b",
-              margin: "0 0 16px 0",
-              textAlign: "center",
-              alignSelf: "center",
-            }}
-          >
-            Recording… tap to stop
-          </p>
-        )}
-        {transcribing && (
-          <p
-            style={{
-              fontSize: "14px",
-              fontWeight: 400,
-              color: "#8a8a8a",
-              margin: "0 0 16px 0",
-              textAlign: "center",
-              alignSelf: "center",
-            }}
-          >
-            Transcribing…
-          </p>
-        )}
-        {voiceError && (
-          <p
-            style={{
-              fontSize: "14px",
-              fontWeight: 400,
-              color: "#c0392b",
-              margin: "0 0 16px 0",
-              textAlign: "center",
-              alignSelf: "center",
-            }}
-          >
-            {voiceError}
-          </p>
-        )}
-
-        {/* OR divider */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            width: "100%",
-            marginBottom: "24px",
-            gap: "12px",
-          }}
-        >
-          <div style={{ flex: 1, height: "1px", backgroundColor: "#e4e4e4" }} />
-          <span
-            style={{
-              fontSize: "14px",
-              fontWeight: 400,
-              color: "#8a8a8a",
-            }}
-          >
-            or
-          </span>
-          <div style={{ flex: 1, height: "1px", backgroundColor: "#e4e4e4" }} />
-        </div>
-
-        {/* Input box */}
-        <div
-          style={{
-            width: "100%",
-            border: "1px solid #e4e4e4",
-            borderRadius: "10px",
-            padding: "4px 4px 4px 18px",
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            backgroundColor: "#fff",
-            boxShadow: "0 1px 3px rgba(0,0,0,0.04)",
-            boxSizing: "border-box",
-            gap: "8px",
-            marginBottom: "12px",
-          }}
-        >
+        {/* Pill input */}
+        <div style={{
+          display: 'flex', alignItems: 'center', gap: '12px',
+          background: '#1a1a1a', borderRadius: '999px',
+          padding: '12px 16px 12px 20px', width: '100%', boxSizing: 'border-box',
+          marginBottom: '0',
+        }}>
           <input
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && !processing) handleSubmit();
+            onKeyDown={(e) => { if (e.key === 'Enter') handleSubmit(); }}
+            style={{
+              flex: 1, border: 'none', background: 'transparent', color: '#fff',
+              fontSize: '14px', outline: 'none', fontFamily: 'Inter,sans-serif',
             }}
             placeholder="What's on your mind..."
-            style={{
-              flex: 1,
-              border: "none",
-              outline: "none",
-              fontSize: "14px",
-              fontWeight: 400,
-              fontFamily: "Inter, sans-serif",
-              color: "#1a1a1a",
-              backgroundColor: "transparent",
-              padding: "12px 0",
-            }}
           />
-          <button
-            onClick={() => handleSubmit()}
-            disabled={processing}
-            style={{
-              width: "38px",
-              height: "38px",
-              borderRadius: "7px",
-              backgroundColor: processing ? "#d4a85a" : "#C4922A",
-              border: "none",
-              cursor: processing ? "not-allowed" : "pointer",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              flexShrink: 0,
-              color: "#fff",
-            }}
-          >
-            ↑
+          <button onClick={handleRecord} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px', display: 'flex', alignItems: 'center' }}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={recording ? '#c0392b' : '#888'} strokeWidth="1.5" strokeLinecap="round">
+              <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/>
+              <line x1="8" y1="23" x2="16" y2="23"/>
+            </svg>
           </button>
+          {input.trim() && (
+            <button onClick={() => handleSubmit()} style={{ background: '#C4922A', border: 'none', borderRadius: '50%', width: '32px', height: '32px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+            </button>
+          )}
         </div>
 
+        {/* Status text */}
+        {recording && (
+          <p style={{ fontSize: '14px', fontWeight: 400, color: '#c0392b', margin: '12px 0 0 0', textAlign: 'center', alignSelf: 'center' }}>
+            Recording… tap to stop
+          </p>
+        )}
+        {transcribing && (
+          <p style={{ fontSize: '14px', fontWeight: 400, color: '#8a8a8a', margin: '12px 0 0 0', textAlign: 'center', alignSelf: 'center' }}>
+            Transcribing…
+          </p>
+        )}
+        {voiceError && (
+          <p style={{ fontSize: '14px', fontWeight: 400, color: '#c0392b', margin: '12px 0 0 0', textAlign: 'center', alignSelf: 'center' }}>
+            {voiceError}
+          </p>
+        )}
+
         {/* Privacy note */}
-        <p
-          style={{
-            fontSize: "14px",
-            fontWeight: 400,
-            color: "#b0aaa0",
-            margin: "0 0 40px 0",
-            textAlign: "center",
-          }}
-        >
+        <p style={{ fontSize: '12px', color: '#888', textAlign: 'center', marginTop: '12px', marginBottom: '40px' }}>
           Private. Deleted after analysis.
         </p>
 
