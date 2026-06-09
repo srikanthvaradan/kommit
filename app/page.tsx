@@ -210,11 +210,11 @@ export default function Home() {
             maxWidth: "560px",
             display: "flex",
             flexDirection: "column",
-            alignItems: "flex-start",
+            alignItems: "center",
           }}
         >
           {/* Logo */}
-          <div style={{textAlign:'center', marginBottom:'48px'}}>
+          <div style={{textAlign:'center', marginBottom:'48px', width:'100%'}}>
             <span style={{fontSize:'48px', fontWeight:'300', letterSpacing:'12px', color:'#1a1a1a', fontFamily:'Inter,sans-serif'}}>KOMMIT</span>
           </div>
 
