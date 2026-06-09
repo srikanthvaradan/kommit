@@ -32,7 +32,10 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     const arrayBuffer = await audioFile.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 
-    key = "audio/" + Date.now() + ".webm";
+    const mimeType = audioFile.type || "audio/webm";
+    const mediaFormat = mimeType.includes("mp4") ? "mp4" : mimeType.includes("ogg") ? "ogg" : "webm";
+
+    key = "audio/" + Date.now() + "." + mediaFormat;
     await uploadAudio(buffer, key);
 
     const jobName = "kommit-" + Date.now();
@@ -42,7 +45,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         TranscriptionJobName: jobName,
         LanguageCode: undefined,
         IdentifyLanguage: true,
-        MediaFormat: "webm",
+        MediaFormat: mediaFormat,
         Media: {
           MediaFileUri:
             "s3://" + process.env.KOMMIT_S3_BUCKET! + "/" + key,
