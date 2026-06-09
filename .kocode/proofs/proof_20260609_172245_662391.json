@@ -1,0 +1,21 @@
+{
+  "id": "20260609_172245_662322",
+  "version": "1.0.0",
+  "timestamp": "2026-06-09T17:22:45.662328",
+  "project": "kommit",
+  "task": "OBJECTIVE: Edit /Users/srini/Projects/kommit/app/page.tsx\n\nUpdate the getAgentDetail function and show work expanded view to show rich information.\n\nUpdate the expanded detail section for each agent. When show work is clicked, show a rich detail box:\n\nFor T-1000: show search query, then each source as a block with title (bold), highlight text, and URL link\nFor Hannibal: show sentiment badge, all key phrases as pill tags, sentiment scores breakdown\nFor Tyler Durden: show full read text, weight label, full commitment text\nFor Joker: show full avoided text, reframe text in italic, and the question in bold\nFor Thanos: show full truth text\nFor Agent Smith: show source language detected and confirmation of translation\nFor Gus Fring: show category, decision, and safety confirmation\nFor Bane: show country detected and crisis resource details\nFor Mike Ehrmantraut: show audio deletion confirmation\nFor Ra&#x27;s al Ghul: show commitment preparation confirmation\n\nUse this structure for each expanded item:\n&lt;div style={{background:&#x27;#f9f9f9&#x27;, borderRadius:&#x27;6px&#x27;, padding:&#x27;16px&#x27;, marginTop:&#x27;8px&#x27;, borderLeft:&#x27;3px solid #C4922A&#x27;}}&gt;\n  &lt;p style={{fontSize:&#x27;12px&#x27;, color:&#x27;#C4922A&#x27;, fontWeight:500, margin:&#x27;0 0 8px&#x27;, letterSpacing:&#x27;1px&#x27;}}&gt;{characterName}&lt;/p&gt;\n  {/* rich content specific to each agent */}\n&lt;/div&gt;\n\nFILES: /Users/srini/Projects/kommit/app/page.tsx\n\nACCEPTANCE CRITERIA:\nT-1000 shows source titles, highlights, URLs\nHannibal shows phrases as pills and scores\nTyler Durden shows full texts\nJoker shows all three fields\nRich formatting with left gold border\nNo TypeScript errors\n\nTEST: cd /Users/srini/Projects/kommit; npx tsc --noEmit\n\nDO NOT: break card display or submit logic\nDO NOT: use ast.parse",
+  "status": "completed",
+  "verified": true,
+  "files_changed": [
+    "/Users/srini/Projects/kommit/app/page.tsx"
+  ],
+  "lines_changed": 192,
+  "test_command": "cd /Users/srini/Projects/kommit; npx tsc --noEmit",
+  "test_output": "",
+  "elapsed_seconds": 274.6,
+  "why_context": null,
+  "model": "advanced",
+  "repo": "/Users/srini/Projects/kommit",
+  "agent": "KOCODE v1.0.0",
+  "commit_hash": null
+}

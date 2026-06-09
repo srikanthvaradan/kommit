@@ -2,6 +2,18 @@
 
 import { useState, useRef } from "react";
 
+interface SourceDetail {
+  title: string;
+  highlight: string;
+  url: string;
+}
+
+interface SentimentScores {
+  positive?: number;
+  neutral?: number;
+  negative?: number;
+}
+
 interface AgentEvent {
   agent?: string;
   type?: string;
@@ -13,8 +25,17 @@ interface AgentEvent {
   category?: string;
   phrases?: string[];
   sources?: number;
+  sourceDetails?: SourceDetail[];
+  scores?: SentimentScores;
   read?: string;
   avoided?: string;
+  weight?: string;
+  commitment?: string;
+  reframe?: string;
+  question?: string;
+  language?: string;
+  country?: string;
+  crisisDetail?: string;
   [key: string]: unknown;
 }
 
@@ -171,18 +192,235 @@ export default function Home() {
     return (p.decision as string) || (p.detail as string) || '';
   };
 
-  const getAgentFullDetail = (p: AgentEvent): string => {
-    if (p.agent === 'Gus Fring') return `Input classified as ${p.category ?? ''}`;
-    if (p.agent === 'Bane') return (p.detail as string) || '';
-    if (p.agent === 'Mike Ehrmantraut') return (p.detail as string) || '';
-    if (p.agent === 'Hannibal') return `Sentiment: ${p.sentiment ?? ''} — Key phrases: ${(p.phrases ?? []).join(', ')}`;
-    if (p.agent === 'T-1000') return `Searched: "${p.query ?? ''}" — ${p.sources ?? 0} sources found`;
-    if (p.agent === 'Tyler Durden') return (p.read as string) || '';
-    if (p.agent === 'Joker') return (p.avoided as string) || '';
-    if (p.agent === 'Thanos') return (p.truth as string) || 'Delivering verdict...';
-    if (p.agent === 'Agent Smith') return (p.detail as string) || 'Translated to English';
-    if (p.agent === "Ra's al Ghul") return (p.detail as string) || 'Commitment contract prepared';
-    return (p.decision as string) || (p.detail as string) || '';
+  const getAgentDetail = (p: AgentEvent): React.ReactNode => {
+    const goldBorder: React.CSSProperties = {
+      background: '#f9f9f9',
+      borderRadius: '6px',
+      padding: '16px',
+      marginTop: '8px',
+      borderLeft: '3px solid #C4922A',
+    };
+    const labelStyle: React.CSSProperties = {
+      fontSize: '12px',
+      color: '#C4922A',
+      fontWeight: 500,
+      margin: '0 0 8px',
+      letterSpacing: '1px',
+    };
+    const textStyle: React.CSSProperties = {
+      fontSize: '13px',
+      color: '#555',
+      margin: '0',
+      lineHeight: 1.6,
+    };
+
+    if (p.agent === 'T-1000') {
+      return (
+        <div style={goldBorder}>
+          <p style={labelStyle}>T-1000</p>
+          {p.query && (
+            <p style={{ ...textStyle, marginBottom: '12px' }}>
+              <span style={{ fontWeight: 600, color: '#1a1a1a' }}>Search query:</span> {p.query}
+            </p>
+          )}
+          {p.sourceDetails && p.sourceDetails.length > 0 ? (
+            p.sourceDetails.map((src, idx) => (
+              <div key={idx} style={{ marginBottom: idx < p.sourceDetails!.length - 1 ? '12px' : '0', paddingBottom: idx < p.sourceDetails!.length - 1 ? '12px' : '0', borderBottom: idx < p.sourceDetails!.length - 1 ? '1px solid #e8e8e8' : 'none' }}>
+                <p style={{ fontSize: '13px', fontWeight: 700, color: '#1a1a1a', margin: '0 0 4px' }}>{src.title}</p>
+                {src.highlight && <p style={{ fontSize: '13px', color: '#555', margin: '0 0 4px', lineHeight: 1.5 }}>{src.highlight}</p>}
+                {src.url && (
+                  <a href={src.url} target="_blank" rel="noopener noreferrer" style={{ fontSize: '12px', color: '#C4922A', wordBreak: 'break-all' }}>{src.url}</a>
+                )}
+              </div>
+            ))
+          ) : (
+            <p style={textStyle}>{p.sources ?? 0} sources found</p>
+          )}
+        </div>
+      );
+    }
+
+    if (p.agent === 'Hannibal') {
+      const sentimentColor = p.sentiment === 'POSITIVE' ? '#27ae60' : p.sentiment === 'NEGATIVE' ? '#c0392b' : '#8a8a8a';
+      return (
+        <div style={goldBorder}>
+          <p style={labelStyle}>HANNIBAL</p>
+          {p.sentiment && (
+            <div style={{ marginBottom: '12px' }}>
+              <span style={{ display: 'inline-block', background: sentimentColor, color: '#fff', fontSize: '11px', fontWeight: 600, borderRadius: '4px', padding: '3px 8px', letterSpacing: '1px' }}>
+                {p.sentiment}
+              </span>
+            </div>
+          )}
+          {p.phrases && p.phrases.length > 0 && (
+            <div style={{ marginBottom: '12px' }}>
+              <p style={{ fontSize: '12px', color: '#9a9a9a', margin: '0 0 6px', letterSpacing: '0.5px' }}>KEY PHRASES</p>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                {p.phrases.map((phrase, idx) => (
+                  <span key={idx} style={{ background: '#fff', border: '1px solid #e4e4e4', borderRadius: '999px', fontSize: '12px', color: '#1a1a1a', padding: '3px 10px' }}>
+                    {phrase}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+          {p.scores && (
+            <div>
+              <p style={{ fontSize: '12px', color: '#9a9a9a', margin: '0 0 6px', letterSpacing: '0.5px' }}>SENTIMENT SCORES</p>
+              {Object.entries(p.scores).map(([key, val]) => (
+                <div key={key} style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                  <span style={{ fontSize: '12px', color: '#555', width: '70px', textTransform: 'capitalize' }}>{key}</span>
+                  <div style={{ flex: 1, background: '#e8e8e8', borderRadius: '999px', height: '6px', overflow: 'hidden' }}>
+                    <div style={{ width: `${Math.round((val as number) * 100)}%`, background: key === 'positive' ? '#27ae60' : key === 'negative' ? '#c0392b' : '#8a8a8a', height: '100%', borderRadius: '999px' }} />
+                  </div>
+                  <span style={{ fontSize: '12px', color: '#555', width: '36px', textAlign: 'right' }}>{Math.round((val as number) * 100)}%</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    if (p.agent === 'Tyler Durden') {
+      return (
+        <div style={goldBorder}>
+          <p style={labelStyle}>TYLER DURDEN</p>
+          {p.weight && (
+            <p style={{ fontSize: '12px', fontWeight: 600, color: '#C4922A', margin: '0 0 8px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+              Weight: {p.weight}
+            </p>
+          )}
+          {p.read && (
+            <div style={{ marginBottom: '10px' }}>
+              <p style={{ fontSize: '12px', color: '#9a9a9a', margin: '0 0 4px', letterSpacing: '0.5px' }}>SITUATION READ</p>
+              <p style={textStyle}>{p.read}</p>
+            </div>
+          )}
+          {p.commitment && (
+            <div>
+              <p style={{ fontSize: '12px', color: '#9a9a9a', margin: '0 0 4px', letterSpacing: '0.5px' }}>COMMITMENT</p>
+              <p style={textStyle}>{p.commitment}</p>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    if (p.agent === 'Joker') {
+      return (
+        <div style={goldBorder}>
+          <p style={labelStyle}>JOKER</p>
+          {p.avoided && (
+            <div style={{ marginBottom: '10px' }}>
+              <p style={{ fontSize: '12px', color: '#9a9a9a', margin: '0 0 4px', letterSpacing: '0.5px' }}>WHAT YOU ARE AVOIDING</p>
+              <p style={textStyle}>{p.avoided}</p>
+            </div>
+          )}
+          {p.reframe && (
+            <div style={{ marginBottom: '10px' }}>
+              <p style={{ fontSize: '12px', color: '#9a9a9a', margin: '0 0 4px', letterSpacing: '0.5px' }}>REFRAME</p>
+              <p style={{ ...textStyle, fontStyle: 'italic' }}>{p.reframe}</p>
+            </div>
+          )}
+          {p.question && (
+            <div>
+              <p style={{ fontSize: '12px', color: '#9a9a9a', margin: '0 0 4px', letterSpacing: '0.5px' }}>THE QUESTION</p>
+              <p style={{ ...textStyle, fontWeight: 700, color: '#1a1a1a' }}>{p.question}</p>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    if (p.agent === 'Thanos') {
+      return (
+        <div style={goldBorder}>
+          <p style={labelStyle}>THANOS</p>
+          <p style={textStyle}>{p.truth || 'Delivering verdict...'}</p>
+        </div>
+      );
+    }
+
+    if (p.agent === 'Agent Smith') {
+      return (
+        <div style={goldBorder}>
+          <p style={labelStyle}>AGENT SMITH</p>
+          {p.language && (
+            <p style={{ ...textStyle, marginBottom: '6px' }}>
+              <span style={{ fontWeight: 600, color: '#1a1a1a' }}>Source language detected:</span> {p.language}
+            </p>
+          )}
+          <p style={textStyle}>{p.detail || 'Translated to English'}</p>
+        </div>
+      );
+    }
+
+    if (p.agent === 'Gus Fring') {
+      return (
+        <div style={goldBorder}>
+          <p style={labelStyle}>GUS FRING</p>
+          {p.category && (
+            <p style={{ ...textStyle, marginBottom: '6px' }}>
+              <span style={{ fontWeight: 600, color: '#1a1a1a' }}>Category:</span> {p.category}
+            </p>
+          )}
+          {p.decision && (
+            <p style={{ ...textStyle, marginBottom: '6px' }}>
+              <span style={{ fontWeight: 600, color: '#1a1a1a' }}>Decision:</span> {p.decision}
+            </p>
+          )}
+          <p style={{ ...textStyle, color: '#27ae60' }}>✓ Safety check complete</p>
+        </div>
+      );
+    }
+
+    if (p.agent === 'Bane') {
+      return (
+        <div style={goldBorder}>
+          <p style={labelStyle}>BANE</p>
+          {p.country && (
+            <p style={{ ...textStyle, marginBottom: '6px' }}>
+              <span style={{ fontWeight: 600, color: '#1a1a1a' }}>Country detected:</span> {p.country}
+            </p>
+          )}
+          {p.crisisDetail && (
+            <p style={{ ...textStyle, marginBottom: '6px' }}>{p.crisisDetail}</p>
+          )}
+          {p.detail && (
+            <p style={textStyle}>{p.detail}</p>
+          )}
+        </div>
+      );
+    }
+
+    if (p.agent === 'Mike Ehrmantraut') {
+      return (
+        <div style={goldBorder}>
+          <p style={labelStyle}>MIKE EHRMANTRAUT</p>
+          <p style={{ ...textStyle, color: '#27ae60' }}>✓ Audio deleted after transcription</p>
+          {p.detail && <p style={{ ...textStyle, marginTop: '6px' }}>{p.detail}</p>}
+        </div>
+      );
+    }
+
+    if (p.agent === "Ra's al Ghul") {
+      return (
+        <div style={goldBorder}>
+          <p style={labelStyle}>RA&apos;S AL GHUL</p>
+          <p style={{ ...textStyle, color: '#27ae60' }}>✓ Commitment contract prepared</p>
+          {p.detail && <p style={{ ...textStyle, marginTop: '6px' }}>{p.detail}</p>}
+        </div>
+      );
+    }
+
+    // fallback
+    return (
+      <div style={goldBorder}>
+        <p style={labelStyle}>{(p.agent || '').toUpperCase()}</p>
+        <p style={textStyle}>{(p.decision as string) || (p.detail as string) || ''}</p>
+      </div>
+    );
   };
 
   const processing = status === "processing";
@@ -391,7 +629,6 @@ export default function Home() {
                 if (!name) return null;
                 const roleName = AGENT_ROLES[name] || name;
                 const summary = getAgentSummary(parsed);
-                const fullDetail = getAgentFullDetail(parsed);
                 const isExpanded = expandedAgents.has(i);
                 return (
                   <div key={i} style={{display:'flex', gap:'12px', marginBottom:'0', position:'relative'}}>
@@ -425,12 +662,7 @@ export default function Home() {
                       >
                         {isExpanded ? 'hide work' : 'show work'}
                       </button>
-                      {isExpanded && (
-                        <div style={{background:'#f9f9f9', borderRadius:'6px', padding:'12px', marginTop:'8px'}}>
-                          <span style={{color:'#C4922A', fontWeight:500, fontSize:'13px'}}>{name}</span>
-                          <p style={{fontSize:'13px', color:'#555', margin:'6px 0 0', lineHeight:1.6}}>{fullDetail}</p>
-                        </div>
-                      )}
+                      {isExpanded && getAgentDetail(parsed)}
                     </div>
                   </div>
                 );
