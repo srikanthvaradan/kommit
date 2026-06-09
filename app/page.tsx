@@ -233,6 +233,7 @@ export default function Home() {
               style={{
                 flex: 1, border: 'none', background: 'transparent', color: '#fff',
                 fontSize: '14px', outline: 'none', fontFamily: 'Inter,sans-serif',
+                textAlign: 'center',
               }}
               placeholder="What's weighing on you right now?"
             />
