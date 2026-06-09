@@ -28,6 +28,14 @@ function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+const SUPPORTED_LANGUAGE_OPTIONS = [
+  "en-US", "en-GB", "en-IN", "en-AU",
+  "ta-IN", "hi-IN", "id-ID", "ms-MY",
+  "fr-FR", "zh-CN", "ko-KR", "ja-JP",
+  "de-DE", "es-ES", "pt-BR", "ar-SA",
+  "it-IT", "nl-NL", "vi-VN", "tr-TR"
+];
+
 export async function POST(req: NextRequest): Promise<NextResponse> {
   let key: string | undefined;
 
@@ -55,6 +63,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         TranscriptionJobName: jobName,
         LanguageCode: undefined,
         IdentifyLanguage: true,
+        LanguageOptions: SUPPORTED_LANGUAGE_OPTIONS as unknown as import("@aws-sdk/client-transcribe").LanguageCode[],
         MediaFormat: mediaFormat,
         Media: {
           MediaFileUri:
