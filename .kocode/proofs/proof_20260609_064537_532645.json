@@ -1,0 +1,21 @@
+{
+  "id": "20260609_064537_532565",
+  "version": "1.0.0",
+  "timestamp": "2026-06-09T06:45:37.532573",
+  "project": "kommit",
+  "task": "OBJECTIVE: Create /Users/srini/Projects/kommit/lib/custodian.ts\n\nThe Custodian Agent. Owns audio data lifecycle \u2014 uploads to S3 for Transcribe, deletes immediately after.\n\nUse EXACTLY:\nimport { S3Client, PutObjectCommand, DeleteObjectCommand } from &quot;@aws-sdk/client-s3&quot;;\nconst s3 = new S3Client({ region: process.env.KOMMIT_AWS_REGION!, credentials: { accessKeyId: process.env.KOMMIT_AWS_KEY!, secretAccessKey: process.env.KOMMIT_AWS_SECRET! } });\n\nExport these two functions:\n\n1. uploadAudio(buffer: Buffer, filename: string): Promise&lt;string&gt;\n   Uploads buffer to S3 bucket process.env.KOMMIT_S3_BUCKET! with key filename.\n   Returns the S3 key on success.\n   On error throws with message &quot;Audio upload failed: &lt;error message&gt;&quot;\n\n2. deleteAudio(key: string): Promise&lt;void&gt;\n   Deletes the object from S3 bucket process.env.KOMMIT_S3_BUCKET!.\n   Silently swallows errors \u2014 deletion failure must never block the user.\n   Logs deletion errors to console.error only.\n\nFILE header comment explaining the privacy principle: audio is transient, deleted immediately after transcription.\nJSDoc on both functions.\n\nFILES: /Users/srini/Projects/kommit/lib/custodian.ts\n\nACCEPTANCE CRITERIA:\nuploadAudio and deleteAudio exported\nUses process.env.KOMMIT_S3_BUCKET!\ndeleteAudio never throws\nNo TypeScript errors\n\nTEST: cd /Users/srini/Projects/kommit; npx tsc --noEmit\n\nDO NOT: hardcode bucket name or region\nDO NOT: use ast.parse",
+  "status": "completed",
+  "verified": true,
+  "files_changed": [
+    "/Users/srini/Projects/kommit/lib/custodian.ts"
+  ],
+  "lines_changed": 55,
+  "test_command": "cd /Users/srini/Projects/kommit; npx tsc --noEmit",
+  "test_output": "",
+  "elapsed_seconds": 18.7,
+  "why_context": null,
+  "model": "advanced",
+  "repo": "/Users/srini/Projects/kommit",
+  "agent": "KOCODE v1.0.0",
+  "commit_hash": null
+}
