@@ -1,0 +1,22 @@
+{
+  "id": "20260609_064259_831084",
+  "version": "1.0.0",
+  "timestamp": "2026-06-09T06:42:59.831093",
+  "project": "kommit",
+  "task": "OBJECTIVE: Create /Users/srini/Projects/kommit/lib/commitment.ts\n\nThe Commitment Agent. Creates a Stripe PaymentIntent for the user&#x27;s stake and structures the commitment record.\n\nUse EXACTLY:\nimport Stripe from &quot;stripe&quot;;\nconst stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: &quot;2026-05-27.dahlia&quot; as any });\n\nExport this interface:\nexport interface CommitmentRecord {\n  commitmentText: string;\n  stakeAmount: number;\n  forfeitDestination: string;\n  dueDate: string;\n  clientSecret: string;\n}\n\nExport this function:\nexport async function createCommitment(\n  commitmentText: string,\n  stakeAmount: number,\n  forfeitDestination: string\n): Promise&lt;CommitmentRecord&gt;\n\nImplementation:\n1. Validate stakeAmount is &gt;= 500 (Stripe minimum in cents, equals $5.00). Throw Error if below.\n2. Create PaymentIntent: await stripe.paymentIntents.create({ amount: stakeAmount, currency: &quot;sgd&quot;, metadata: { commitmentText, forfeitDestination } })\n3. Set dueDate to tomorrow at 23:59:59 UTC as ISO string.\n4. Return CommitmentRecord with all fields plus clientSecret from PaymentIntent.\n\nOn error: throw the error \u2014 let the caller handle it.\n\nFILE header comment and JSDoc on all exports.\n\nFILES: /Users/srini/Projects/kommit/lib/commitment.ts\n\nACCEPTANCE CRITERIA:\ncreateCommitment and CommitmentRecord exported\nUses Stripe with apiVersion &quot;2026-05-27.dahlia&quot;\nstakeAmount validated &gt;= 500\ndueDate set to tomorrow 23:59:59 UTC\nNo TypeScript errors\n\nTEST: cd /Users/srini/Projects/kommit; npx tsc --noEmit\n\nDO NOT: hardcode any keys\nDO NOT: use ast.parse",
+  "status": "completed",
+  "verified": true,
+  "files_changed": [
+    "/Users/srini/Projects/kommit/lib/commitment.ts",
+    "/Users/srini/Projects/kommit/types/stripe.d.ts"
+  ],
+  "lines_changed": 106,
+  "test_command": "cd /Users/srini/Projects/kommit; npx tsc --noEmit",
+  "test_output": "",
+  "elapsed_seconds": 36.8,
+  "why_context": null,
+  "model": "advanced",
+  "repo": "/Users/srini/Projects/kommit",
+  "agent": "KOCODE v1.0.0",
+  "commit_hash": null
+}
