@@ -215,7 +215,7 @@ export default function Home() {
         >
           {/* Logo */}
           <div style={{display:'flex', justifyContent:'center', marginBottom:'48px', width:'100%'}}>
-            <img src="/logo_icon.png" style={{width:'80px', height:'80px', borderRadius:'12px', background:'#1a1a1a', padding:'8px', objectFit:'cover'}} alt="KOMMIT" />
+            <img src="/logo_light.svg" alt="KOMMIT" style={{height:'64px', width:'auto', display:'block'}} />
           </div>
 
           {/* Pill input */}
