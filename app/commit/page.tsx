@@ -33,19 +33,18 @@ function CheckoutForm({
     setIsLoading(true);
     setErrorMessage(null);
 
-    const params = new URLSearchParams({
+    sessionStorage.setItem("kommit_card", JSON.stringify({
       truth: searchParams.get("truth") || "",
       commitment: searchParams.get("commitment") || "",
-      stakeAmount: String(stakeAmount),
-      forfeitDestination: forfeitDestination,
+      stakeAmount,
+      forfeitDestination,
       dueDate: new Date(Date.now() + 86400000).toISOString()
-    });
-    const returnUrl = `${window.location.origin}/success?${params.toString()}`;
+    }));
 
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: returnUrl,
+        return_url: `${window.location.origin}/success`,
       },
     });
 
