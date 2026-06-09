@@ -156,8 +156,8 @@ export default function Home() {
           to { opacity: 1; transform: translateY(0); }
         }
         @keyframes o-pulse {
-          0%, 100% { color: #C4922A; }
-          50% { color: #E8B84B; }
+          0%, 100% { background: #C4922A; }
+          50% { background: #E8B84B; }
         }
       `}</style>
 
@@ -175,7 +175,7 @@ export default function Home() {
         {/* Logo */}
         <div style={{display:'flex', alignItems:'center'}}>
           <span style={{fontSize:'22px', fontWeight:'500', letterSpacing:'4px', color:'#1a1a1a', fontFamily:'Inter,sans-serif'}}>K</span>
-          <span id="nav-o" style={{fontSize:'22px', fontWeight:'500', letterSpacing:'4px', color:'#C4922A', fontFamily:'Inter,sans-serif', animation:'o-pulse 2s ease-in-out infinite'}}>O</span>
+          <span id="nav-o" style={{fontSize:'22px', fontWeight:'900', letterSpacing:'4px', color:'#1a1a1a', fontFamily:'Inter,sans-serif', background:'#C4922A', borderRadius:'3px', padding:'0 2px', animation:'o-pulse 2s ease-in-out infinite'}}>O</span>
           <span style={{fontSize:'22px', fontWeight:'500', letterSpacing:'4px', color:'#1a1a1a', fontFamily:'Inter,sans-serif'}}>MMIT</span>
         </div>
 
