@@ -331,15 +331,20 @@ export default function Home() {
                   {agentEvents.map((event, i) => {
                     const parsed = typeof event === 'string' ? JSON.parse(event) : event;
                     const name = parsed.agent || parsed.type || 'Agent';
-                    const detail = parsed.decision 
-                      ? parsed.decision 
-                      : parsed.sentiment 
-                      ? `${parsed.sentiment} — ${(parsed.phrases || []).slice(0,3).join(', ')}` 
-                      : parsed.query 
-                      ? `searching: ${parsed.query}` 
-                      : parsed.truth 
-                      ? parsed.truth.slice(0, 60) + '...' 
-                      : parsed.detail || '';
+                    const getAgentDetail = (parsed: any): string => {
+                      if (parsed.agent === 'Gus Fring') return `Input classified as ${parsed.category} — ${parsed.decision}`;
+                      if (parsed.agent === 'Bane') return parsed.detail || parsed.decision || '';
+                      if (parsed.agent === 'Mike Ehrmantraut') return parsed.detail || parsed.decision || '';
+                      if (parsed.agent === 'Hannibal') return `Sentiment: ${parsed.sentiment} — Key phrases: ${(parsed.phrases || []).slice(0,3).join(', ')}`;
+                      if (parsed.agent === 'T-1000') return `Searched: "${parsed.query}" — ${parsed.sources || 0} sources found`;
+                      if (parsed.agent === 'Tyler Durden') return parsed.read ? parsed.read.slice(0, 100) + (parsed.read.length > 100 ? '...' : '') : '';
+                      if (parsed.agent === 'Joker') return parsed.avoided ? parsed.avoided.slice(0, 100) + (parsed.avoided.length > 100 ? '...' : '') : '';
+                      if (parsed.agent === 'Thanos') return parsed.truth ? parsed.truth.slice(0, 100) + '...' : 'Delivering verdict...';
+                      if (parsed.agent === 'Agent Smith') return parsed.detail || `Translated to English`;
+                      if (parsed.agent === "Ra's al Ghul") return parsed.detail || 'Commitment contract prepared';
+                      return parsed.decision || parsed.detail || '';
+                    };
+                    const detail = getAgentDetail(parsed);
                     return (
                       <li
                         key={i}
