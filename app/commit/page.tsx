@@ -73,8 +73,8 @@ function CheckoutForm({
           marginTop: '20px',
           width: '100%',
           padding: '14px',
-          backgroundColor: '#1a1a1a',
-          color: '#ffffff',
+          backgroundColor: '#ffde59',
+          color: '#1a1a1a',
           border: 'none',
           borderRadius: '6px',
           fontSize: '14px',
@@ -150,20 +150,24 @@ export default function CommitPage() {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'flex-start',
-        padding: '48px 16px',
+        padding: '88px 16px 48px',
       }}
     >
+      <nav style={{position:'fixed', top:0, left:0, right:0, height:'64px', background:'#fff', borderBottom:'1px solid #e4e4e4', display:'flex', alignItems:'center', justifyContent:'space-between', padding:'0 40px', zIndex:100}}>
+        <img src="/ko_icon_light.svg" alt="KOMMIT" style={{height:'44px', width:'44px'}} />
+        <a href="/dashboard" style={{fontSize:'13px', color:'#8a8a8a', textDecoration:'none', fontFamily:'Inter,sans-serif'}}>Dashboard</a>
+      </nav>
       <div style={{ maxWidth: '560px', width: '100%' }}>
 
         {/* Truth */}
         {truth && (
           <div
             style={{
-              border: '1px solid #e4e4e4',
+              border: '1px solid #1a1a1a',
               borderRadius: '8px',
               padding: '20px 24px',
               marginBottom: '12px',
-              backgroundColor: '#ffffff',
+              backgroundColor: '#fafafa',
             }}
           >
             <p
