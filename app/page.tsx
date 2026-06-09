@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 
 interface SourceDetail {
   title: string;
@@ -79,6 +79,19 @@ export default function Home() {
   const [transcribing, setTranscribing] = useState<boolean>(false);
   const [voiceError, setVoiceError] = useState<string | null>(null);
   const [expandedAgents, setExpandedAgents] = useState<Set<number>>(new Set());
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [loginEmail, setLoginEmail] = useState('');
+  const [loginCode, setLoginCode] = useState('');
+  const [loginOtpSent, setLoginOtpSent] = useState(false);
+  const [loginError, setLoginError] = useState<string | null>(null);
+  const [loginSending, setLoginSending] = useState(false);
+  const [loginVerifying, setLoginVerifying] = useState(false);
+  const [currentUser, setCurrentUser] = useState<{id:number,email:string}|null>(null);
+
+  // Check auth on load
+  useEffect(() => {
+    fetch('/api/auth/me').then(r => r.json()).then(d => { if (d.user) setCurrentUser(d.user); });
+  }, []);
   const [showAgents, setShowAgents] = useState<boolean>(false);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
 
@@ -424,6 +437,30 @@ export default function Home() {
     );
   };
 
+  async function sendLoginOtp() {
+    setLoginSending(true);
+    setLoginError(null);
+    try {
+      const res = await fetch('/api/auth/send-otp', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: loginEmail }) });
+      const d = await res.json();
+      if (res.ok) setLoginOtpSent(true);
+      else setLoginError(d.error || 'Failed to send code');
+    } catch { setLoginError('Something went wrong'); }
+    setLoginSending(false);
+  }
+
+  async function verifyLoginOtp() {
+    setLoginVerifying(true);
+    setLoginError(null);
+    try {
+      const res = await fetch('/api/auth/verify-otp', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: loginEmail, code: loginCode }) });
+      const d = await res.json();
+      if (res.ok) { setCurrentUser({ id: 0, email: loginEmail }); setShowLoginModal(false); setLoginOtpSent(false); setLoginCode(''); setLoginEmail(''); }
+      else setLoginError(d.error || 'Invalid code');
+    } catch { setLoginError('Something went wrong'); }
+    setLoginVerifying(false);
+  }
+
   const processing = status === "processing";
 
   return (
@@ -498,18 +535,15 @@ export default function Home() {
           >
             Dashboard
           </a>
-          <a
-            href="/login"
-            style={{
-              fontSize: "14px",
-              fontWeight: 400,
-              color: "#8a8a8a",
-              textDecoration: "none",
-              fontFamily: "Inter, sans-serif",
-            }}
-          >
-            Login
-          </a>
+          {currentUser ? (
+            <a href="/dashboard" style={{ fontSize: "14px", fontWeight: 400, color: "#8a8a8a", textDecoration: "none", fontFamily: "Inter, sans-serif" }}>
+              {currentUser.email.split('@')[0]}
+            </a>
+          ) : (
+            <button onClick={() => setShowLoginModal(true)} style={{ fontSize: "14px", fontWeight: 400, color: "#8a8a8a", background: "none", border: "none", cursor: "pointer", fontFamily: "Inter, sans-serif", padding: 0 }}>
+              Login
+            </button>
+          )}
         </div>
       </nav>
 
@@ -846,6 +880,39 @@ export default function Home() {
           )}
         </div>
       </div>
+      {showLoginModal && (
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 200, padding: '24px' }} onClick={(e) => { if (e.target === e.currentTarget) setShowLoginModal(false); }}>
+          <div style={{ background: '#fff', borderRadius: '12px', padding: '40px', maxWidth: '400px', width: '100%' }}>
+            <h2 style={{ fontSize: '22px', fontWeight: 700, color: '#1a1a1a', marginBottom: '8px' }}>Sign in</h2>
+            <p style={{ fontSize: '14px', color: '#9a9a9a', marginBottom: '28px' }}>{"We'll send a 6-digit code to your email."}</p>
+            {!loginOtpSent ? (
+              <>
+                <input type="email" value={loginEmail} onChange={(e) => setLoginEmail(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') sendLoginOtp(); }} placeholder="your@email.com"
+                  style={{ width: '100%', padding: '12px', fontSize: '14px', fontFamily: 'Inter, sans-serif', border: '1px solid #e4e4e4', borderRadius: '6px', color: '#1a1a1a', backgroundColor: '#fff', outline: 'none', boxSizing: 'border-box' as const, marginBottom: '12px' }} />
+                <button onClick={sendLoginOtp} disabled={loginSending || !loginEmail.includes('@')}
+                  style={{ width: '100%', padding: '14px', backgroundColor: '#1a1a1a', color: '#fff', border: 'none', borderRadius: '6px', fontSize: '14px', fontWeight: 500, fontFamily: 'Inter, sans-serif', cursor: loginSending ? 'not-allowed' : 'pointer', opacity: loginSending || !loginEmail.includes('@') ? 0.5 : 1 }}>
+                  {loginSending ? 'Sending…' : 'Send code'}
+                </button>
+              </>
+            ) : (
+              <>
+                <p style={{ fontSize: '13px', color: '#9a9a9a', marginBottom: '16px' }}>Code sent to <strong>{loginEmail}</strong></p>
+                <input type="text" value={loginCode} onChange={(e) => setLoginCode(e.target.value.replace(/\D/g, ''))} onKeyDown={(e) => { if (e.key === 'Enter' && loginCode.length === 6) verifyLoginOtp(); }} placeholder="000000" maxLength={6}
+                  style={{ width: '100%', padding: '16px', fontSize: '24px', fontFamily: 'Inter, sans-serif', border: '1px solid #e4e4e4', borderRadius: '6px', color: '#1a1a1a', backgroundColor: '#fff', outline: 'none', boxSizing: 'border-box' as const, marginBottom: '12px', letterSpacing: '12px', textAlign: 'center' as const }} />
+                <button onClick={verifyLoginOtp} disabled={loginVerifying || loginCode.length !== 6}
+                  style={{ width: '100%', padding: '14px', backgroundColor: '#ffde59', color: '#1a1a1a', border: 'none', borderRadius: '6px', fontSize: '14px', fontWeight: 600, fontFamily: 'Inter, sans-serif', cursor: loginVerifying || loginCode.length !== 6 ? 'not-allowed' : 'pointer', opacity: loginVerifying || loginCode.length !== 6 ? 0.5 : 1 }}>
+                  {loginVerifying ? 'Verifying…' : 'Verify'}
+                </button>
+                <button onClick={() => { setLoginOtpSent(false); setLoginCode(''); setLoginError(null); }}
+                  style={{ width: '100%', padding: '12px', backgroundColor: 'transparent', color: '#9a9a9a', border: 'none', fontSize: '13px', fontFamily: 'Inter, sans-serif', cursor: 'pointer', marginTop: '4px' }}>
+                  Use a different email
+                </button>
+              </>
+            )}
+            {loginError && <p style={{ color: '#c0392b', fontSize: '13px', marginTop: '12px' }}>{loginError}</p>}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

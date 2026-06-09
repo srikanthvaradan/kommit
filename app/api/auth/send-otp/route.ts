@@ -26,5 +26,5 @@ export async function POST(req: NextRequest) {
     }),
   });
 
-  return NextResponse.json({ ok: true });
+  return NextResponse.json({ ok: true }); NextResponse.json({ ok: true });
 }
