@@ -1,0 +1,21 @@
+{
+  "id": "20260609_070530_221884",
+  "version": "1.0.0",
+  "timestamp": "2026-06-09T07:05:30.221891",
+  "project": "kommit",
+  "task": "OBJECTIVE: Create /Users/srini/Projects/kommit/app/api/commitments/save/route.ts\n\nPOST handler. Called after Stripe payment confirms. Saves the commitment to Neon DB.\n\nImports:\nimport { NextRequest, NextResponse } from &quot;next/server&quot;;\nimport { saveCommitment, initSchema } from &quot;@/lib/db&quot;;\n\nAccept JSON body: { paymentIntentId: string, commitmentText: string, stakeAmount: number, forfeitDestination: string, avoidedTruth: string }\n\nValidate all fields present and non-empty. Return 400 if any missing.\n\nCall initSchema() first.\n\nCall saveCommitment({\n  commitment_text: commitmentText,\n  stake_amount: stakeAmount,\n  forfeit_destination: forfeitDestination,\n  avoided_truth: avoidedTruth,\n  due_date: new Date(Date.now() + 86400000).toISOString(),\n  status: &quot;pending&quot;,\n  stripe_payment_intent_id: paymentIntentId\n})\n\nReturn: { success: true, id }\nOn error return 500 with { error: message }.\n\nFile header comment and JSDoc on POST export.\n\nFILES: /Users/srini/Projects/kommit/app/api/commitments/save/route.ts\n\nACCEPTANCE CRITERIA:\nPOST handler exported\nCalls initSchema before saveCommitment\nReturns id\nNo TypeScript errors\n\nTEST: cd /Users/srini/Projects/kommit; npx tsc --noEmit\n\nDO NOT: hardcode anything\nDO NOT: use ast.parse",
+  "status": "completed",
+  "verified": true,
+  "files_changed": [
+    "/Users/srini/Projects/kommit/app/api/commitments/save/route.ts"
+  ],
+  "lines_changed": 57,
+  "test_command": "cd /Users/srini/Projects/kommit; npx tsc --noEmit",
+  "test_output": "",
+  "elapsed_seconds": 15.7,
+  "why_context": "**db.ts exists** (commit 3500434) with `saveCommitment` and `initSchema` exports confirmed proven. Route pattern established from prior proven routes.\n\n---\n\n```typescript\n/**\n * @file app/api/commitments/save/route.ts\n * API route to save a confirmed commitment to Neon DB after Stripe payment.\n */\n\n",
+  "model": "advanced",
+  "repo": "/Users/srini/Projects/kommit",
+  "agent": "KOCODE v1.0.0",
+  "commit_hash": null
+}
