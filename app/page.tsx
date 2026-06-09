@@ -161,8 +161,7 @@ export default function Home() {
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          padding: "0 32px",
-          height: "56px",
+          padding: "18px 40px",
           borderBottom: "1px solid #f0f0f0",
           backgroundColor: "#ffffff",
         }}
@@ -171,10 +170,10 @@ export default function Home() {
         <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
           <div
             style={{
-              width: "28px",
-              height: "28px",
+              width: "30px",
+              height: "30px",
               backgroundColor: "#545454",
-              borderRadius: "4px",
+              borderRadius: "7px",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -196,7 +195,7 @@ export default function Home() {
               fontSize: "14px",
               fontWeight: 500,
               color: "#1a1a1a",
-              letterSpacing: "0.08em",
+              letterSpacing: "2px",
             }}
           >
             OMMIT
@@ -210,7 +209,7 @@ export default function Home() {
             style={{
               fontSize: "14px",
               fontWeight: 500,
-              color: "#1a1a1a",
+              color: "#8a8a8a",
               textDecoration: "none",
             }}
           >
@@ -221,7 +220,7 @@ export default function Home() {
             style={{
               fontSize: "14px",
               fontWeight: 500,
-              color: "#1a1a1a",
+              color: "#8a8a8a",
               textDecoration: "none",
             }}
           >
