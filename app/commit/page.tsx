@@ -154,7 +154,9 @@ export default function CommitPage() {
       }}
     >
       <nav style={{position:'fixed', top:0, left:0, right:0, height:'64px', background:'#fff', borderBottom:'1px solid #e4e4e4', display:'flex', alignItems:'center', justifyContent:'space-between', padding:'0 40px', zIndex:100}}>
-        <img src="/ko_icon_light.svg" alt="KOMMIT" style={{height:'44px', width:'44px'}} />
+        <a href="/" onClick={() => { sessionStorage.clear(); document.cookie.split(";").forEach(c => { document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); }); }} style={{cursor:'pointer'}}>
+          <img src="/ko_icon_light.svg" alt="KOMMIT" style={{height:'44px', width:'44px'}} />
+        </a>
         <a href="/dashboard" style={{fontSize:'13px', color:'#8a8a8a', textDecoration:'none', fontFamily:'Inter,sans-serif'}}>Dashboard</a>
       </nav>
       <div style={{ maxWidth: '560px', width: '100%' }}>
