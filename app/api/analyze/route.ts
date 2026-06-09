@@ -136,7 +136,8 @@ export async function POST(request: NextRequest): Promise<Response> {
         emit({
           agent: "Hannibal",
           sentiment: sentimentResult.sentiment,
-          phrases: keyPhrases.slice(0, 4),
+          scores: sentimentResult.scores,
+          phrases: keyPhrases,
         });
 
         // ------------------------------------------------------------------
@@ -149,6 +150,7 @@ export async function POST(request: NextRequest): Promise<Response> {
           query: grounding.query,
           sources: grounding.sources.length,
           reformulated: grounding.reformulated,
+          sourceList: grounding.sources,
         });
 
         // ------------------------------------------------------------------
@@ -161,7 +163,7 @@ export async function POST(request: NextRequest): Promise<Response> {
           grounding.sources
         );
 
-        emit({ agent: "Tyler Durden", read: clarity.read });
+        emit({ agent: "Tyler Durden", read: clarity.read, commitment: clarity.commitment, weight: clarity.weight });
 
         // ------------------------------------------------------------------
         // Step 5 — Challenge
@@ -171,6 +173,7 @@ export async function POST(request: NextRequest): Promise<Response> {
         emit({
           agent: "Joker",
           avoided: challenge.avoided,
+          reframe: challenge.reframe,
           question: challenge.question,
         });
 
