@@ -73,8 +73,8 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       })
     );
 
-    const maxAttempts = 15;
-    const pollIntervalMs = 2000;
+    const maxAttempts = 30;
+    const pollIntervalMs = 3000;
     let transcriptText = "";
     let languageCode = "";
     let completed = false;
@@ -120,7 +120,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     }
 
     if (!completed) {
-      throw new Error("Transcription job timed out after 30 seconds");
+      throw new Error("Transcription job timed out after 90 seconds");
     }
 
     if (key) {

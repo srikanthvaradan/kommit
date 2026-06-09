@@ -35,6 +35,7 @@ export default function Home() {
   const [recording, setRecording] = useState<boolean>(false);
   const [transcribing, setTranscribing] = useState<boolean>(false);
   const [debugMsg, setDebugMsg] = useState<string>("");
+  const [voiceError, setVoiceError] = useState<string | null>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
 
   async function handleRecord() {
@@ -56,7 +57,15 @@ export default function Home() {
       const data = await res.json();
       setDebugMsg(JSON.stringify(data));
       console.log("TRANSCRIBE RESPONSE:", data);
-      if (data.transcript) setInput(data.transcript);
+      if (!res.ok) {
+        setVoiceError(data.error || "Transcription failed");
+      } else if (data.transcript) {
+        setInput(data.transcript);
+        setVoiceError(null);
+        setDebugMsg("");
+      } else {
+        setVoiceError("No transcript returned");
+      }
       stream.getTracks().forEach((t) => t.stop());
       setTranscribing(false);
     };
@@ -217,7 +226,8 @@ export default function Home() {
             {recording ? "Stop recording" : "🎤 Speak"}
           </button>
         </div>
-        {debugMsg && <p style={{ color: "red", fontSize: 12 }}>{debugMsg}</p>}
+        {voiceError && <p style={{ color: "red", fontSize: 12 }}>{voiceError}</p>}
+        {debugMsg && !voiceError && <p style={{ color: "red", fontSize: 12 }}>{debugMsg}</p>}
         {transcribing && (
           <p style={{ fontSize: "0.9rem", color: "#555", fontStyle: "italic", marginBottom: "16px" }}>
             Transcribing...
