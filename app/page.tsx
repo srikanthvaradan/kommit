@@ -227,17 +227,6 @@ export default function Home() {
           >
             What&apos;s weighing on you right now?
           </h1>
-          <p
-            style={{
-              fontSize: "14px",
-              fontWeight: 400,
-              color: "#8a8a8a",
-              margin: "0 0 48px 0",
-              textAlign: "left",
-            }}
-          >
-            Speak or type. 10 agents. Zero judgment.
-          </p>
 
           {/* Pill input */}
           <div style={{

@@ -17,5 +17,6 @@
   "model": "advanced",
   "repo": "/Users/srini/Projects/kommit",
   "agent": "KOCODE v1.0.0",
-  "commit_hash": null
+  "commit_hash": "14effbc",
+  "sha256": "6ab3b47ce6b50d1058aa69524edd26ae0350ff7133538fda6870160aa41d3e12"
 }
