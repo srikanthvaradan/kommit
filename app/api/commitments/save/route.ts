@@ -5,6 +5,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { saveCommitment, initSchema } from "@/lib/db";
+import { neon } from '@neondatabase/serverless';
 
 /**
  * POST /api/commitments/save
@@ -13,6 +14,18 @@ import { saveCommitment, initSchema } from "@/lib/db";
 export async function POST(req: NextRequest): Promise<NextResponse> {
   try {
     const body = await req.json();
+
+    const token = req.cookies.get('kommit_session')?.value;
+    let userId: number | null = null;
+    if (token) {
+      const sql = neon(process.env.DATABASE_URL!);
+      const sessions = await sql`
+        SELECT u.id FROM user_sessions s
+        JOIN users u ON s.user_id = u.id
+        WHERE s.token = ${token} AND s.expires_at > NOW()
+      `;
+      if (sessions.length) userId = sessions[0].id;
+    }
 
     const {
       paymentIntentId,
@@ -48,6 +61,11 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       status: "pending",
       stripe_payment_intent_id: paymentIntentId,
     });
+
+    if (userId && id) {
+      const sql = neon(process.env.DATABASE_URL!);
+      await sql`UPDATE commitments SET user_id = ${userId} WHERE id = ${id}`;
+    }
 
     return NextResponse.json({ success: true, id });
   } catch (err) {
