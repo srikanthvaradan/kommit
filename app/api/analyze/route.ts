@@ -7,18 +7,12 @@
 import { NextRequest } from "next/server";
 import { classify } from "@/lib/safety";
 import { detectSentiment, detectKeyPhrases } from "@/lib/sensing";
-import { detectKeyPhrases as detectLanguage } from "@/lib/sensing";
 import { needsTranslation, translateToEnglish, translateFromEnglish } from "@/lib/bridge";
 import { groundSituation } from "@/lib/grounding";
 import { getClarity } from "@/lib/clarity";
 import { getChallenge } from "@/lib/challenge";
 import { adjudicate } from "@/lib/adjudicator";
 import { getCrisisResources, getCountryFromHeaders } from "@/lib/edge";
-
-// Suppress unused-import warning for detectLanguage — used for language detection alias
-void detectLanguage;
-// Suppress unused-import warning for needsTranslation — available for callers
-void needsTranslation;
 
 /**
  * Converts a BCP-47 language code to an ISO 639-1 code.

@@ -58,7 +58,7 @@ export default function Home() {
       if (!res.ok) {
         setVoiceError(data.error || "Transcription failed");
       } else if (data.transcript) {
-        handleSubmit(data.transcript);
+        handleSubmit(data.transcript, data.languageCode);
         setVoiceError(null);
       } else {
         setVoiceError("No transcript returned");
@@ -71,7 +71,7 @@ export default function Home() {
     setRecording(true);
   }
 
-  async function handleSubmit(text?: string) {
+  async function handleSubmit(text?: string, languageCode?: string) {
     const textToAnalyze = typeof text === "string" ? text : input;
     setStatus("processing");
     setAgentEvents([]);
@@ -80,7 +80,7 @@ export default function Home() {
     const res = await fetch("/api/analyze", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ text: textToAnalyze }),
+      body: JSON.stringify({ text: textToAnalyze, languageCode }),
     });
 
     const reader = res.body!.getReader();
