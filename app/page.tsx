@@ -155,6 +155,10 @@ export default function Home() {
           from { opacity: 0; transform: translateY(6px); }
           to { opacity: 1; transform: translateY(0); }
         }
+        @keyframes o-pulse {
+          0%, 100% { color: #C4922A; }
+          50% { color: #E8B84B; }
+        }
       `}</style>
 
       {/* Nav */}
@@ -169,9 +173,10 @@ export default function Home() {
         }}
       >
         {/* Logo */}
-        <div style={{display:'flex', alignItems:'center', gap:'0px'}}>
-          <img src="/logo_icon.png" alt="KOMMIT" style={{height:'44px', width:'44px', borderRadius:'6px', objectFit:'cover', padding:'4px'}} />
-          <span style={{fontSize:'18px', fontWeight:'500', letterSpacing:'4px', color:'#1a1a1a'}}>KOMMIT</span>
+        <div style={{display:'flex', alignItems:'center'}}>
+          <span style={{fontSize:'22px', fontWeight:'500', letterSpacing:'4px', color:'#1a1a1a', fontFamily:'Inter,sans-serif'}}>K</span>
+          <span id="nav-o" style={{fontSize:'22px', fontWeight:'500', letterSpacing:'4px', color:'#C4922A', fontFamily:'Inter,sans-serif', animation:'o-pulse 2s ease-in-out infinite'}}>O</span>
+          <span style={{fontSize:'22px', fontWeight:'500', letterSpacing:'4px', color:'#1a1a1a', fontFamily:'Inter,sans-serif'}}>MMIT</span>
         </div>
 
         {/* Nav links */}
