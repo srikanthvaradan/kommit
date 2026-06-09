@@ -1,0 +1,21 @@
+{
+  "id": "20260609_070738_924377",
+  "version": "1.0.0",
+  "timestamp": "2026-06-09T07:07:38.924385",
+  "project": "kommit",
+  "task": "OBJECTIVE: Create /Users/srini/Projects/kommit/app/api/commitments/checkin/route.ts\n\nPOST handler. Marks a commitment as completed when user follows through.\n\nImports:\nimport { NextRequest, NextResponse } from &quot;next/server&quot;;\nimport { neon } from &quot;@neondatabase/serverless&quot;;\nconst sql = neon(process.env.DATABASE_URL!);\n\nAccept JSON body: { id: string }\nValidate id is present. Return 400 if missing.\n\nRun: UPDATE commitments SET status = &#x27;completed&#x27; WHERE id = $1\nReturn: { success: true }\nOn error return 500 with { error: message }.\n\nFILE header comment and JSDoc on POST export.\n\nFILES: /Users/srini/Projects/kommit/app/api/commitments/checkin/route.ts\n\nACCEPTANCE CRITERIA:\nPOST handler exported\nUpdates status to completed\nReturns success\nNo TypeScript errors\n\nTEST: cd /Users/srini/Projects/kommit; npx tsc --noEmit\n\nDO NOT: hardcode anything\nDO NOT: use ast.parse",
+  "status": "completed",
+  "verified": true,
+  "files_changed": [
+    "/Users/srini/Projects/kommit/app/api/commitments/checkin/route.ts"
+  ],
+  "lines_changed": 41,
+  "test_command": "cd /Users/srini/Projects/kommit; npx tsc --noEmit",
+  "test_output": "",
+  "elapsed_seconds": 10.5,
+  "why_context": null,
+  "model": "advanced",
+  "repo": "/Users/srini/Projects/kommit",
+  "agent": "KOCODE v1.0.0",
+  "commit_hash": null
+}
