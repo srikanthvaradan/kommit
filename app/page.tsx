@@ -174,13 +174,7 @@ export default function Home() {
         }}
       >
         {/* Logo */}
-        <div style={{display:'flex', alignItems:'center', gap:'0px', lineHeight:1}}>
-          <span style={{fontSize:'24px', fontWeight:'700', color:'#545454', fontFamily:'Inter,sans-serif', letterSpacing:'-1px'}}>K</span>
-          <span style={{fontSize:'24px', fontWeight:'700', color:'#545454', fontFamily:'Inter,sans-serif', letterSpacing:'-1px', position:'relative', display:'inline-flex', alignItems:'center', justifyContent:'center', width:'22px', height:'24px'}}>
-            <span style={{position:'absolute', width:'18px', height:'18px', borderRadius:'50%', background:'#F5C842', border:'2px solid #545454', display:'block'}}></span>
-          </span>
-          <span style={{fontSize:'24px', fontWeight:'700', color:'#545454', fontFamily:'Inter,sans-serif', letterSpacing:'-1px'}}>MMIT</span>
-        </div>
+        <img src="/ko_icon_light.svg?v=1781023020" alt="KOMMIT" style={{height:'44px', width:'44px'}} />
 
         {/* Nav links */}
         <div style={{ display: "flex", alignItems: "center", gap: "24px" }}>
@@ -224,11 +218,7 @@ export default function Home() {
           }}
         >
           {/* Logo */}
-          <div style={{display:'flex', alignItems:'center', justifyContent:'center', lineHeight:1, marginBottom:'48px'}}>
-            <span style={{fontSize:'56px', fontWeight:'700', color:'#545454', fontFamily:'Inter,sans-serif', letterSpacing:'4px'}}>K</span>
-            <span style={{fontSize:'56px', fontWeight:'700', color:'#545454', fontFamily:'Inter,sans-serif', letterSpacing:'4px', background:'#F5C842', borderRadius:'50%', width:'52px', height:'52px', display:'inline-flex', alignItems:'center', justifyContent:'center', margin:'0 2px'}}></span>
-            <span style={{fontSize:'56px', fontWeight:'700', color:'#545454', fontFamily:'Inter,sans-serif', letterSpacing:'4px'}}>MMIT</span>
-          </div>
+          <img src="/kommit_logo_light.svg?v=1781022912" alt="KOMMIT" style={{height:'200px', width:'auto', marginBottom:'48px'}} />
 
           {/* Pill input */}
           <div style={{
@@ -414,30 +404,30 @@ export default function Home() {
 
           {/* Result card */}
           {!processing && card && (
-            <div style={{ width: "100%", marginBottom: "32px" }}>
+            <div style={{ maxWidth: "560px", margin: "0 auto", paddingTop: "40px", width: "100%" }}>
               {/* What is happening */}
               <div
                 style={{
-                  marginBottom: "12px",
-                  padding: "16px 20px",
-                  backgroundColor: "#ffffff",
-                  borderRadius: "10px",
                   border: "1px solid #e4e4e4",
+                  borderRadius: "8px",
+                  padding: "24px 28px",
+                  marginBottom: "12px",
+                  background: "#fff",
                 }}
               >
                 <p
                   style={{
-                    margin: "0 0 6px 0",
-                    fontSize: "14px",
+                    margin: "0 0 12px 0",
+                    fontSize: "11px",
                     fontWeight: 500,
-                    color: "#8a8a8a",
+                    color: "#9a9a9a",
                     textTransform: "uppercase",
-                    letterSpacing: "0.08em",
+                    letterSpacing: "2px",
                   }}
                 >
                   What is happening
                 </p>
-                <p style={{ margin: "0", fontSize: "14px", fontWeight: 400, color: "#1a1a1a", lineHeight: "1.6" }}>
+                <p style={{ margin: "0", fontSize: "14px", color: "#1a1a1a", lineHeight: "1.7" }}>
                   {card.clarity}
                 </p>
               </div>
@@ -445,26 +435,26 @@ export default function Home() {
               {/* What you are avoiding */}
               <div
                 style={{
-                  marginBottom: "12px",
-                  padding: "16px 20px",
-                  backgroundColor: "#ffffff",
-                  borderRadius: "10px",
                   border: "1px solid #e4e4e4",
+                  borderRadius: "8px",
+                  padding: "24px 28px",
+                  marginBottom: "12px",
+                  background: "#fff",
                 }}
               >
                 <p
                   style={{
-                    margin: "0 0 6px 0",
-                    fontSize: "14px",
+                    margin: "0 0 12px 0",
+                    fontSize: "11px",
                     fontWeight: 500,
-                    color: "#8a8a8a",
+                    color: "#9a9a9a",
                     textTransform: "uppercase",
-                    letterSpacing: "0.08em",
+                    letterSpacing: "2px",
                   }}
                 >
                   What you are avoiding
                 </p>
-                <p style={{ margin: "0", fontSize: "14px", fontWeight: 400, color: "#1a1a1a", lineHeight: "1.6" }}>
+                <p style={{ margin: "0", fontSize: "14px", color: "#1a1a1a", lineHeight: "1.7" }}>
                   {card.challenge}
                 </p>
               </div>
@@ -472,21 +462,21 @@ export default function Home() {
               {/* The truth */}
               <div
                 style={{
-                  marginBottom: "20px",
-                  padding: "16px 20px",
-                  backgroundColor: "#fffbf4",
-                  borderRadius: "10px",
                   border: "1px solid #C4922A",
+                  borderRadius: "8px",
+                  padding: "24px 28px",
+                  marginBottom: "24px",
+                  background: "#fffdf7",
                 }}
               >
                 <p
                   style={{
-                    margin: "0 0 6px 0",
-                    fontSize: "14px",
+                    margin: "0 0 12px 0",
+                    fontSize: "11px",
                     fontWeight: 500,
                     color: "#C4922A",
                     textTransform: "uppercase",
-                    letterSpacing: "0.08em",
+                    letterSpacing: "2px",
                   }}
                 >
                   The truth
@@ -495,10 +485,9 @@ export default function Home() {
                   style={{
                     margin: "0",
                     fontSize: "14px",
-                    fontWeight: 400,
                     color: "#1a1a1a",
-                    lineHeight: "1.6",
-                    fontStyle: "italic",
+                    lineHeight: "1.7",
+                    fontStyle: "normal",
                   }}
                 >
                   {card.truth}
@@ -509,10 +498,9 @@ export default function Home() {
               <p
                 style={{
                   fontSize: "14px",
-                  fontWeight: 400,
                   color: "#1a1a1a",
                   lineHeight: "1.7",
-                  marginBottom: "20px",
+                  marginBottom: "24px",
                 }}
               >
                 {card.commitment}
@@ -528,16 +516,20 @@ export default function Home() {
                   "&stakeAmount=500"
                 }
                 style={{
-                  display: "inline-block",
+                  display: "block",
                   backgroundColor: "#C4922A",
-                  color: "#ffffff",
+                  color: "#fff",
                   textDecoration: "none",
-                  borderRadius: "8px",
-                  padding: "10px 24px",
+                  border: "none",
+                  borderRadius: "6px",
+                  padding: "14px 28px",
                   fontSize: "14px",
                   fontWeight: 500,
                   fontFamily: "Inter, sans-serif",
-                  letterSpacing: "0.02em",
+                  cursor: "pointer",
+                  width: "100%",
+                  boxSizing: "border-box",
+                  textAlign: "center",
                 }}
               >
                 Back this with $5
