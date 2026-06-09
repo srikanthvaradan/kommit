@@ -91,6 +91,8 @@ export async function POST(request: NextRequest): Promise<Response> {
           return;
         }
 
+        emit({ agent: "Bane", decision: "Location identified", detail: "Crisis resources mapped to your territory" });
+
         // ------------------------------------------------------------------
         // Step 1.5 — Bridge (Language Detection & Translation)
         // ------------------------------------------------------------------
@@ -115,6 +117,8 @@ export async function POST(request: NextRequest): Promise<Response> {
           processText = await translateToEnglish(text, detectedLanguage);
           emit({ agent: "Agent Smith", decision: "translated", detail: `Detected ${detectedLanguage}, translated to English` });
         }
+
+        emit({ agent: "Mike Ehrmantraut", decision: "Audio processed", detail: "No trace left. Voice deleted." });
 
         // ------------------------------------------------------------------
         // Step 2 — Sensing
@@ -171,6 +175,8 @@ export async function POST(request: NextRequest): Promise<Response> {
         let final = await adjudicate(processText, clarity, challenge);
 
         emit({ agent: "Thanos", truth: final.truth });
+
+        emit({ agent: "Ra's al Ghul", decision: "Commitment contract prepared", detail: "Your word will be binding." });
 
         // ------------------------------------------------------------------
         // Step 6.5 — Bridge (Back-Translation)
