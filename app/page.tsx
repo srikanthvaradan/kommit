@@ -226,7 +226,7 @@ export default function Home() {
           {/* Logo */}
           <div style={{display:'flex', alignItems:'center', justifyContent:'center', lineHeight:1, marginBottom:'48px'}}>
             <span style={{fontSize:'56px', fontWeight:'700', color:'#545454', fontFamily:'Inter,sans-serif', letterSpacing:'4px'}}>K</span>
-            <span style={{fontSize:'56px', fontWeight:'700', color:'#545454', fontFamily:'Inter,sans-serif', letterSpacing:'4px', background:'#F5C842', borderRadius:'50%', width:'52px', height:'52px', display:'inline-flex', alignItems:'center', justifyContent:'center', margin:'0 2px'}}>O</span>
+            <span style={{fontSize:'56px', fontWeight:'700', color:'#545454', fontFamily:'Inter,sans-serif', letterSpacing:'4px', background:'#F5C842', borderRadius:'50%', width:'52px', height:'52px', display:'inline-flex', alignItems:'center', justifyContent:'center', margin:'0 2px'}}></span>
             <span style={{fontSize:'56px', fontWeight:'700', color:'#545454', fontFamily:'Inter,sans-serif', letterSpacing:'4px'}}>MMIT</span>
           </div>
 
