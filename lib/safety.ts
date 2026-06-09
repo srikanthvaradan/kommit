@@ -16,7 +16,7 @@ function classify(inputString: string): "safe" | "joyful" | "sensitive" | "crisi
   const unsafePatterns = ["ignore previous", "you are now", "jailbreak", "ignore instructions"];
   // Joyful patterns are used to identify positive and uplifting input
   // If a joyful pattern is found, the function will return "joyful" to trigger supportive and celebratory response
-  const joyfulPatterns = ["so excited", "amazing news", "just got", "we did it", "they said yes"];
+  const joyfulPatterns = ["so excited", "amazing news", "they said yes", "we did it", "celebrating", "i got the job", "we shipped", "got accepted", "best day"];
   // Sensitive patterns are used to identify potentially sensitive or emotional input
   // If a sensitive pattern is found, the function will return "sensitive" to trigger empathetic and supportive response
   const sensitivePatterns = ["divorce", "grief", "lost my", "funeral", "abuse", "trauma"];
