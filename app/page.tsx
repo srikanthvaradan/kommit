@@ -35,6 +35,7 @@ export default function Home() {
   const [recording, setRecording] = useState<boolean>(false);
   const [transcribing, setTranscribing] = useState<boolean>(false);
   const [voiceError, setVoiceError] = useState<string | null>(null);
+  const [showAgents, setShowAgents] = useState<boolean>(false);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
 
   async function handleRecord() {
@@ -76,6 +77,7 @@ export default function Home() {
     setStatus("processing");
     setAgentEvents([]);
     setCard(null);
+    setShowAgents(false);
 
     const res = await fetch("/api/analyze", {
       method: "POST",
@@ -123,6 +125,8 @@ export default function Home() {
     }
   }
 
+  const processing = status === "processing";
+
   return (
     <div
       style={{
@@ -134,6 +138,17 @@ export default function Home() {
         margin: "0",
       }}
     >
+      <style>{`
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+        @keyframes fadeInUp {
+          from { opacity: 0; transform: translateY(6px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
+
       <div
         style={{
           maxWidth: "640px",
@@ -192,16 +207,16 @@ export default function Home() {
         <div style={{ display: "flex", gap: "12px", marginBottom: "32px" }}>
           <button
             onClick={() => handleSubmit()}
-            disabled={status === "processing"}
+            disabled={processing}
             style={{
-              backgroundColor: status === "processing" ? "#aaa" : ACCENT,
+              backgroundColor: processing ? "#aaa" : ACCENT,
               color: "#fff",
               border: "none",
               borderRadius: "6px",
               padding: "14px 32px",
               fontSize: "1rem",
               fontFamily: "Georgia, serif",
-              cursor: status === "processing" ? "not-allowed" : "pointer",
+              cursor: processing ? "not-allowed" : "pointer",
               letterSpacing: "0.02em",
             }}
           >
@@ -224,6 +239,7 @@ export default function Home() {
             {recording ? "Stop recording" : "🎤 Speak"}
           </button>
         </div>
+
         {voiceError && <p style={{ color: "red", fontSize: 12 }}>{voiceError}</p>}
         {transcribing && (
           <p style={{ fontSize: "0.9rem", color: "#555", fontStyle: "italic", marginBottom: "16px" }}>
@@ -231,45 +247,91 @@ export default function Home() {
           </p>
         )}
 
-        {/* Processing: agent events */}
-        {status === "processing" && agentEvents.length > 0 && (
+        {/* Processing: animated O icon + agent feed toggle */}
+        {processing && (
           <div
             style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
               marginBottom: "32px",
-              padding: "16px",
-              backgroundColor: "#f0f4ef",
-              borderRadius: "6px",
-              border: `1px solid ${ACCENT}`,
+              paddingTop: "16px",
             }}
           >
-            <p
+            {/* Spinning O icon */}
+            <img
+              src="/Kommit_Icon.png"
+              alt="Processing"
               style={{
-                margin: "0 0 12px 0",
-                fontWeight: "bold",
+                animation: "spin 4s linear infinite",
+                width: 120,
+                height: 120,
+              }}
+            />
+
+            {/* Show agents toggle */}
+            <button
+              onClick={() => setShowAgents((prev) => !prev)}
+              style={{
+                marginTop: "20px",
+                background: "none",
+                border: "none",
                 color: ACCENT,
-                fontSize: "0.9rem",
-                textTransform: "uppercase",
-                letterSpacing: "0.06em",
+                fontSize: "0.85rem",
+                fontFamily: "Georgia, serif",
+                cursor: "pointer",
+                textDecoration: "underline",
+                letterSpacing: "0.02em",
+                padding: "0",
               }}
             >
-              Analyzing…
-            </p>
-            <ul style={{ margin: "0", padding: "0 0 0 16px" }}>
-              {agentEvents.map((ev, i) => (
-                <li
-                  key={i}
-                  style={{
-                    fontSize: "0.85rem",
-                    color: "#444",
-                    marginBottom: "6px",
-                    fontFamily: "monospace",
-                  }}
-                >
-                  <strong style={{ color: ACCENT }}>{ev.agent}</strong>:{" "}
-                  {ev.detail}
-                </li>
-              ))}
-            </ul>
+              {showAgents ? "hide agents" : "show agents"}
+            </button>
+
+            {/* Agent feed list */}
+            {showAgents && agentEvents.length > 0 && (
+              <ul
+                style={{
+                  marginTop: "16px",
+                  padding: "0",
+                  listStyle: "none",
+                  width: "100%",
+                  maxWidth: "480px",
+                }}
+              >
+                {agentEvents.map((ev, i) => (
+                  <li
+                    key={i}
+                    style={{
+                      fontSize: "0.85rem",
+                      color: "#444",
+                      marginBottom: "8px",
+                      fontFamily: "Georgia, serif",
+                      animation: "fadeInUp 0.4s ease both",
+                      animationDelay: `${i * 0.08}s`,
+                      opacity: 0,
+                    }}
+                  >
+                    <strong style={{ color: ACCENT }}>{ev.agent}</strong>
+                    {" — "}
+                    {ev.detail}
+                  </li>
+                ))}
+              </ul>
+            )}
+
+            {showAgents && agentEvents.length === 0 && (
+              <p
+                style={{
+                  marginTop: "12px",
+                  fontSize: "0.8rem",
+                  color: "#888",
+                  fontStyle: "italic",
+                }}
+              >
+                Waiting for agents…
+              </p>
+            )}
           </div>
         )}
 
@@ -311,8 +373,8 @@ export default function Home() {
           </div>
         )}
 
-        {/* Card */}
-        {card && (
+        {/* Card — only shown when not processing */}
+        {!processing && card && (
           <div style={{ marginBottom: "32px" }}>
             {/* What is happening */}
             <div
