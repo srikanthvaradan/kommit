@@ -1,0 +1,21 @@
+{
+  "id": "20260609_074706_562761",
+  "version": "1.0.0",
+  "timestamp": "2026-06-09T07:47:06.562768",
+  "project": "kommit",
+  "task": "OBJECTIVE: Edit /Users/srini/Projects/kommit/app/api/analyze/route.ts\n\nAdd multilingual support. Translate non-English input to English before the pipeline, then translate the final card back to the original language.\n\nAdd these imports at the top:\nimport { needsTranslation, translateToEnglish, translateFromEnglish } from &quot;@/lib/bridge&quot;;\nimport { detectKeyPhrases as detectLanguage } from &quot;@/lib/sensing&quot;;\n\nAfter the Gatekeeper step and before the Sensing step, add:\n\nlet processText = text;\nlet detectedLanguage = &quot;en&quot;;\nconst langDetect = text.slice(0, 50);\nif (/[^\\u0000-\\u007F]/.test(langDetect)) {\n  detectedLanguage = &quot;ta&quot;;\n  processText = await translateToEnglish(text, &quot;ta&quot;);\n  emit: { agent: &quot;Bridge&quot;, decision: &quot;translated&quot;, detail: &quot;Non-English detected, translated to English&quot; }\n}\n\nReplace all subsequent uses of `text` in the pipeline (Sensing, Grounding, Clarity, Challenge, Adjudicate) with `processText`.\n\nAfter adjudicate produces `final`, if detectedLanguage !== &quot;en&quot;, translate the card fields back:\nconst [truth, commitment, stake] = await Promise.all([\n  translateFromEnglish(final.truth, detectedLanguage),\n  translateFromEnglish(final.commitment, detectedLanguage),\n  translateFromEnglish(final.stake, detectedLanguage)\n]);\nfinal = { ...final, truth, commitment, stake };\n\nFILES: /Users/srini/Projects/kommit/app/api/analyze/route.ts\n\nACCEPTANCE CRITERIA:\nNon-English text is translated before pipeline\nBridge emit event shown in feed\nFinal card translated back to original language\nNo TypeScript errors\n\nTEST: cd /Users/srini/Projects/kommit; npx tsc --noEmit\n\nDO NOT: break the existing English path\nDO NOT: use ast.parse",
+  "status": "completed",
+  "verified": true,
+  "files_changed": [
+    "/Users/srini/Projects/kommit/app/api/analyze/route.ts"
+  ],
+  "lines_changed": 30,
+  "test_command": "cd /Users/srini/Projects/kommit; npx tsc --noEmit",
+  "test_output": "",
+  "elapsed_seconds": 25.5,
+  "why_context": "**RELEVANT HISTORY:**\n\n- `route.ts` last proven at `54fc571` \u2014 pipeline order: Gatekeeper \u2192 Sensing \u2192 Grounding \u2192 Clarity \u2192 Challenge \u2192 Adjudicate\n- `bridge.ts` proven at `f9b075f` \u2014 exports `needsTranslation`, `translateToEnglish`, `translateFromEnglish`\n- `sensing.ts` proven at `6ff7f4f` \u2014 exports",
+  "model": "advanced",
+  "repo": "/Users/srini/Projects/kommit",
+  "agent": "KOCODE v1.0.0",
+  "commit_hash": null
+}

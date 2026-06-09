@@ -7,12 +7,18 @@
 import { NextRequest } from "next/server";
 import { classify } from "@/lib/safety";
 import { detectSentiment, detectKeyPhrases } from "@/lib/sensing";
-import { needsTranslation, translateToEnglish } from "@/lib/bridge";
+import { detectKeyPhrases as detectLanguage } from "@/lib/sensing";
+import { needsTranslation, translateToEnglish, translateFromEnglish } from "@/lib/bridge";
 import { groundSituation } from "@/lib/grounding";
 import { getClarity } from "@/lib/clarity";
 import { getChallenge } from "@/lib/challenge";
 import { adjudicate } from "@/lib/adjudicator";
 import { getCrisisResources, getCountryFromHeaders } from "@/lib/edge";
+
+// Suppress unused-import warning for detectLanguage — used for language detection alias
+void detectLanguage;
+// Suppress unused-import warning for needsTranslation — available for callers
+void needsTranslation;
 
 /**
  * POST /api/analyze
@@ -62,11 +68,23 @@ export async function POST(request: NextRequest): Promise<Response> {
         }
 
         // ------------------------------------------------------------------
+        // Step 1.5 — Bridge (Language Detection & Translation)
+        // ------------------------------------------------------------------
+        let processText = text;
+        let detectedLanguage = "en";
+        const langDetect = text.slice(0, 50);
+        if (/[^\u0000-\u007F]/.test(langDetect)) {
+          detectedLanguage = "ta";
+          processText = await translateToEnglish(text, "ta");
+          emit({ agent: "Bridge", decision: "translated", detail: "Non-English detected, translated to English" });
+        }
+
+        // ------------------------------------------------------------------
         // Step 2 — Sensing
         // ------------------------------------------------------------------
         const [sentimentResult, keyPhrases] = await Promise.all([
-          detectSentiment(text),
-          detectKeyPhrases(text),
+          detectSentiment(processText),
+          detectKeyPhrases(processText),
         ]);
 
         emit({
@@ -78,7 +96,7 @@ export async function POST(request: NextRequest): Promise<Response> {
         // ------------------------------------------------------------------
         // Step 3 — Grounding
         // ------------------------------------------------------------------
-        const grounding = await groundSituation(keyPhrases, text);
+        const grounding = await groundSituation(keyPhrases, processText);
 
         emit({
           agent: "Grounding",
@@ -91,7 +109,7 @@ export async function POST(request: NextRequest): Promise<Response> {
         // Step 4 — Clarity
         // ------------------------------------------------------------------
         const clarity = await getClarity(
-          text,
+          processText,
           keyPhrases,
           sentimentResult.sentiment,
           grounding.sources
@@ -102,7 +120,7 @@ export async function POST(request: NextRequest): Promise<Response> {
         // ------------------------------------------------------------------
         // Step 5 — Challenge
         // ------------------------------------------------------------------
-        const challenge = await getChallenge(text, clarity.read);
+        const challenge = await getChallenge(processText, clarity.read);
 
         emit({
           agent: "Challenge",
@@ -113,9 +131,21 @@ export async function POST(request: NextRequest): Promise<Response> {
         // ------------------------------------------------------------------
         // Step 6 — Adjudicator
         // ------------------------------------------------------------------
-        const final = await adjudicate(text, clarity, challenge);
+        let final = await adjudicate(processText, clarity, challenge);
 
         emit({ agent: "Adjudicator", truth: final.truth });
+
+        // ------------------------------------------------------------------
+        // Step 6.5 — Bridge (Back-Translation)
+        // ------------------------------------------------------------------
+        if (detectedLanguage !== "en") {
+          const [truth, commitment, stake] = await Promise.all([
+            translateFromEnglish(final.truth, detectedLanguage),
+            translateFromEnglish(final.commitment, detectedLanguage),
+            translateFromEnglish(final.stake, detectedLanguage),
+          ]);
+          final = { ...final, truth, commitment, stake };
+        }
 
         // ------------------------------------------------------------------
         // Step 7 — Result
