@@ -163,14 +163,14 @@ export default function Home() {
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          padding: "18px 40px",
+          padding: "12px 40px",
           borderBottom: "1px solid #f0f0f0",
           backgroundColor: "#ffffff",
         }}
       >
         {/* Logo */}
-        <div style={{display:'flex', alignItems:'center', gap:'4px'}}>
-          <img src="/logo_icon.png" alt="KOMMIT" style={{height:'104px', width:'104px', borderRadius:'6px', objectFit:'cover'}} />
+        <div style={{display:'flex', alignItems:'center', gap:'0px'}}>
+          <img src="/logo_icon.png" alt="KOMMIT" style={{height:'44px', width:'44px', borderRadius:'6px', objectFit:'cover', padding:'4px'}} />
           <span style={{fontSize:'18px', fontWeight:'500', letterSpacing:'4px', color:'#1a1a1a'}}>KOMMIT</span>
         </div>
 
@@ -179,10 +179,11 @@ export default function Home() {
           <a
             href="/dashboard"
             style={{
-              fontSize: "14px",
-              fontWeight: 500,
+              fontSize: "13px",
+              fontWeight: 400,
               color: "#8a8a8a",
               textDecoration: "none",
+              fontFamily: "Inter, sans-serif",
             }}
           >
             Dashboard
@@ -190,10 +191,11 @@ export default function Home() {
           <a
             href="/login"
             style={{
-              fontSize: "14px",
-              fontWeight: 500,
+              fontSize: "13px",
+              fontWeight: 400,
               color: "#8a8a8a",
               textDecoration: "none",
+              fontFamily: "Inter, sans-serif",
             }}
           >
             Login
