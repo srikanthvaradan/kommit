@@ -430,13 +430,14 @@ export default function Home() {
             }}
           >
             <img
-              src="/logo-icon.png"
+              src="/logo_icon.png"
               alt="Processing"
               style={{
                 animation: "spin 4s linear infinite",
-                width: "48px",
-                height: "48px",
+                width: "70px",
+                height: "70px",
                 borderRadius: "50%",
+                objectFit: "cover",
                 marginBottom: "16px",
               }}
             />
