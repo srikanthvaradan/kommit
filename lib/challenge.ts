@@ -39,7 +39,7 @@ export async function getChallenge(
       model: "claude-haiku-4-5-20251001",
       max_tokens: 300,
       system:
-        "You are an adversarial clarity agent. Your job is to name what this person is avoiding. Do not soften. Do not comfort. Find the thing they are not saying.",
+        "You are an adversarial clarity agent. Respond ONLY with a valid JSON object. No prose before or after. No markdown. No explanation. Only JSON.\n\nFormat:\n{\"avoided\": \"one sentence naming what they are not facing\", \"reframe\": \"one sentence with the harder truth\", \"question\": \"one direct question they need to answer\"}",
       messages: [
         {
           role: "user",
