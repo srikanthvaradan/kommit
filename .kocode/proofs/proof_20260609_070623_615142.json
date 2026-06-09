@@ -1,0 +1,21 @@
+{
+  "id": "20260609_070623_615073",
+  "version": "1.0.0",
+  "timestamp": "2026-06-09T07:06:23.615080",
+  "project": "kommit",
+  "task": "OBJECTIVE: Create /Users/srini/Projects/kommit/app/success/page.tsx\n\nThe Reckoning screen. Shown after payment confirms. Displays the commitment the user just backed.\n\nAdd &quot;use client&quot; at top.\n\nReads from URL search params: truth, commitment, stakeAmount, forfeitDestination, dueDate.\n\nAfter mount call POST /api/commitments/save with all params from the URL plus avoidedTruth = truth.\nOn success store the returned id in state.\n\nRender:\n- Large heading: &quot;Your word is backed.&quot;\n- The truth (what they committed to face)\n- The commitment text (what they will do)\n- The stake amount formatted as currency\n- &quot;If you don&#x27;t follow through, your money goes to:&quot; + forfeitDestination\n- Due date formatted as readable date\n- A &quot;I followed through&quot; button \u2014 on click POST to /api/commitments/checkin with { id } then show &quot;Commitment honoured. Your money is coming back.&quot;\n- Subtext: &quot;Come back by [due date]. Your word is on the line.&quot;\n\nNo Tailwind. Background #FAFAF8, accent #3D5A36.\n\nFILES: /Users/srini/Projects/kommit/app/success/page.tsx\n\nACCEPTANCE CRITERIA:\n&quot;use client&quot; at top\nCalls save on mount\nShows all commitment details\nFollow-through button present\nNo TypeScript errors\n\nTEST: cd /Users/srini/Projects/kommit; npx tsc --noEmit\n\nDO NOT: use Tailwind\nDO NOT: use ast.parse",
+  "status": "completed",
+  "verified": true,
+  "files_changed": [
+    "/Users/srini/Projects/kommit/app/success/page.tsx"
+  ],
+  "lines_changed": 248,
+  "test_command": "cd /Users/srini/Projects/kommit; npx tsc --noEmit",
+  "test_output": "",
+  "elapsed_seconds": 28.3,
+  "why_context": null,
+  "model": "advanced",
+  "repo": "/Users/srini/Projects/kommit",
+  "agent": "KOCODE v1.0.0",
+  "commit_hash": null
+}
