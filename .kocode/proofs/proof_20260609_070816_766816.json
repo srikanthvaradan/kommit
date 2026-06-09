@@ -1,0 +1,21 @@
+{
+  "id": "20260609_070816_766748",
+  "version": "1.0.0",
+  "timestamp": "2026-06-09T07:08:16.766755",
+  "project": "kommit",
+  "task": "OBJECTIVE: Create /Users/srini/Projects/kommit/app/api/transcribe/route.ts\n\nPOST handler. Accepts audio file, uploads to S3 via Custodian, runs AWS Transcribe, returns transcript and detected language code.\n\nImports:\nimport { NextRequest, NextResponse } from &quot;next/server&quot;;\nimport { TranscribeClient, StartTranscriptionJobCommand, GetTranscriptionJobCommand } from &quot;@aws-sdk/client-transcribe&quot;;\nimport { uploadAudio, deleteAudio } from &quot;@/lib/custodian&quot;;\n\nconst transcribeClient = new TranscribeClient({\n  region: process.env.KOMMIT_TRANSCRIBE_REGION!,\n  credentials: { accessKeyId: process.env.KOMMIT_AWS_KEY!, secretAccessKey: process.env.KOMMIT_AWS_SECRET! }\n});\n\nAccept multipart form data with field &quot;audio&quot; (File).\n\nImplementation:\n1. Read audio file as ArrayBuffer, convert to Buffer.\n2. Generate unique key: &quot;audio/&quot; + Date.now() + &quot;.webm&quot;\n3. Upload via uploadAudio(buffer, key).\n4. Start transcription job:\n   await transcribeClient.send(new StartTranscriptionJobCommand({\n     TranscriptionJobName: &quot;kommit-&quot; + Date.now(),\n     LanguageCode: undefined,\n     IdentifyLanguage: true,\n     MediaFormat: &quot;webm&quot;,\n     Media: { MediaFileUri: &quot;s3://&quot; + process.env.KOMMIT_S3_BUCKET! + &quot;/&quot; + key },\n     OutputBucketName: process.env.KOMMIT_S3_BUCKET!\n   }))\n5. Poll every 2 seconds for up to 30 seconds until job status is COMPLETED or FAILED.\n   Use GetTranscriptionJobCommand.\n6. On COMPLETED: fetch the transcript JSON from the OutputUri using fetch().\n   Extract transcript text from results.transcripts[0].transcript.\n   Extract language code from LanguageCode field on the job.\n7. Delete audio via deleteAudio(key).\n8. Return: { transcript: string, languageCode: string }\nOn any error return 500 with { error: message }.\n\nFILES: /Users/srini/Projects/kommit/app/api/transcribe/route.ts\n\nACCEPTANCE CRITERIA:\nPOST handler exported\nUses IdentifyLanguage: true\nPolls until COMPLETED\nDeletes audio after transcription\nReturns transcript and languageCode\nNo TypeScript errors\n\nTEST: cd /Users/srini/Projects/kommit; npx tsc --noEmit\n\nDO NOT: hardcode bucket names or regions\nDO NOT: use ast.parse",
+  "status": "completed",
+  "verified": true,
+  "files_changed": [
+    "/Users/srini/Projects/kommit/app/api/transcribe/route.ts"
+  ],
+  "lines_changed": 124,
+  "test_command": "cd /Users/srini/Projects/kommit; npx tsc --noEmit",
+  "test_output": "",
+  "elapsed_seconds": 17.3,
+  "why_context": null,
+  "model": "advanced",
+  "repo": "/Users/srini/Projects/kommit",
+  "agent": "KOCODE v1.0.0",
+  "commit_hash": null
+}
