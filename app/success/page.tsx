@@ -3,33 +3,41 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
+interface KommitCard {
+  truth: string;
+  commitment: string;
+  stakeAmount: number;
+  forfeitDestination: string;
+  dueDate: string;
+}
+
 export default function SuccessPage() {
   const searchParams = useSearchParams();
+  const paymentIntentId = searchParams.get("payment_intent") ?? "";
 
-  const truth = searchParams.get("truth") ?? "";
-  const commitment = searchParams.get("commitment") ?? "";
-  const stakeAmountRaw = searchParams.get("stakeAmount") ?? "0";
-  const forfeitDestination = searchParams.get("forfeitDestination") ?? "";
-  const dueDate = searchParams.get("dueDate") ?? "";
-  const paymentIntentId = searchParams.get("paymentIntentId") ?? "";
-
+  const [card, setCard] = useState<KommitCard | null>(null);
   const [id, setId] = useState<string | null>(null);
   const [honoured, setHonoured] = useState(false);
   const [checkinError, setCheckinError] = useState<string | null>(null);
   const [saveError, setSaveError] = useState<string | null>(null);
 
   useEffect(() => {
-    async function save() {
+    const stored = sessionStorage.getItem("kommit_card");
+    const parsed: KommitCard | null = stored ? JSON.parse(stored) : null;
+    sessionStorage.removeItem("kommit_card");
+    setCard(parsed);
+
+    async function save(c: KommitCard) {
       try {
         const res = await fetch("/api/commitments/save", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             paymentIntentId,
-            commitmentText: commitment,
-            stakeAmount: Number(stakeAmountRaw),
-            forfeitDestination,
-            avoidedTruth: truth,
+            commitmentText: c.commitment,
+            stakeAmount: Number(c.stakeAmount),
+            forfeitDestination: c.forfeitDestination,
+            avoidedTruth: c.truth,
           }),
         });
         const data = await res.json();
@@ -43,7 +51,9 @@ export default function SuccessPage() {
       }
     }
 
-    save();
+    if (parsed) {
+      save(parsed);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -66,7 +76,12 @@ export default function SuccessPage() {
     }
   }
 
-  const stakeAmount = Number(stakeAmountRaw);
+  const truth = card?.truth ?? "";
+  const commitment = card?.commitment ?? "";
+  const stakeAmount = card?.stakeAmount ?? 0;
+  const forfeitDestination = card?.forfeitDestination ?? "";
+  const dueDate = card?.dueDate ?? "";
+
   const formattedStake = new Intl.NumberFormat("en-SG", {
     style: "currency",
     currency: "SGD",
