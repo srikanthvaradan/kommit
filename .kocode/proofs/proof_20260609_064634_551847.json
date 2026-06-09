@@ -1,0 +1,21 @@
+{
+  "id": "20260609_064634_551770",
+  "version": "1.0.0",
+  "timestamp": "2026-06-09T06:46:34.551782",
+  "project": "kommit",
+  "task": "OBJECTIVE: Create /Users/srini/Projects/kommit/lib/edge.ts\n\nThe Edge Agent. Uses Vercel&#x27;s x-vercel-ip-country header to return country-appropriate crisis resources.\n\nExport this interface:\nexport interface CrisisResources {\n  primary: { name: string; number: string; url: string };\n  universal: string;\n}\n\nExport this function:\nexport function getCrisisResources(countryCode: string): CrisisResources\n\nImplementation \u2014 return resources based on countryCode:\n- &quot;SG&quot;: primary = { name: &quot;SOS 24-Hour Hotline&quot;, number: &quot;1-767&quot;, url: &quot;https://www.sos.org.sg&quot; }\n- &quot;IN&quot;: primary = { name: &quot;iCall&quot;, number: &quot;9152987821&quot;, url: &quot;https://icallhelpline.org&quot; }\n- &quot;US&quot;: primary = { name: &quot;988 Suicide &amp; Crisis Lifeline&quot;, number: &quot;988&quot;, url: &quot;https://988lifeline.org&quot; }\n- &quot;GB&quot;: primary = { name: &quot;Samaritans&quot;, number: &quot;116 123&quot;, url: &quot;https://www.samaritans.org&quot; }\n- &quot;AU&quot;: primary = { name: &quot;Lifeline&quot;, number: &quot;13 11 14&quot;, url: &quot;https://www.lifeline.org.au&quot; }\n- All others: primary = { name: &quot;Find A Helpline&quot;, number: &quot;&quot;, url: &quot;https://findahelpline.com&quot; }\n- universal is always &quot;https://findahelpline.com&quot; for every country.\n\nExport this helper:\nexport function getCountryFromHeaders(headers: Headers): string\nReads the &quot;x-vercel-ip-country&quot; header. Returns the value or &quot;UNKNOWN&quot; if absent.\n\nFILE header comment explaining what this agent does.\nJSDoc on both exports.\n\nFILES: /Users/srini/Projects/kommit/lib/edge.ts\n\nACCEPTANCE CRITERIA:\ngetCrisisResources and getCountryFromHeaders exported\nCrisisResources interface exported\nuniversal always set\nNo TypeScript errors\n\nTEST: cd /Users/srini/Projects/kommit; npx tsc --noEmit\n\nDO NOT: use ast.parse",
+  "status": "completed",
+  "verified": true,
+  "files_changed": [
+    "/Users/srini/Projects/kommit/lib/edge.ts"
+  ],
+  "lines_changed": 79,
+  "test_command": "cd /Users/srini/Projects/kommit; npx tsc --noEmit",
+  "test_output": "",
+  "elapsed_seconds": 21.6,
+  "why_context": null,
+  "model": "advanced",
+  "repo": "/Users/srini/Projects/kommit",
+  "agent": "KOCODE v1.0.0",
+  "commit_hash": null
+}
