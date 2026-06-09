@@ -389,8 +389,10 @@ export default function Home() {
             display: "flex",
             flexDirection: "row",
             alignItems: "center",
-            backgroundColor: "#ffffff",
+            backgroundColor: "#fff",
+            boxShadow: "0 1px 3px rgba(0,0,0,0.04)",
             boxSizing: "border-box",
+            gap: "8px",
             marginBottom: "12px",
           }}
         >
@@ -401,7 +403,7 @@ export default function Home() {
             onKeyDown={(e) => {
               if (e.key === "Enter" && !processing) handleSubmit();
             }}
-            placeholder="Type what's on your mind…"
+            placeholder="What's on your mind..."
             style={{
               flex: 1,
               border: "none",
@@ -411,7 +413,7 @@ export default function Home() {
               fontFamily: "Inter, sans-serif",
               color: "#1a1a1a",
               backgroundColor: "transparent",
-              padding: "8px 0",
+              padding: "12px 0",
             }}
           />
           <button
@@ -420,7 +422,7 @@ export default function Home() {
             style={{
               width: "38px",
               height: "38px",
-              borderRadius: "50%",
+              borderRadius: "7px",
               backgroundColor: processing ? "#d4a85a" : "#C4922A",
               border: "none",
               cursor: processing ? "not-allowed" : "pointer",
@@ -428,24 +430,10 @@ export default function Home() {
               alignItems: "center",
               justifyContent: "center",
               flexShrink: 0,
+              color: "#fff",
             }}
           >
-            {/* Arrow-up icon */}
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 16 16"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M8 13V3M8 3L4 7M8 3L12 7"
-                stroke="#ffffff"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+            ↑
           </button>
         </div>
 
