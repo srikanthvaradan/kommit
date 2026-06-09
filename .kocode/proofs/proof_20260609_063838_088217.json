@@ -1,0 +1,21 @@
+{
+  "id": "20260609_063838_088137",
+  "version": "1.0.0",
+  "timestamp": "2026-06-09T06:38:38.088143",
+  "project": "kommit",
+  "task": "OBJECTIVE: Create /Users/srini/Projects/kommit/lib/clarity.ts\n\nThe Clarity Agent. Produces the reasonable, surface-level read of the situation.\n\nUse EXACTLY:\nimport Anthropic from &quot;@anthropic-ai/sdk&quot;;\nconst anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY! });\n\nExport this interface:\nexport interface ClarityCard {\n  read: string;\n  commitment: string;\n  weight: string;\n}\n\nExport this function:\nexport async function getClarity(\n  transcript: string,\n  keyPhrases: string[],\n  sentiment: string,\n  sources: Array&lt;{ title: string; url: string; highlight: string }&gt;\n): Promise&lt;ClarityCard&gt;\n\nImplementation:\nCall anthropic.messages.create with model &quot;claude-haiku-4-5-20251001&quot;, max_tokens 400.\nSystem: &quot;You are a clarity agent. Read the situation and produce a grounded, honest response. Be direct, not comforting. Be specific to this exact situation.&quot;\nUser: the transcript, key phrases, sentiment, and top source highlight combined.\nParse response as JSON with fields: read (one sentence naming what is actually happening), commitment (one concrete action), weight (one word naming the emotional weight).\nIf JSON parse fails return fallback: { read: &quot;Something significant is happening.&quot;, commitment: &quot;Sit with this for one hour before deciding anything.&quot;, weight: &quot;Uncertain&quot; }\n\nFILE header comment and JSDoc on all exports.\n\nFILES: /Users/srini/Projects/kommit/lib/clarity.ts\n\nACCEPTANCE CRITERIA:\ngetClarity and ClarityCard exported\nUses new Anthropic({ apiKey: ... })\nReturns ClarityCard on success and on error\nNo TypeScript errors\n\nTEST: cd /Users/srini/Projects/kommit; npx tsc --noEmit\n\nDO NOT: access .text on ContentBlock without type === &quot;text&quot; check\nDO NOT: use ast.parse",
+  "status": "completed",
+  "verified": true,
+  "files_changed": [
+    "/Users/srini/Projects/kommit/lib/clarity.ts"
+  ],
+  "lines_changed": 102,
+  "test_command": "cd /Users/srini/Projects/kommit; npx tsc --noEmit",
+  "test_output": "",
+  "elapsed_seconds": 23.9,
+  "why_context": null,
+  "model": "advanced",
+  "repo": "/Users/srini/Projects/kommit",
+  "agent": "KOCODE v1.0.0",
+  "commit_hash": null
+}
