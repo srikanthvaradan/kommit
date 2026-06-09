@@ -99,14 +99,15 @@ export default function SuccessPage() {
   return (
     <main
       style={{
-        backgroundColor: "#FAFAF8",
+        backgroundColor: "#ffffff",
         minHeight: "100vh",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
         padding: "2rem",
-        fontFamily: "Georgia, serif",
+        fontFamily: "Inter, sans-serif",
+        fontSize: "14px",
         color: "#1a1a1a",
       }}
     >
@@ -118,10 +119,10 @@ export default function SuccessPage() {
       >
         <h1
           style={{
-            fontSize: "2.5rem",
-            fontWeight: "bold",
-            color: "#3D5A36",
-            marginBottom: "2rem",
+            fontSize: "32px",
+            fontWeight: 700,
+            color: "#1a1a1a",
+            marginBottom: "40px",
             lineHeight: 1.2,
           }}
         >
@@ -134,87 +135,132 @@ export default function SuccessPage() {
           </p>
         )}
 
-        <section style={{ marginBottom: "1.5rem" }}>
+        <section
+          style={{
+            border: "1px solid #e4e4e4",
+            borderRadius: "8px",
+            padding: "20px 24px",
+            marginBottom: "12px",
+            background: "#fff",
+          }}
+        >
           <h2
             style={{
-              fontSize: "0.85rem",
+              fontSize: "11px",
+              fontWeight: 500,
+              letterSpacing: "2px",
+              color: "#9a9a9a",
               textTransform: "uppercase",
-              letterSpacing: "0.08em",
-              color: "#3D5A36",
-              marginBottom: "0.4rem",
+              marginBottom: "8px",
             }}
           >
             The truth you faced
           </h2>
-          <p style={{ fontSize: "1.1rem", lineHeight: 1.6 }}>{truth}</p>
+          <p style={{ fontSize: "14px", color: "#1a1a1a", lineHeight: 1.7, margin: 0 }}>{truth}</p>
         </section>
 
-        <section style={{ marginBottom: "1.5rem" }}>
+        <section
+          style={{
+            border: "1px solid #e4e4e4",
+            borderRadius: "8px",
+            padding: "20px 24px",
+            marginBottom: "12px",
+            background: "#fff",
+          }}
+        >
           <h2
             style={{
-              fontSize: "0.85rem",
+              fontSize: "11px",
+              fontWeight: 500,
+              letterSpacing: "2px",
+              color: "#9a9a9a",
               textTransform: "uppercase",
-              letterSpacing: "0.08em",
-              color: "#3D5A36",
-              marginBottom: "0.4rem",
+              marginBottom: "8px",
             }}
           >
             Your commitment
           </h2>
-          <p style={{ fontSize: "1.1rem", lineHeight: 1.6 }}>{commitment}</p>
+          <p style={{ fontSize: "14px", color: "#1a1a1a", lineHeight: 1.7, margin: 0 }}>{commitment}</p>
         </section>
 
-        <section style={{ marginBottom: "1.5rem" }}>
+        <section
+          style={{
+            border: "1px solid #e4e4e4",
+            borderRadius: "8px",
+            padding: "20px 24px",
+            marginBottom: "12px",
+            background: "#fff",
+          }}
+        >
           <h2
             style={{
-              fontSize: "0.85rem",
+              fontSize: "11px",
+              fontWeight: 500,
+              letterSpacing: "2px",
+              color: "#9a9a9a",
               textTransform: "uppercase",
-              letterSpacing: "0.08em",
-              color: "#3D5A36",
-              marginBottom: "0.4rem",
+              marginBottom: "8px",
             }}
           >
             Stake
           </h2>
-          <p style={{ fontSize: "1.1rem", lineHeight: 1.6 }}>{formattedStake}</p>
+          <p style={{ fontSize: "14px", color: "#1a1a1a", lineHeight: 1.7, margin: 0 }}>{formattedStake}</p>
         </section>
 
-        <section style={{ marginBottom: "1.5rem" }}>
+        <section
+          style={{
+            border: "1px solid #e4e4e4",
+            borderRadius: "8px",
+            padding: "20px 24px",
+            marginBottom: "12px",
+            background: "#fff",
+          }}
+        >
           <h2
             style={{
-              fontSize: "0.85rem",
+              fontSize: "11px",
+              fontWeight: 500,
+              letterSpacing: "2px",
+              color: "#9a9a9a",
               textTransform: "uppercase",
-              letterSpacing: "0.08em",
-              color: "#3D5A36",
-              marginBottom: "0.4rem",
+              marginBottom: "8px",
             }}
           >
             If you don&apos;t follow through, your money goes to
           </h2>
-          <p style={{ fontSize: "1.1rem", lineHeight: 1.6 }}>{forfeitDestination}</p>
+          <p style={{ fontSize: "14px", color: "#1a1a1a", lineHeight: 1.7, margin: 0 }}>{forfeitDestination}</p>
         </section>
 
-        <section style={{ marginBottom: "2rem" }}>
+        <section
+          style={{
+            border: "1px solid #e4e4e4",
+            borderRadius: "8px",
+            padding: "20px 24px",
+            marginBottom: "12px",
+            background: "#fff",
+          }}
+        >
           <h2
             style={{
-              fontSize: "0.85rem",
+              fontSize: "11px",
+              fontWeight: 500,
+              letterSpacing: "2px",
+              color: "#9a9a9a",
               textTransform: "uppercase",
-              letterSpacing: "0.08em",
-              color: "#3D5A36",
-              marginBottom: "0.4rem",
+              marginBottom: "8px",
             }}
           >
             Due date
           </h2>
-          <p style={{ fontSize: "1.1rem", lineHeight: 1.6 }}>{formattedDueDate}</p>
+          <p style={{ fontSize: "14px", color: "#1a1a1a", lineHeight: 1.7, margin: 0 }}>{formattedDueDate}</p>
         </section>
 
         {honoured ? (
           <p
             style={{
-              fontSize: "1.2rem",
-              color: "#3D5A36",
-              fontWeight: "bold",
+              fontSize: "14px",
+              color: "#1a1a1a",
+              fontWeight: 700,
               marginBottom: "1.5rem",
             }}
           >
@@ -226,15 +272,17 @@ export default function SuccessPage() {
               onClick={handleFollowThrough}
               disabled={!id}
               style={{
-                backgroundColor: "#3D5A36",
-                color: "#FAFAF8",
+                backgroundColor: "#1a1a1a",
+                color: "#fff",
                 border: "none",
-                padding: "0.85rem 2rem",
-                fontSize: "1rem",
+                borderRadius: "6px",
+                padding: "14px 28px",
+                fontSize: "14px",
+                fontWeight: 500,
+                width: "100%",
+                marginBottom: "12px",
                 cursor: id ? "pointer" : "not-allowed",
                 opacity: id ? 1 : 0.6,
-                marginBottom: "1rem",
-                letterSpacing: "0.03em",
               }}
             >
               I followed through
@@ -249,10 +297,10 @@ export default function SuccessPage() {
 
         <p
           style={{
-            fontSize: "0.9rem",
-            color: "#555",
-            marginTop: "1rem",
-            fontStyle: "italic",
+            fontSize: "13px",
+            color: "#9a9a9a",
+            fontStyle: "normal",
+            marginTop: "16px",
           }}
         >
           Come back by {formattedDueDate}. Your word is on the line.
