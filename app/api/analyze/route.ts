@@ -1,0 +1,153 @@
+/**
+ * @file app/api/analyze/route.ts
+ * @description Main analysis pipeline. Accepts a POST request with a text body,
+ * runs all agents in sequence, and streams decision events as Server-Sent Events (SSE).
+ */
+
+import { NextRequest } from "next/server";
+import { classify } from "@/lib/safety";
+import { detectSentiment, detectKeyPhrases } from "@/lib/sensing";
+import { needsTranslation, translateToEnglish } from "@/lib/bridge";
+import { groundSituation } from "@/lib/grounding";
+import { getClarity } from "@/lib/clarity";
+import { getChallenge } from "@/lib/challenge";
+import { adjudicate } from "@/lib/adjudicator";
+import { getCrisisResources, getCountryFromHeaders } from "@/lib/edge";
+
+/**
+ * POST /api/analyze
+ *
+ * Accepts a JSON body `{ text: string }` and streams Server-Sent Events
+ * for each agent step in the analysis pipeline.
+ *
+ * @param request - The incoming Next.js request object.
+ * @returns A streaming Response with Content-Type: text/event-stream.
+ */
+export async function POST(request: NextRequest): Promise<Response> {
+  const body = await request.json();
+  const text: string = body.text ?? "";
+
+  const encoder = new TextEncoder();
+
+  const stream = new ReadableStream({
+    async start(controller) {
+      const emit = (event: unknown) => {
+        controller.enqueue(encoder.encode(`data: ${JSON.stringify(event)}\n\n`));
+      };
+
+      try {
+        // ------------------------------------------------------------------
+        // Step 1 — Gatekeeper
+        // ------------------------------------------------------------------
+        const category = classify(text);
+        const gatekeeperDecision =
+          category === "safe" || category === "joyful" || category === "sensitive"
+            ? "proceed"
+            : "halt";
+
+        emit({ agent: "Gatekeeper", category, decision: gatekeeperDecision });
+
+        if (category === "crisis") {
+          const country = getCountryFromHeaders(request.headers);
+          const resources = getCrisisResources(country);
+          emit({ type: "crisis", resources });
+          controller.close();
+          return;
+        }
+
+        if (category === "unsafe") {
+          emit({ type: "blocked" });
+          controller.close();
+          return;
+        }
+
+        // ------------------------------------------------------------------
+        // Step 2 — Sensing
+        // ------------------------------------------------------------------
+        const [sentimentResult, keyPhrases] = await Promise.all([
+          detectSentiment(text),
+          detectKeyPhrases(text),
+        ]);
+
+        emit({
+          agent: "Sensing",
+          sentiment: sentimentResult.sentiment,
+          phrases: keyPhrases.slice(0, 4),
+        });
+
+        // ------------------------------------------------------------------
+        // Step 3 — Grounding
+        // ------------------------------------------------------------------
+        const grounding = await groundSituation(keyPhrases, text);
+
+        emit({
+          agent: "Grounding",
+          query: grounding.query,
+          sources: grounding.sources.length,
+          reformulated: grounding.reformulated,
+        });
+
+        // ------------------------------------------------------------------
+        // Step 4 — Clarity
+        // ------------------------------------------------------------------
+        const clarity = await getClarity(
+          text,
+          keyPhrases,
+          sentimentResult.sentiment,
+          grounding.sources
+        );
+
+        emit({ agent: "Clarity", read: clarity.read });
+
+        // ------------------------------------------------------------------
+        // Step 5 — Challenge
+        // ------------------------------------------------------------------
+        const challenge = await getChallenge(text, clarity.read);
+
+        emit({
+          agent: "Challenge",
+          avoided: challenge.avoided,
+          question: challenge.question,
+        });
+
+        // ------------------------------------------------------------------
+        // Step 6 — Adjudicator
+        // ------------------------------------------------------------------
+        const final = await adjudicate(text, clarity, challenge);
+
+        emit({ agent: "Adjudicator", truth: final.truth });
+
+        // ------------------------------------------------------------------
+        // Step 7 — Result
+        // ------------------------------------------------------------------
+        emit({
+          type: "result",
+          card: {
+            truth: final.truth,
+            commitment: final.commitment,
+            stake: final.stake,
+            clarity: clarity.read,
+            challenge: challenge.avoided,
+            sources: grounding.sources,
+          },
+        });
+
+        emit({ type: "done" });
+      } catch (err: unknown) {
+        const message = err instanceof Error ? err.message : String(err);
+        controller.enqueue(
+          encoder.encode(`data: ${JSON.stringify({ type: "error", message })}\n\n`)
+        );
+      } finally {
+        controller.close();
+      }
+    },
+  });
+
+  return new Response(stream, {
+    headers: {
+      "Content-Type": "text/event-stream",
+      "Cache-Control": "no-cache",
+    },
+  });
+}

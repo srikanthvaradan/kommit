@@ -1,0 +1,21 @@
+{
+  "id": "20260609_065121_820878",
+  "version": "1.0.0",
+  "timestamp": "2026-06-09T06:51:21.820887",
+  "project": "kommit",
+  "task": "OBJECTIVE: Create /Users/srini/Projects/kommit/app/api/analyze/route.ts\n\nThe main pipeline. POST handler that runs all agents in sequence and streams decision events as Server-Sent Events.\n\nImports needed:\nimport { NextRequest } from &quot;next/server&quot;;\nimport { classify } from &quot;@/lib/safety&quot;;\nimport { detectSentiment, detectKeyPhrases } from &quot;@/lib/sensing&quot;;\nimport { needsTranslation, translateToEnglish } from &quot;@/lib/bridge&quot;;\nimport { groundSituation } from &quot;@/lib/grounding&quot;;\nimport { getClarity } from &quot;@/lib/clarity&quot;;\nimport { getChallenge } from &quot;@/lib/challenge&quot;;\nimport { adjudicate } from &quot;@/lib/adjudicator&quot;;\nimport { getCrisisResources, getCountryFromHeaders } from &quot;@/lib/edge&quot;;\n\nExport a POST handler. Accept JSON body: { text: string }.\nReturn a streaming Response with Content-Type: text/event-stream.\n\nUse this exact pattern to emit events:\nconst encoder = new TextEncoder();\nconst stream = new ReadableStream({ async start(controller) { ... controller.enqueue(encoder.encode(`data: ${JSON.stringify(event)}\\n\\n`)); ... controller.close(); } });\nreturn new Response(stream, { headers: { &quot;Content-Type&quot;: &quot;text/event-stream&quot;, &quot;Cache-Control&quot;: &quot;no-cache&quot; } });\n\nPipeline inside start(controller):\n\nStep 1 \u2014 Gatekeeper:\nconst category = classify(text);\nemit: { agent: &quot;Gatekeeper&quot;, category, decision: category === &quot;safe&quot; || category === &quot;joyful&quot; || category === &quot;sensitive&quot; ? &quot;proceed&quot; : &quot;halt&quot; }\nIf crisis: also get resources via getCrisisResources(getCountryFromHeaders(request.headers)) and emit: { type: &quot;crisis&quot;, resources }. Then close and return.\nIf unsafe: emit { type: &quot;blocked&quot; }. Close and return.\n\nStep 2 \u2014 Sensing (run sentiment + phrases in parallel):\nconst [sentimentResult, keyPhrases] = await Promise.all([detectSentiment(text), detectKeyPhrases(text)]);\nemit: { agent: &quot;Sensing&quot;, sentiment: sentimentResult.sentiment, phrases: keyPhrases.slice(0, 4) }\n\nStep 3 \u2014 Grounding:\nconst grounding = await groundSituation(keyPhrases, text);\nemit: { agent: &quot;Grounding&quot;, query: grounding.query, sources: grounding.sources.length, reformulated: grounding.reformulated }\n\nStep 4 \u2014 Clarity:\nconst clarity = await getClarity(text, keyPhrases, sentimentResult.sentiment, grounding.sources);\nemit: { agent: &quot;Clarity&quot;, read: clarity.read }\n\nStep 5 \u2014 Challenge:\nconst challenge = await getChallenge(text, clarity.read);\nemit: { agent: &quot;Challenge&quot;, avoided: challenge.avoided, question: challenge.question }\n\nStep 6 \u2014 Adjudicator:\nconst final = await adjudicate(text, clarity, challenge);\nemit: { agent: &quot;Adjudicator&quot;, truth: final.truth }\n\nStep 7 \u2014 Result:\nemit: { type: &quot;result&quot;, card: { truth: final.truth, commitment: final.commitment, stake: final.stake, clarity: clarity.read, challenge: challenge.avoided, sources: grounding.sources } }\nemit: { type: &quot;done&quot; }\n\nWrap the entire pipeline in try/catch. On error emit: { type: &quot;error&quot;, message: error message } then close.\n\nFILE header comment and JSDoc on the POST export.\n\nFILES: /Users/srini/Projects/kommit/app/api/analyze/route.ts\n\nACCEPTANCE CRITERIA:\nPOST handler exported\nStreams SSE events for each agent step\nCrisis path emits resources and halts\nResult event contains full card\nNo TypeScript errors\n\nTEST: cd /Users/srini/Projects/kommit; npx tsc --noEmit\n\nDO NOT: use ast.parse\nDO NOT: block \u2014 always stream",
+  "status": "completed",
+  "verified": true,
+  "files_changed": [
+    "/Users/srini/Projects/kommit/app/api/analyze/route.ts"
+  ],
+  "lines_changed": 153,
+  "test_command": "cd /Users/srini/Projects/kommit; npx tsc --noEmit",
+  "test_output": "",
+  "elapsed_seconds": 66.1,
+  "why_context": null,
+  "model": "advanced",
+  "repo": "/Users/srini/Projects/kommit",
+  "agent": "KOCODE v1.0.0",
+  "commit_hash": null
+}
