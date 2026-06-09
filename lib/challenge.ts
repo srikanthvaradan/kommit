@@ -48,31 +48,14 @@ export async function getChallenge(
       ],
     });
 
-    const block = response.content.find((b) => b.type === "text");
-    if (!block || block.type !== "text") {
-      return FALLBACK;
+    const content = response.content[0];
+    const rawText = content.type === "text" ? content.text : "";
+    const jsonMatch = rawText.match(/\{[\s\S]*\}/);
+    const parsed = jsonMatch ? JSON.parse(jsonMatch[0]) : null;
+    if (!parsed || !parsed.avoided) {
+      return { avoided: "Something important is not being faced.", reframe: "The real issue may be different from what is described.", question: "What are you not willing to say out loud?" };
     }
-
-    const raw = block.text.trim();
-
-    // Strip markdown code fences if present
-    const jsonString = raw
-      .replace(/^```(?:json)?\s*/i, "")
-      .replace(/\s*```$/, "")
-      .trim();
-
-    const parsed = JSON.parse(jsonString) as Partial<ChallengeCard>;
-
-    return {
-      avoided:
-        typeof parsed.avoided === "string" ? parsed.avoided : FALLBACK.avoided,
-      reframe:
-        typeof parsed.reframe === "string" ? parsed.reframe : FALLBACK.reframe,
-      question:
-        typeof parsed.question === "string"
-          ? parsed.question
-          : FALLBACK.question,
-    };
+    return { avoided: String(parsed.avoided), reframe: String(parsed.reframe ?? ""), question: String(parsed.question ?? "") };
   } catch {
     return FALLBACK;
   }
