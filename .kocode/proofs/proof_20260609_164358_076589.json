@@ -1,0 +1,21 @@
+{
+  "id": "20260609_164358_076520",
+  "version": "1.0.0",
+  "timestamp": "2026-06-09T16:43:58.076528",
+  "project": "kommit",
+  "task": "OBJECTIVE: Edit /Users/srini/Projects/kommit/app/page.tsx\n\nFix the agent feed display. Currently showing raw JSON strings. \n\nFind where agentEvents are rendered and update each entry to show:\n- Agent name in gold (#C4922A)\n- A clean human-readable decision extracted from the event object\n\nReplace the current agent event display with:\n{agentEvents.map((event, i) =&gt; {\n  const parsed = typeof event === &#x27;string&#x27; ? JSON.parse(event) : event;\n  const name = parsed.agent || parsed.type || &#x27;Agent&#x27;;\n  const detail = parsed.decision || parsed.sentiment || parsed.query || parsed.truth || parsed.detail || &#x27;&#x27;;\n  return (\n    &lt;div key={i} style={{fontSize:&#x27;13px&#x27;, color:&#x27;#8a8a8a&#x27;, marginBottom:&#x27;6px&#x27;}}&gt;\n      &lt;span style={{color:&#x27;#C4922A&#x27;, fontWeight:500}}&gt;{name}&lt;/span&gt;\n      {detail ? ` \u2014 ${detail}` : &#x27;&#x27;}\n    &lt;/div&gt;\n  );\n})}\n\nFILES: /Users/srini/Projects/kommit/app/page.tsx\n\nACCEPTANCE CRITERIA:\nAgent names in gold\nHuman readable decisions shown\nNo raw JSON visible\nNo TypeScript errors\n\nTEST: cd /Users/srini/Projects/kommit; npx tsc --noEmit\n\nDO NOT: break any other logic\nDO NOT: use ast.parse",
+  "status": "completed",
+  "verified": true,
+  "files_changed": [
+    "/Users/srini/Projects/kommit/app/page.tsx"
+  ],
+  "lines_changed": 9,
+  "test_command": "cd /Users/srini/Projects/kommit; npx tsc --noEmit",
+  "test_output": "",
+  "elapsed_seconds": 15.6,
+  "why_context": null,
+  "model": "advanced",
+  "repo": "/Users/srini/Projects/kommit",
+  "agent": "KOCODE v1.0.0",
+  "commit_hash": null
+}

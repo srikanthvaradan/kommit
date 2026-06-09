@@ -3,8 +3,14 @@
 import { useState, useRef } from "react";
 
 interface AgentEvent {
-  agent: string;
-  detail: string;
+  agent?: string;
+  type?: string;
+  decision?: string;
+  sentiment?: string;
+  query?: string;
+  truth?: string;
+  detail?: string;
+  [key: string]: unknown;
 }
 
 interface Card {
@@ -97,10 +103,7 @@ export default function Home() {
           const event = JSON.parse(line.trim());
 
           if (event.agent) {
-            setAgentEvents((prev) => [
-              ...prev,
-              { agent: event.agent, detail: JSON.stringify(event).slice(0, 80) },
-            ]);
+            setAgentEvents((prev) => [...prev, event as AgentEvent]);
           }
 
           if (event.type === "result") {
@@ -325,25 +328,31 @@ export default function Home() {
                     width: "100%",
                   }}
                 >
-                  {agentEvents.map((ev, i) => (
-                    <li
-                      key={i}
-                      style={{
-                        fontSize: "14px",
-                        fontWeight: 400,
-                        color: "#444",
-                        marginBottom: "8px",
-                        fontFamily: "Inter, sans-serif",
-                        animation: "fadeInUp 0.4s ease both",
-                        animationDelay: `${i * 0.08}s`,
-                        opacity: 0,
-                      }}
-                    >
-                      <span style={{ color: "#C4922A", fontWeight: 500 }}>{ev.agent}</span>
-                      {" — "}
-                      {ev.detail}
-                    </li>
-                  ))}
+                  {agentEvents.map((event, i) => {
+                    const parsed = typeof event === 'string' ? JSON.parse(event) : event;
+                    const name = parsed.agent || parsed.type || 'Agent';
+                    const detail = parsed.decision || parsed.sentiment || parsed.query || parsed.truth || parsed.detail || '';
+                    return (
+                      <li
+                        key={i}
+                        style={{
+                          fontSize: "14px",
+                          fontWeight: 400,
+                          color: "#444",
+                          marginBottom: "8px",
+                          fontFamily: "Inter, sans-serif",
+                          animation: "fadeInUp 0.4s ease both",
+                          animationDelay: `${i * 0.08}s`,
+                          opacity: 0,
+                        }}
+                      >
+                        <div style={{fontSize:'13px', color:'#8a8a8a', marginBottom:'6px'}}>
+                          <span style={{color:'#C4922A', fontWeight:500}}>{name}</span>
+                          {detail ? ` — ${detail}` : ''}
+                        </div>
+                      </li>
+                    );
+                  })}
                 </ul>
               )}
 
