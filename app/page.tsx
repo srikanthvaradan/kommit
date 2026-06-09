@@ -213,20 +213,10 @@ export default function Home() {
             alignItems: "flex-start",
           }}
         >
-          {/* Heading */}
-          <h1
-            style={{
-              fontSize: "28px",
-              fontWeight: 300,
-              color: "#1a1a1a",
-              letterSpacing: "-0.5px",
-              margin: "0 0 8px 0",
-              textAlign: "left",
-              lineHeight: 1.3,
-            }}
-          >
-            What&apos;s weighing on you right now?
-          </h1>
+          {/* Logo */}
+          <div style={{display:'flex', justifyContent:'center', marginBottom:'48px', width:'100%'}}>
+            <img src="/logo_icon.png" style={{width:'80px', height:'80px', borderRadius:'12px', background:'#1a1a1a', padding:'8px', objectFit:'cover'}} alt="KOMMIT" />
+          </div>
 
           {/* Pill input */}
           <div style={{
@@ -244,7 +234,7 @@ export default function Home() {
                 flex: 1, border: 'none', background: 'transparent', color: '#fff',
                 fontSize: '14px', outline: 'none', fontFamily: 'Inter,sans-serif',
               }}
-              placeholder="What's on your mind..."
+              placeholder="What's weighing on you right now?"
             />
             <button onClick={handleRecord} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px', display: 'flex', alignItems: 'center' }}>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={recording ? '#c0392b' : '#888'} strokeWidth="1.5" strokeLinecap="round">
