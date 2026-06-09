@@ -34,7 +34,6 @@ export default function Home() {
   const [crisisResources, setCrisisResources] = useState<CrisisResources | null>(null);
   const [recording, setRecording] = useState<boolean>(false);
   const [transcribing, setTranscribing] = useState<boolean>(false);
-  const [debugMsg, setDebugMsg] = useState<string>("");
   const [voiceError, setVoiceError] = useState<string | null>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
 
@@ -55,14 +54,12 @@ export default function Home() {
       formData.append("audio", blob, "recording.webm");
       const res = await fetch("/api/transcribe", { method: "POST", body: formData });
       const data = await res.json();
-      setDebugMsg(JSON.stringify(data));
       console.log("TRANSCRIBE RESPONSE:", data);
       if (!res.ok) {
         setVoiceError(data.error || "Transcription failed");
       } else if (data.transcript) {
         setInput(data.transcript);
         setVoiceError(null);
-        setDebugMsg("");
       } else {
         setVoiceError("No transcript returned");
       }
@@ -227,7 +224,6 @@ export default function Home() {
           </button>
         </div>
         {voiceError && <p style={{ color: "red", fontSize: 12 }}>{voiceError}</p>}
-        {debugMsg && !voiceError && <p style={{ color: "red", fontSize: 12 }}>{debugMsg}</p>}
         {transcribing && (
           <p style={{ fontSize: "0.9rem", color: "#555", fontStyle: "italic", marginBottom: "16px" }}>
             Transcribing...
