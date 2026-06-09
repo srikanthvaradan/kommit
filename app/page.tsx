@@ -173,11 +173,7 @@ export default function Home() {
         }}
       >
         {/* Logo */}
-        <div style={{display:'flex', alignItems:'center'}}>
-          <span style={{fontSize:'22px', fontWeight:'500', letterSpacing:'4px', color:'#1a1a1a', fontFamily:'Inter,sans-serif'}}>K</span>
-          <span id="nav-o" style={{fontSize:'22px', fontWeight:'900', letterSpacing:'4px', color:'#1a1a1a', fontFamily:'Inter,sans-serif', background:'#C4922A', borderRadius:'3px', padding:'0 2px', animation:'o-pulse 2s ease-in-out infinite'}}>O</span>
-          <span style={{fontSize:'22px', fontWeight:'500', letterSpacing:'4px', color:'#1a1a1a', fontFamily:'Inter,sans-serif'}}>MMIT</span>
-        </div>
+        <img src="/kommit_logo.svg" alt="KOMMIT" style={{height:'48px', width:'auto'}} />
 
         {/* Nav links */}
         <div style={{ display: "flex", alignItems: "center", gap: "24px" }}>
