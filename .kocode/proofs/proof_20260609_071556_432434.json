@@ -1,0 +1,21 @@
+{
+  "id": "20260609_071556_432366",
+  "version": "1.0.0",
+  "timestamp": "2026-06-09T07:15:56.432373",
+  "project": "kommit",
+  "task": "OBJECTIVE: Rewrite /Users/srini/Projects/kommit/app/page.tsx\n\nMain KOMMIT page. Replace the default Next.js template entirely.\n\nAdd &quot;use client&quot; at top.\n\nImports: import { useState } from &quot;react&quot;;\n\nState:\n- input: string\n- status: &quot;idle&quot; | &quot;processing&quot; | &quot;done&quot; | &quot;crisis&quot;\n- agentEvents: Array&lt;{ agent: string; detail: string }&gt;\n- card: { truth: string; commitment: string; stake: string; clarity: string; challenge: string } | null\n- crisisResources: { primary: { name: string; number: string; url: string } } | null\n\nhandleSubmit():\n1. Set status &quot;processing&quot;, clear events and card.\n2. const res = await fetch(&quot;/api/analyze&quot;, { method: &quot;POST&quot;, headers: { &quot;Content-Type&quot;: &quot;application/json&quot; }, body: JSON.stringify({ text: input }) })\n3. const reader = res.body!.getReader(); const decoder = new TextDecoder();\n4. Loop: read chunks, decode, split on &quot;data: &quot;, filter empty, JSON.parse each.\n5. If event.agent: push { agent: event.agent, detail: JSON.stringify(event).slice(0, 80) } to agentEvents.\n6. If event.type === &quot;result&quot;: set card from event.card.\n7. If event.type === &quot;crisis&quot;: set crisisResources, status &quot;crisis&quot;.\n8. If event.type === &quot;done&quot;: set status &quot;done&quot;.\n\nRender (inline styles only, no Tailwind, background #FAFAF8, accent #3D5A36):\n- Header: &quot;KOMMIT&quot; bold large, tagline &quot;Your word, backed.&quot;\n- Textarea: value={input} onChange, placeholder=&quot;What is weighing on you?&quot;, 4 rows\n- Button &quot;Find the truth&quot; onClick={handleSubmit} disabled when status===&quot;processing&quot;\n- When processing: show agentEvents as a list. Each shows agent name + detail.\n- When status===&quot;crisis&quot;: show crisisResources.primary.name, number, url. Message: &quot;You are not alone.&quot;\n- When card exists: three blocks \u2014 &quot;What is happening&quot; (card.clarity), &quot;What you are avoiding&quot; (card.challenge), &quot;The truth&quot; (card.truth). Then card.commitment. Then button &quot;Back this with $5&quot; that navigates to /commit?truth=+encodeURIComponent(card.truth)+&quot;&amp;commitment=&quot;+encodeURIComponent(card.commitment)+&quot;&amp;stakeAmount=500&quot;\n\nFILES: /Users/srini/Projects/kommit/app/page.tsx\n\nACCEPTANCE CRITERIA:\n&quot;use client&quot; at top\nhandleSubmit reads SSE stream\nCard renders three sections\nNo TypeScript errors\n\nTEST: cd /Users/srini/Projects/kommit; npx tsc --noEmit\n\nDO NOT: use Tailwind\nDO NOT: import from any lib file directly\nDO NOT: use ast.parse",
+  "status": "completed",
+  "verified": true,
+  "files_changed": [
+    "/Users/srini/Projects/kommit/app/page.tsx"
+  ],
+  "lines_changed": 320,
+  "test_command": "cd /Users/srini/Projects/kommit; npx tsc --noEmit",
+  "test_output": "",
+  "elapsed_seconds": 59.2,
+  "why_context": null,
+  "model": "advanced",
+  "repo": "/Users/srini/Projects/kommit",
+  "agent": "KOCODE v1.0.0",
+  "commit_hash": null
+}
