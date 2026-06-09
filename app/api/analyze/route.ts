@@ -147,6 +147,9 @@ export async function POST(request: NextRequest): Promise<Response> {
           final = { ...final, truth, commitment, stake };
         }
 
+        const clarityRead = detectedLanguage !== "en" ? await translateFromEnglish(clarity.read, detectedLanguage) : clarity.read;
+        const challengeAvoided = detectedLanguage !== "en" ? await translateFromEnglish(challenge.avoided, detectedLanguage) : challenge.avoided;
+
         // ------------------------------------------------------------------
         // Step 7 — Result
         // ------------------------------------------------------------------
@@ -156,8 +159,8 @@ export async function POST(request: NextRequest): Promise<Response> {
             truth: final.truth,
             commitment: final.commitment,
             stake: final.stake,
-            clarity: clarity.read,
-            challenge: challenge.avoided,
+            clarity: clarityRead,
+            challenge: challengeAvoided,
             sources: grounding.sources,
           },
         });
