@@ -38,7 +38,6 @@ export default function Home() {
   const [recording, setRecording] = useState<boolean>(false);
   const [transcribing, setTranscribing] = useState<boolean>(false);
   const [voiceError, setVoiceError] = useState<string | null>(null);
-  const [showAgents, setShowAgents] = useState<boolean>(false);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
 
   async function handleRecord() {
@@ -80,7 +79,6 @@ export default function Home() {
     setStatus("processing");
     setAgentEvents([]);
     setCard(null);
-    setShowAgents(false);
 
     const res = await fetch("/api/analyze", {
       method: "POST",
@@ -161,6 +159,10 @@ export default function Home() {
         @keyframes o-pulse {
           0%, 100% { background: #C4922A; }
           50% { background: #E8B84B; }
+        }
+        @keyframes dot-pulse {
+          0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+          40% { transform: scale(1); opacity: 1; }
         }
       `}</style>
 
@@ -280,107 +282,60 @@ export default function Home() {
 
           {/* Processing state */}
           {processing && (
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                width: "100%",
-                marginBottom: "32px",
-              }}
-            >
-              <img
-                src="/ko_icon_light.svg"
-                alt="Processing"
-                style={{
-                  animation: "spin 4s linear infinite",
-                  width: "60px",
-                  height: "60px",
-                  borderRadius: "50%",
-                  objectFit: "cover",
-                  marginBottom: "16px",
-                }}
-              />
-              <button
-                onClick={() => setShowAgents((prev) => !prev)}
-                style={{
-                  background: "none",
-                  border: "none",
-                  color: "#C4922A",
-                  fontSize: "14px",
-                  fontWeight: 500,
-                  fontFamily: "Inter, sans-serif",
-                  cursor: "pointer",
-                  textDecoration: "underline",
-                  padding: "0",
-                  marginBottom: "12px",
-                }}
-              >
-                {showAgents ? "hide agents" : "show agents"}
-              </button>
+            <div style={{display:'flex', flexDirection:'column', alignItems:'center', marginBottom:'32px'}}>
+              <div style={{display:'flex', gap:'8px', marginBottom:'16px'}}>
+                {[0,1,2].map(i => (
+                  <div key={i} style={{
+                    width:'8px', height:'8px', borderRadius:'50%', background:'#C4922A',
+                    animation:'dot-pulse 1.4s ease-in-out infinite',
+                    animationDelay:`${i * 0.2}s`
+                  }}/>
+                ))}
+              </div>
+              <p style={{fontSize:'13px', color:'#9a9a9a', margin:0, letterSpacing:'1px'}}>10 agents working</p>
+            </div>
+          )}
 
-              {showAgents && agentEvents.length > 0 && (
-                <ul
-                  style={{
-                    margin: "0",
-                    padding: "0",
-                    listStyle: "none",
-                    width: "100%",
-                  }}
-                >
-                  {agentEvents.map((event, i) => {
-                    const parsed = typeof event === 'string' ? JSON.parse(event) : event;
-                    const name = parsed.agent || parsed.type || 'Agent';
-                    const getAgentDetail = (parsed: any): string => {
-                      if (parsed.agent === 'Gus Fring') return `Input classified as ${parsed.category} — ${parsed.decision}`;
-                      if (parsed.agent === 'Bane') return parsed.detail || parsed.decision || '';
-                      if (parsed.agent === 'Mike Ehrmantraut') return parsed.detail || parsed.decision || '';
-                      if (parsed.agent === 'Hannibal') return `Sentiment: ${parsed.sentiment} — Key phrases: ${(parsed.phrases || []).slice(0,3).join(', ')}`;
-                      if (parsed.agent === 'T-1000') return `Searched: "${parsed.query}" — ${parsed.sources || 0} sources found`;
-                      if (parsed.agent === 'Tyler Durden') return parsed.read ? parsed.read.slice(0, 100) + (parsed.read.length > 100 ? '...' : '') : '';
-                      if (parsed.agent === 'Joker') return parsed.avoided ? parsed.avoided.slice(0, 100) + (parsed.avoided.length > 100 ? '...' : '') : '';
-                      if (parsed.agent === 'Thanos') return parsed.truth ? parsed.truth.slice(0, 100) + '...' : 'Delivering verdict...';
-                      if (parsed.agent === 'Agent Smith') return parsed.detail || `Translated to English`;
-                      if (parsed.agent === "Ra's al Ghul") return parsed.detail || 'Commitment contract prepared';
-                      return parsed.decision || parsed.detail || '';
-                    };
-                    const detail = getAgentDetail(parsed);
-                    return (
-                      <li
-                        key={i}
-                        style={{
-                          fontSize: "14px",
-                          fontWeight: 400,
-                          color: "#444",
-                          marginBottom: "8px",
-                          fontFamily: "Inter, sans-serif",
-                          animation: "fadeInUp 0.4s ease both",
-                          animationDelay: `${i * 0.08}s`,
-                          opacity: 0,
-                        }}
-                      >
-                        <div style={{fontSize:'13px', color:'#8a8a8a', marginBottom:'6px'}}>
-                          <span style={{color:'#C4922A', fontWeight:500}}>{name}</span>
-                          {detail ? ` — ${detail}` : ''}
-                        </div>
-                      </li>
-                    );
-                  })}
-                </ul>
-              )}
-
-              {showAgents && agentEvents.length === 0 && (
-                <p
-                  style={{
-                    fontSize: "14px",
-                    fontWeight: 400,
-                    color: "#8a8a8a",
-                    margin: "0",
-                  }}
-                >
-                  Waiting for agents…
-                </p>
-              )}
+          {/* Agent timeline — always visible during and after processing */}
+          {agentEvents.length > 0 && (
+            <div style={{width:'100%', marginBottom:'24px'}}>
+              {agentEvents.map((event, i) => {
+                const parsed = typeof event === 'string' ? JSON.parse(event) : event;
+                const name = parsed.agent || '';
+                if (!name) return null;
+                const getAgentDetail = (p: AgentEvent): string => {
+                  if (p.agent === 'Gus Fring') return `Input classified as ${(p as any).category}`;
+                  if (p.agent === 'Bane') return (p.detail as string) || '';
+                  if (p.agent === 'Mike Ehrmantraut') return (p.detail as string) || '';
+                  if (p.agent === 'Hannibal') return `Sentiment: ${p.sentiment} — Key phrases: ${((p as any).phrases||[]).slice(0,3).join(', ')}`;
+                  if (p.agent === 'T-1000') return `Searched: "${p.query}" — ${(p as any).sources||0} sources found`;
+                  if (p.agent === 'Tyler Durden') return (p as any).read ? (p as any).read.slice(0,120)+'...' : '';
+                  if (p.agent === 'Joker') return (p as any).avoided ? (p as any).avoided.slice(0,120)+'...' : '';
+                  if (p.agent === 'Thanos') return p.truth ? p.truth.slice(0,120)+'...' : 'Delivering verdict...';
+                  if (p.agent === 'Agent Smith') return (p.detail as string) || 'Translated to English';
+                  if (p.agent === "Ra's al Ghul") return (p.detail as string) || 'Commitment contract prepared';
+                  return (p.decision as string) || (p.detail as string) || '';
+                };
+                const detail = getAgentDetail(parsed);
+                return (
+                  <div key={i} style={{display:'flex', gap:'12px', marginBottom:'0', position:'relative'}}>
+                    <div style={{display:'flex', flexDirection:'column', alignItems:'center', width:'20px', flexShrink:0}}>
+                      <div style={{width:'20px', height:'20px', borderRadius:'50%', background:'#C4922A', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0}}>
+                        <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                          <path d="M2 5l2 2 4-4" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      </div>
+                      {i < agentEvents.length - 1 && <div style={{width:'1px', flex:1, background:'#e4e4e4', minHeight:'24px'}}/>}
+                    </div>
+                    <div style={{paddingBottom:'16px', flex:1}}>
+                      <div style={{display:'flex', alignItems:'center', gap:'8px', marginBottom:'2px'}}>
+                        <span style={{fontSize:'13px', fontWeight:500, color:'#1a1a1a'}}>{name}</span>
+                      </div>
+                      {detail && <p style={{fontSize:'13px', color:'#8a8a8a', margin:'0', lineHeight:1.5}}>{detail}</p>}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           )}
 
