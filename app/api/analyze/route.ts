@@ -21,6 +21,15 @@ void detectLanguage;
 void needsTranslation;
 
 /**
+ * Converts a BCP-47 language code to an ISO 639-1 code.
+ * @param code - The BCP-47 language code (e.g. "hi-IN", "ta-IN", "fr-FR").
+ * @returns The ISO 639-1 code (e.g. "hi", "ta", "fr").
+ */
+function toISO639(code: string): string {
+  return code.split("-")[0];
+}
+
+/**
  * Trims translated text to the last complete sentence.
  * @param text - The text to trim.
  * @returns The text trimmed to the last complete sentence.
@@ -83,11 +92,11 @@ export async function POST(request: NextRequest): Promise<Response> {
         // Step 1.5 — Bridge (Language Detection & Translation)
         // ------------------------------------------------------------------
         let processText = text;
-        let detectedLanguage = "en";
+        const languageCode = body.languageCode || "en";
+        let detectedLanguage = toISO639(languageCode);
         const langDetect = text.slice(0, 50);
         if (/[^\u0000-\u007F]/.test(langDetect)) {
-          detectedLanguage = "ta";
-          processText = await translateToEnglish(text, "ta");
+          processText = await translateToEnglish(text, detectedLanguage);
           emit({ agent: "Bridge", decision: "translated", detail: "Non-English detected, translated to English" });
         }
 

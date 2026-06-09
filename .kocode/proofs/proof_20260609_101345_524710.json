@@ -1,0 +1,19 @@
+{
+  "id": "20260609_101345_524663",
+  "version": "1.0.0",
+  "timestamp": "2026-06-09T10:13:45.524673",
+  "project": "kommit",
+  "task": "OBJECTIVE: Read and analyze /Users/srini/Projects/kommit/app/api/analyze/route.ts\n\nFind the section where detectedLanguage is set and where translateFromEnglish is called. Report exactly:\n1. How detectedLanguage is set\n2. What value is passed to translateFromEnglish as the target language\n3. Whether the language code from the transcribe response is being passed through correctly\n\nDo not change anything. Report findings only.\n\nFILES: /Users/srini/Projects/kommit/app/api/analyze/route.ts",
+  "status": "spec_unverifiable",
+  "verified": false,
+  "files_changed": [],
+  "lines_changed": 0,
+  "test_command": "",
+  "test_output": "acceptance criteria not verifiable \u2014 returned to author",
+  "elapsed_seconds": 28.6,
+  "why_context": null,
+  "model": "advanced",
+  "repo": "/Users/srini/Projects/kommit",
+  "agent": "KOCODE v1.0.0",
+  "commit_hash": null
+}
