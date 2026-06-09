@@ -290,12 +290,12 @@ export default function Home() {
               }}
             >
               <img
-                src="/logo_icon.png"
+                src="/ko_icon_light.svg"
                 alt="Processing"
                 style={{
                   animation: "spin 4s linear infinite",
-                  width: "70px",
-                  height: "70px",
+                  width: "60px",
+                  height: "60px",
                   borderRadius: "50%",
                   objectFit: "cover",
                   marginBottom: "16px",
@@ -331,7 +331,15 @@ export default function Home() {
                   {agentEvents.map((event, i) => {
                     const parsed = typeof event === 'string' ? JSON.parse(event) : event;
                     const name = parsed.agent || parsed.type || 'Agent';
-                    const detail = parsed.decision || parsed.sentiment || parsed.query || parsed.truth || parsed.detail || '';
+                    const detail = parsed.decision 
+                      ? parsed.decision 
+                      : parsed.sentiment 
+                      ? `${parsed.sentiment} — ${(parsed.phrases || []).slice(0,3).join(', ')}` 
+                      : parsed.query 
+                      ? `searching: ${parsed.query}` 
+                      : parsed.truth 
+                      ? parsed.truth.slice(0, 60) + '...' 
+                      : parsed.detail || '';
                     return (
                       <li
                         key={i}
