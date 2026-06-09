@@ -76,11 +76,11 @@ export default function SuccessPage() {
     }
   }
 
-  const truth = card?.truth ?? "";
-  const commitment = card?.commitment ?? "";
-  const stakeAmount = card?.stakeAmount ?? 0;
-  const forfeitDestination = card?.forfeitDestination ?? "";
-  const dueDate = card?.dueDate ?? "";
+  const truth = card?.truth || searchParams.get("truth") || "";
+  const commitment = card?.commitment || searchParams.get("commitment") || "";
+  const stakeAmount = card?.stakeAmount || parseInt(searchParams.get("stake") || "0", 10);
+  const forfeitDestination = card?.forfeitDestination || searchParams.get("forfeit") || "";
+  const dueDate = card?.dueDate || searchParams.get("due") || "";
 
   const formattedStake = new Intl.NumberFormat("en-SG", {
     style: "currency",
@@ -97,215 +97,223 @@ export default function SuccessPage() {
     : "";
 
   return (
-    <main
-      style={{
-        backgroundColor: "#ffffff",
-        minHeight: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: "2rem",
-        fontFamily: "Inter, sans-serif",
-        fontSize: "14px",
-        color: "#1a1a1a",
-      }}
-    >
-      <div
+    <>
+      <nav style={{position:'fixed', top:0, left:0, right:0, height:'64px', background:'#fff', borderBottom:'1px solid #e4e4e4', display:'flex', alignItems:'center', justifyContent:'space-between', padding:'0 40px', zIndex:100}}>
+        <img src="/ko_icon_light.svg" alt="KOMMIT" style={{height:'44px', width:'44px'}} />
+        <a href="/dashboard" style={{fontSize:'13px', color:'#8a8a8a', textDecoration:'none', fontFamily:'Inter,sans-serif'}}>Dashboard</a>
+      </nav>
+      <main
         style={{
-          maxWidth: "640px",
-          width: "100%",
+          backgroundColor: "#ffffff",
+          minHeight: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: "2rem",
+          paddingTop: "88px",
+          fontFamily: "Inter, sans-serif",
+          fontSize: "14px",
+          color: "#1a1a1a",
         }}
       >
-        <h1
+        <div
           style={{
-            fontSize: "32px",
-            fontWeight: 700,
-            color: "#1a1a1a",
-            marginBottom: "40px",
-            lineHeight: 1.2,
+            maxWidth: "640px",
+            width: "100%",
           }}
         >
-          Your word is backed.
-        </h1>
-
-        {saveError && (
-          <p style={{ color: "#c0392b", marginBottom: "1rem" }}>
-            Warning: {saveError}
-          </p>
-        )}
-
-        <section
-          style={{
-            border: "1px solid #e4e4e4",
-            borderRadius: "8px",
-            padding: "20px 24px",
-            marginBottom: "12px",
-            background: "#fff",
-          }}
-        >
-          <h2
+          <h1
             style={{
-              fontSize: "11px",
-              fontWeight: 500,
-              letterSpacing: "2px",
-              color: "#9a9a9a",
-              textTransform: "uppercase",
-              marginBottom: "8px",
-            }}
-          >
-            The truth you faced
-          </h2>
-          <p style={{ fontSize: "14px", color: "#1a1a1a", lineHeight: 1.7, margin: 0 }}>{truth}</p>
-        </section>
-
-        <section
-          style={{
-            border: "1px solid #e4e4e4",
-            borderRadius: "8px",
-            padding: "20px 24px",
-            marginBottom: "12px",
-            background: "#fff",
-          }}
-        >
-          <h2
-            style={{
-              fontSize: "11px",
-              fontWeight: 500,
-              letterSpacing: "2px",
-              color: "#9a9a9a",
-              textTransform: "uppercase",
-              marginBottom: "8px",
-            }}
-          >
-            Your commitment
-          </h2>
-          <p style={{ fontSize: "14px", color: "#1a1a1a", lineHeight: 1.7, margin: 0 }}>{commitment}</p>
-        </section>
-
-        <section
-          style={{
-            border: "1px solid #e4e4e4",
-            borderRadius: "8px",
-            padding: "20px 24px",
-            marginBottom: "12px",
-            background: "#fff",
-          }}
-        >
-          <h2
-            style={{
-              fontSize: "11px",
-              fontWeight: 500,
-              letterSpacing: "2px",
-              color: "#9a9a9a",
-              textTransform: "uppercase",
-              marginBottom: "8px",
-            }}
-          >
-            Stake
-          </h2>
-          <p style={{ fontSize: "14px", color: "#1a1a1a", lineHeight: 1.7, margin: 0 }}>{formattedStake}</p>
-        </section>
-
-        <section
-          style={{
-            border: "1px solid #e4e4e4",
-            borderRadius: "8px",
-            padding: "20px 24px",
-            marginBottom: "12px",
-            background: "#fff",
-          }}
-        >
-          <h2
-            style={{
-              fontSize: "11px",
-              fontWeight: 500,
-              letterSpacing: "2px",
-              color: "#9a9a9a",
-              textTransform: "uppercase",
-              marginBottom: "8px",
-            }}
-          >
-            If you don&apos;t follow through, your money goes to
-          </h2>
-          <p style={{ fontSize: "14px", color: "#1a1a1a", lineHeight: 1.7, margin: 0 }}>{forfeitDestination}</p>
-        </section>
-
-        <section
-          style={{
-            border: "1px solid #e4e4e4",
-            borderRadius: "8px",
-            padding: "20px 24px",
-            marginBottom: "12px",
-            background: "#fff",
-          }}
-        >
-          <h2
-            style={{
-              fontSize: "11px",
-              fontWeight: 500,
-              letterSpacing: "2px",
-              color: "#9a9a9a",
-              textTransform: "uppercase",
-              marginBottom: "8px",
-            }}
-          >
-            Due date
-          </h2>
-          <p style={{ fontSize: "14px", color: "#1a1a1a", lineHeight: 1.7, margin: 0 }}>{formattedDueDate}</p>
-        </section>
-
-        {honoured ? (
-          <p
-            style={{
-              fontSize: "14px",
-              color: "#1a1a1a",
+              fontSize: "32px",
               fontWeight: 700,
-              marginBottom: "1.5rem",
+              color: "#1a1a1a",
+              marginBottom: "40px",
+              lineHeight: 1.2,
             }}
           >
-            Commitment honoured. Your money is coming back.
-          </p>
-        ) : (
-          <>
-            <button
-              onClick={handleFollowThrough}
-              disabled={!id}
+            Your word is backed.
+          </h1>
+
+          {saveError && (
+            <p style={{ color: "#c0392b", marginBottom: "1rem" }}>
+              Warning: {saveError}
+            </p>
+          )}
+
+          <section
+            style={{
+              border: "1px solid #1a1a1a",
+              borderRadius: "8px",
+              padding: "20px 24px",
+              marginBottom: "12px",
+              background: "#fafafa",
+            }}
+          >
+            <h2
               style={{
-                backgroundColor: "#1a1a1a",
-                color: "#fff",
-                border: "none",
-                borderRadius: "6px",
-                padding: "14px 28px",
-                fontSize: "14px",
+                fontSize: "11px",
                 fontWeight: 500,
-                width: "100%",
-                marginBottom: "12px",
-                cursor: id ? "pointer" : "not-allowed",
-                opacity: id ? 1 : 0.6,
+                letterSpacing: "2px",
+                color: "#9a9a9a",
+                textTransform: "uppercase",
+                marginBottom: "8px",
               }}
             >
-              I followed through
-            </button>
-            {checkinError && (
-              <p style={{ color: "#c0392b", marginBottom: "1rem" }}>
-                {checkinError}
-              </p>
-            )}
-          </>
-        )}
+              The truth you faced
+            </h2>
+            <p style={{ fontSize: "14px", color: "#1a1a1a", lineHeight: 1.7, margin: 0 }}>{truth}</p>
+          </section>
 
-        <p
-          style={{
-            fontSize: "13px",
-            color: "#9a9a9a",
-            fontStyle: "normal",
-            marginTop: "16px",
-          }}
-        >
-          Come back by {formattedDueDate}. Your word is on the line.
-        </p>
-      </div>
-    </main>
+          <section
+            style={{
+              border: "1px solid #e4e4e4",
+              borderRadius: "8px",
+              padding: "20px 24px",
+              marginBottom: "12px",
+              background: "#fff",
+            }}
+          >
+            <h2
+              style={{
+                fontSize: "11px",
+                fontWeight: 500,
+                letterSpacing: "2px",
+                color: "#9a9a9a",
+                textTransform: "uppercase",
+                marginBottom: "8px",
+              }}
+            >
+              Your commitment
+            </h2>
+            <p style={{ fontSize: "14px", color: "#1a1a1a", lineHeight: 1.7, margin: 0 }}>{commitment}</p>
+          </section>
+
+          <section
+            style={{
+              border: "1px solid #e4e4e4",
+              borderRadius: "8px",
+              padding: "20px 24px",
+              marginBottom: "12px",
+              background: "#fff",
+            }}
+          >
+            <h2
+              style={{
+                fontSize: "11px",
+                fontWeight: 500,
+                letterSpacing: "2px",
+                color: "#9a9a9a",
+                textTransform: "uppercase",
+                marginBottom: "8px",
+              }}
+            >
+              Stake
+            </h2>
+            <p style={{ fontSize: "14px", color: "#1a1a1a", lineHeight: 1.7, margin: 0 }}>{formattedStake}</p>
+          </section>
+
+          <section
+            style={{
+              border: "1px solid #e4e4e4",
+              borderRadius: "8px",
+              padding: "20px 24px",
+              marginBottom: "12px",
+              background: "#fff",
+            }}
+          >
+            <h2
+              style={{
+                fontSize: "11px",
+                fontWeight: 500,
+                letterSpacing: "2px",
+                color: "#9a9a9a",
+                textTransform: "uppercase",
+                marginBottom: "8px",
+              }}
+            >
+              If you don&apos;t follow through, your money goes to
+            </h2>
+            <p style={{ fontSize: "14px", color: "#1a1a1a", lineHeight: 1.7, margin: 0 }}>{forfeitDestination}</p>
+          </section>
+
+          <section
+            style={{
+              border: "1px solid #e4e4e4",
+              borderRadius: "8px",
+              padding: "20px 24px",
+              marginBottom: "12px",
+              background: "#fff",
+            }}
+          >
+            <h2
+              style={{
+                fontSize: "11px",
+                fontWeight: 500,
+                letterSpacing: "2px",
+                color: "#9a9a9a",
+                textTransform: "uppercase",
+                marginBottom: "8px",
+              }}
+            >
+              Due date
+            </h2>
+            <p style={{ fontSize: "14px", color: "#1a1a1a", lineHeight: 1.7, margin: 0 }}>{formattedDueDate}</p>
+          </section>
+
+          {honoured ? (
+            <p
+              style={{
+                fontSize: "14px",
+                color: "#1a1a1a",
+                fontWeight: 700,
+                marginBottom: "1.5rem",
+              }}
+            >
+              Commitment honoured. Your money is coming back.
+            </p>
+          ) : (
+            <>
+              <button
+                onClick={handleFollowThrough}
+                disabled={!id}
+                style={{
+                  backgroundColor: "#ffde59",
+                  color: "#1a1a1a",
+                  border: "none",
+                  borderRadius: "6px",
+                  padding: "14px 28px",
+                  fontSize: "14px",
+                  fontWeight: 500,
+                  width: "100%",
+                  marginBottom: "12px",
+                  cursor: id ? "pointer" : "not-allowed",
+                  opacity: id ? 1 : 0.6,
+                }}
+              >
+                I followed through
+              </button>
+              <a href="/dashboard" style={{display:'block', textAlign:'center', fontSize:'13px', color:'#9a9a9a', marginTop:'12px', textDecoration:'none'}}>View all commitments →</a>
+              {checkinError && (
+                <p style={{ color: "#c0392b", marginBottom: "1rem" }}>
+                  {checkinError}
+                </p>
+              )}
+            </>
+          )}
+
+          <p
+            style={{
+              fontSize: "13px",
+              color: "#9a9a9a",
+              fontStyle: "normal",
+              marginTop: "16px",
+            }}
+          >
+            Come back by {formattedDueDate}. Your word is on the line.
+          </p>
+        </div>
+      </main>
+    </>
   );
 }

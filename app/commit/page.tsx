@@ -47,7 +47,7 @@ function CheckoutForm({
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: `${window.location.origin}/success`,
+        return_url: `${window.location.origin}/success?truth=${encodeURIComponent(searchParams.get("truth") || "")}&commitment=${encodeURIComponent(searchParams.get("commitment") || "")}&stake=${stakeAmount}&forfeit=${encodeURIComponent(forfeitDestination)}&due=${encodeURIComponent(new Date(Date.now() + 86400000).toISOString())}`,
       },
     });
 
@@ -73,8 +73,8 @@ function CheckoutForm({
           marginTop: '20px',
           width: '100%',
           padding: '14px',
-          backgroundColor: '#ffde59',
-          color: '#1a1a1a',
+          backgroundColor: '#1a1a1a',
+          color: '#ffffff',
           border: 'none',
           borderRadius: '6px',
           fontSize: '14px',
