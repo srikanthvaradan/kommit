@@ -16,10 +16,12 @@ function CheckoutForm({
   stakeAmount,
   forfeitDestination,
   searchParams,
+  joinPool,
 }: {
   stakeAmount: number;
   forfeitDestination: string;
   searchParams: ReturnType<typeof useSearchParams>;
+  joinPool: boolean;
 }) {
   const stripe = useStripe();
   const elements = useElements();
@@ -38,6 +40,7 @@ function CheckoutForm({
       commitment: searchParams.get("commitment") || "",
       stakeAmount,
       forfeitDestination,
+      joinPool,
       dueDate: new Date(Date.now() + 86400000).toISOString()
     }));
 
@@ -98,10 +101,17 @@ export default function CommitPage() {
   const [stakeAmount, setStakeAmount] = useState<number>(
     stakeParam ? parseInt(stakeParam, 10) : 500
   );
-  const [forfeitDestination, setForfeitDestination] = useState<string>(
-    "A cause I oppose"
-  );
+  const [forfeitType, setForfeitType] = useState<'cause' | 'pool' | 'kommit'>('kommit');
+  const [joinPool, setJoinPool] = useState(false);
+  const [causeText, setCauseText] = useState('');
   const [apiError, setApiError] = useState<string | null>(null);
+
+  const forfeitDestination: string =
+    forfeitType === 'cause'
+      ? causeText || 'A cause I oppose'
+      : forfeitType === 'pool'
+      ? joinPool ? 'KOMMIT pool member' : 'KOMMIT'
+      : 'KOMMIT';
 
   useEffect(() => {
     const createCommitment = async () => {
@@ -136,6 +146,34 @@ export default function CommitPage() {
   }, []);
 
   const formattedStake = (stakeAmount / 100).toFixed(2);
+
+  const cardBaseStyle: React.CSSProperties = {
+    border: '1px solid #e4e4e4',
+    borderRadius: '8px',
+    padding: '16px 20px',
+    marginBottom: '8px',
+    cursor: 'pointer',
+    background: '#fff',
+  };
+
+  const cardSelectedStyle: React.CSSProperties = {
+    ...cardBaseStyle,
+    border: '1px solid #1a1a1a',
+    background: '#fafafa',
+  };
+
+  const optionLabelStyle: React.CSSProperties = {
+    fontSize: '14px',
+    fontWeight: 500,
+    color: '#1a1a1a',
+  };
+
+  const optionDescStyle: React.CSSProperties = {
+    fontSize: '12px',
+    color: '#9a9a9a',
+    marginTop: '4px',
+    margin: '4px 0 0 0',
+  };
 
   return (
     <div
@@ -280,29 +318,73 @@ export default function CommitPage() {
               fontSize: "14px",
               fontWeight: "600",
               color: "#1a1a1a",
-              marginBottom: "8px",
+              marginBottom: "12px",
             }}
           >
             If I don&apos;t follow through, my money goes to:
           </label>
-          <input
-            type="text"
-            value={forfeitDestination}
-            onChange={(e) => setForfeitDestination(e.target.value)}
-            placeholder="A cause I oppose"
-            style={{
-              width: "100%",
-              padding: "12px",
-              fontSize: "14px",
-              fontFamily: "Inter, sans-serif",
-              border: "1px solid #e4e4e4",
-              borderRadius: "6px",
-              backgroundColor: "#ffffff",
-              color: "#1a1a1a",
-              outline: "none",
-              boxSizing: "border-box",
-            }}
-          />
+
+          {/* Option 1: A cause I hate */}
+          <div
+            style={forfeitType === 'cause' ? cardSelectedStyle : cardBaseStyle}
+            onClick={() => setForfeitType('cause')}
+          >
+            <p style={optionLabelStyle}>A cause I hate</p>
+            <p style={optionDescStyle}>Name a specific cause or organisation you oppose.</p>
+          </div>
+
+          {/* Option 2: A random KOMMIT member */}
+          <div
+            style={forfeitType === 'pool' ? cardSelectedStyle : cardBaseStyle}
+            onClick={() => setForfeitType('pool')}
+          >
+            <p style={optionLabelStyle}>A random KOMMIT member</p>
+            <p style={optionDescStyle}>Your stake goes to a stranger who followed through.</p>
+          </div>
+
+          {/* Option 3: KOMMIT keeps it */}
+          <div
+            style={forfeitType === 'kommit' ? cardSelectedStyle : cardBaseStyle}
+            onClick={() => setForfeitType('kommit')}
+          >
+            <p style={optionLabelStyle}>KOMMIT keeps it</p>
+            <p style={optionDescStyle}>Your forfeited stake goes to KOMMIT.</p>
+          </div>
+
+          {/* Option 1 extra UI */}
+          {forfeitType === 'cause' && (
+            <input
+              type="text"
+              value={causeText}
+              onChange={(e) => setCauseText(e.target.value)}
+              placeholder="Name the cause..."
+              style={{
+                width: "100%",
+                padding: "12px",
+                fontSize: "14px",
+                fontFamily: "Inter, sans-serif",
+                border: "1px solid #e4e4e4",
+                borderRadius: "6px",
+                backgroundColor: "#ffffff",
+                color: "#1a1a1a",
+                outline: "none",
+                boxSizing: "border-box",
+                marginTop: "4px",
+              }}
+            />
+          )}
+
+          {/* Option 2 extra UI */}
+          {forfeitType === 'pool' && (
+            <div style={{ border: '1px solid #ffde59', borderRadius: '8px', padding: '16px 20px', background: '#fffdf7', marginTop: '4px' }}>
+              <p style={{ fontSize: '13px', fontWeight: 500, color: '#1a1a1a', margin: '0 0 4px' }}>Join the KOMMIT pool</p>
+              <p style={{ fontSize: '12px', color: '#9a9a9a', margin: '0 0 12px', lineHeight: 1.5 }}>If you follow through, you might receive a stranger&apos;s forfeited stake. If you fail, yours goes to a random member — with a note that just says &quot;Failed to KOMMIT.&quot;</p>
+              <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+                <input type="checkbox" checked={joinPool} onChange={(e) => setJoinPool(e.target.checked)} />
+                <span style={{ fontSize: '13px', color: '#1a1a1a' }}>Add me to the pool</span>
+              </label>
+            </div>
+          )}
         </div>
 
         {/* Stripe Elements */}
@@ -315,7 +397,7 @@ export default function CommitPage() {
             stripe={stripePromise}
             options={{ clientSecret }}
           >
-            <CheckoutForm stakeAmount={stakeAmount} forfeitDestination={forfeitDestination} searchParams={searchParams} />
+            <CheckoutForm stakeAmount={stakeAmount} forfeitDestination={forfeitDestination} searchParams={searchParams} joinPool={joinPool} />
           </Elements>
         ) : (
           !apiError && (
