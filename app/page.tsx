@@ -234,22 +234,22 @@ export default function Home() {
         style={{
           maxWidth: "560px",
           margin: "0 auto",
-          padding: "72px 24px 48px",
+          padding: "48px 40px",
           display: "flex",
           flexDirection: "column",
-          alignItems: "center",
+          alignItems: "flex-start",
         }}
       >
         {/* Heading */}
         <h1
           style={{
-            fontSize: "14px",
+            fontSize: "28px",
             fontWeight: 300,
             color: "#1a1a1a",
-            letterSpacing: "-0.8px",
-            margin: "0 0 10px 0",
-            textAlign: "center",
-            lineHeight: 1.5,
+            letterSpacing: "-0.5px",
+            margin: "0 0 8px 0",
+            textAlign: "left",
+            lineHeight: 1.3,
           }}
         >
           What&apos;s weighing on you right now?
@@ -260,14 +260,14 @@ export default function Home() {
             fontWeight: 400,
             color: "#8a8a8a",
             margin: "0 0 48px 0",
-            textAlign: "center",
+            textAlign: "left",
           }}
         >
           Speak or type. 10 agents. Zero judgment.
         </p>
 
         {/* Speak button */}
-        <div style={{ position: "relative", marginBottom: "32px" }}>
+        <div style={{ position: "relative", marginBottom: "32px", alignSelf: "center" }}>
           {/* Pulse ring */}
           <div
             style={{
@@ -294,24 +294,22 @@ export default function Home() {
               backgroundColor: "#ffffff",
               cursor: "pointer",
               display: "flex",
+              flexDirection: "column",
               alignItems: "center",
               justifyContent: "center",
+              gap: "6px",
               animation: "breathe 3s ease-in-out infinite",
               position: "relative",
               zIndex: 1,
               padding: 0,
             }}
           >
-            <img
-              src="/logo-icon.png"
-              alt="Speak"
-              style={{
-                width: "60px",
-                height: "60px",
-                borderRadius: "50%",
-                objectFit: "cover",
-              }}
-            />
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#C4922A" strokeWidth="1.2" strokeLinecap="round">
+              <path d="M12 2C8.5 2 5.5 4.5 5.5 8c0 5.5 4 11 5.5 13 1.5-2 5.5-7.5 5.5-13 0-3.5-3-6-4.5-6z"/>
+              <path d="M9 8c0-1.7 1.3-3 3-3s3 1.3 3 3c0 3-2 6-3 8"/>
+              <path d="M7 9.5C7 7 9.2 5 12 5"/>
+            </svg>
+            <span style={{fontSize:'8px',letterSpacing:'2px',color:'#C4922A',fontWeight:500}}>SPEAK</span>
           </button>
         </div>
 
@@ -324,6 +322,7 @@ export default function Home() {
               color: "#c0392b",
               margin: "0 0 16px 0",
               textAlign: "center",
+              alignSelf: "center",
             }}
           >
             Recording… tap to stop
@@ -337,6 +336,7 @@ export default function Home() {
               color: "#8a8a8a",
               margin: "0 0 16px 0",
               textAlign: "center",
+              alignSelf: "center",
             }}
           >
             Transcribing…
@@ -350,6 +350,7 @@ export default function Home() {
               color: "#c0392b",
               margin: "0 0 16px 0",
               textAlign: "center",
+              alignSelf: "center",
             }}
           >
             {voiceError}
