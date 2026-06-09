@@ -167,7 +167,7 @@ export default function Home() {
         }}
       >
         {/* Logo */}
-        <img src="/logo_light.svg" alt="KOMMIT" style={{height:'80px', width:'auto'}} />
+        <img src="/logo_light.svg" alt="KOMMIT" style={{height:'44px', width:'auto', display:'block', objectFit:'contain'}} />
 
         {/* Nav links */}
         <div style={{ display: "flex", alignItems: "center", gap: "24px" }}>
