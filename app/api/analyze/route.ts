@@ -21,6 +21,18 @@ void detectLanguage;
 void needsTranslation;
 
 /**
+ * Trims translated text to the last complete sentence.
+ * @param text - The text to trim.
+ * @returns The text trimmed to the last complete sentence.
+ */
+function trimToLastSentence(text: string): string {
+  if (!text) return text;
+  const lastPeriod = Math.max(text.lastIndexOf('.'), text.lastIndexOf('?'), text.lastIndexOf('!'));
+  if (lastPeriod === -1 || lastPeriod === text.length - 1) return text;
+  return text.slice(0, lastPeriod + 1);
+}
+
+/**
  * POST /api/analyze
  *
  * Accepts a JSON body `{ text: string }` and streams Server-Sent Events
@@ -144,11 +156,18 @@ export async function POST(request: NextRequest): Promise<Response> {
             translateFromEnglish(final.commitment, detectedLanguage),
             translateFromEnglish(final.stake, detectedLanguage),
           ]);
-          final = { ...final, truth, commitment, stake };
+          final = {
+            ...final,
+            truth: trimToLastSentence(truth),
+            commitment: trimToLastSentence(commitment),
+            stake: trimToLastSentence(stake),
+          };
         }
 
-        const clarityRead = detectedLanguage !== "en" ? await translateFromEnglish(clarity.read, detectedLanguage) : clarity.read;
-        const challengeAvoided = detectedLanguage !== "en" ? await translateFromEnglish(challenge.avoided, detectedLanguage) : challenge.avoided;
+        let clarityRead = detectedLanguage !== "en" ? await translateFromEnglish(clarity.read, detectedLanguage) : clarity.read;
+        clarityRead = trimToLastSentence(clarityRead);
+        let challengeAvoided = detectedLanguage !== "en" ? await translateFromEnglish(challenge.avoided, detectedLanguage) : challenge.avoided;
+        challengeAvoided = trimToLastSentence(challengeAvoided);
 
         // ------------------------------------------------------------------
         // Step 7 — Result

@@ -1,0 +1,21 @@
+{
+  "id": "20260609_075936_621692",
+  "version": "1.0.0",
+  "timestamp": "2026-06-09T07:59:36.621699",
+  "project": "kommit",
+  "task": "OBJECTIVE: Edit /Users/srini/Projects/kommit/app/api/analyze/route.ts\n\nAdd a helper function that trims translated text to the last complete sentence. Apply it to all translated fields.\n\nAdd this function before the POST export:\nfunction trimToLastSentence(text: string): string {\n  if (!text) return text;\n  const lastPeriod = Math.max(text.lastIndexOf(&#x27;.&#x27;), text.lastIndexOf(&#x27;?&#x27;), text.lastIndexOf(&#x27;!&#x27;));\n  if (lastPeriod === -1 || lastPeriod === text.length - 1) return text;\n  return text.slice(0, lastPeriod + 1);\n}\n\nAfter all translateFromEnglish calls, wrap each result with trimToLastSentence():\n- clarityRead = trimToLastSentence(clarityRead)\n- challengeAvoided = trimToLastSentence(challengeAvoided)\n- truth = trimToLastSentence(truth)\n- commitment = trimToLastSentence(commitment)\n- stake = trimToLastSentence(stake)\n\nFILES: /Users/srini/Projects/kommit/app/api/analyze/route.ts\n\nACCEPTANCE CRITERIA:\ntrimToLastSentence function present\nApplied to all 5 translated fields\nNo TypeScript errors\n\nTEST: cd /Users/srini/Projects/kommit; npx tsc --noEmit\n\nDO NOT: break the English path\nDO NOT: use ast.parse",
+  "status": "completed",
+  "verified": true,
+  "files_changed": [
+    "/Users/srini/Projects/kommit/app/api/analyze/route.ts"
+  ],
+  "lines_changed": 19,
+  "test_command": "cd /Users/srini/Projects/kommit; npx tsc --noEmit",
+  "test_output": "",
+  "elapsed_seconds": 13.5,
+  "why_context": null,
+  "model": "advanced",
+  "repo": "/Users/srini/Projects/kommit",
+  "agent": "KOCODE v1.0.0",
+  "commit_hash": null
+}
