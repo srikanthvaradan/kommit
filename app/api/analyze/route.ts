@@ -5,6 +5,7 @@
  */
 
 import { NextRequest } from "next/server";
+import { ComprehendClient, DetectDominantLanguageCommand } from "@aws-sdk/client-comprehend";
 import { classify } from "@/lib/safety";
 import { detectSentiment, detectKeyPhrases } from "@/lib/sensing";
 import { needsTranslation, translateToEnglish, translateFromEnglish } from "@/lib/bridge";
@@ -13,6 +14,14 @@ import { getClarity } from "@/lib/clarity";
 import { getChallenge } from "@/lib/challenge";
 import { adjudicate } from "@/lib/adjudicator";
 import { getCrisisResources, getCountryFromHeaders } from "@/lib/edge";
+
+const comprehendClient = new ComprehendClient({
+  region: process.env.KOMMIT_COMPREHEND_REGION!,
+  credentials: {
+    accessKeyId: process.env.KOMMIT_AWS_KEY!,
+    secretAccessKey: process.env.KOMMIT_AWS_SECRET!,
+  },
+});
 
 /**
  * Converts a BCP-47 language code to an ISO 639-1 code.
@@ -86,12 +95,25 @@ export async function POST(request: NextRequest): Promise<Response> {
         // Step 1.5 — Bridge (Language Detection & Translation)
         // ------------------------------------------------------------------
         let processText = text;
-        const languageCode = body.languageCode || "en";
-        let detectedLanguage = toISO639(languageCode);
-        const langDetect = text.slice(0, 50);
-        if (/[^\u0000-\u007F]/.test(langDetect)) {
+        let detectedLanguage = toISO639(body.languageCode || "en");
+
+        if (detectedLanguage === "en") {
+          try {
+            const langResult = await comprehendClient.send(
+              new DetectDominantLanguageCommand({ Text: text.slice(0, 300) })
+            );
+            const topLang = langResult.Languages?.[0];
+            if (topLang && topLang.Score && topLang.Score > 0.7 && topLang.LanguageCode !== "en") {
+              detectedLanguage = topLang.LanguageCode!;
+            }
+          } catch {
+            // keep detectedLanguage as "en"
+          }
+        }
+
+        if (detectedLanguage !== "en") {
           processText = await translateToEnglish(text, detectedLanguage);
-          emit({ agent: "Bridge", decision: "translated", detail: "Non-English detected, translated to English" });
+          emit({ agent: "Bridge", decision: "translated", detail: `Detected ${detectedLanguage}, translated to English` });
         }
 
         // ------------------------------------------------------------------

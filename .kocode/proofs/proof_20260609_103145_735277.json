@@ -1,0 +1,21 @@
+{
+  "id": "20260609_103145_735207",
+  "version": "1.0.0",
+  "timestamp": "2026-06-09T10:31:45.735213",
+  "project": "kommit",
+  "task": "OBJECTIVE: Edit /Users/srini/Projects/kommit/app/api/analyze/route.ts\n\nFix language detection for text input. The Unicode check misses Latin-script languages like French.\n\nAfter reading languageCode from body, if languageCode is &quot;en&quot; (default), use Comprehend DetectDominantLanguageCommand to detect the actual language.\n\nAdd import at top:\nimport { ComprehendClient, DetectDominantLanguageCommand } from &quot;@aws-sdk/client-comprehend&quot;;\n\nAdd comprehend client:\nconst comprehendClient = new ComprehendClient({\n  region: process.env.KOMMIT_COMPREHEND_REGION!,\n  credentials: {\n    accessKeyId: process.env.KOMMIT_AWS_KEY!,\n    secretAccessKey: process.env.KOMMIT_AWS_SECRET!,\n  },\n});\n\nReplace the current language detection block with:\nlet processText = text;\nlet detectedLanguage = toISO639(body.languageCode || &quot;en&quot;);\n\nif (detectedLanguage === &quot;en&quot;) {\n  try {\n    const langResult = await comprehendClient.send(\n      new DetectDominantLanguageCommand({ Text: text.slice(0, 300) })\n    );\n    const topLang = langResult.Languages?.[0];\n    if (topLang &amp;&amp; topLang.Score &amp;&amp; topLang.Score &gt; 0.7 &amp;&amp; topLang.LanguageCode !== &quot;en&quot;) {\n      detectedLanguage = topLang.LanguageCode!;\n    }\n  } catch {\n    // keep detectedLanguage as &quot;en&quot;\n  }\n}\n\nif (detectedLanguage !== &quot;en&quot;) {\n  processText = await translateToEnglish(text, detectedLanguage);\n  emit({ agent: &quot;Bridge&quot;, decision: &quot;translated&quot;, detail: `Detected ${detectedLanguage}, translated to English` });\n}\n\nFILES: /Users/srini/Projects/kommit/app/api/analyze/route.ts\n\nACCEPTANCE CRITERIA:\nComprehend DetectDominantLanguage used when languageCode not in body\nNon-English text translated before pipeline\ndetectedLanguage set correctly for back-translation\nNo TypeScript errors\n\nTEST: cd /Users/srini/Projects/kommit; npx tsc --noEmit\n\nDO NOT: use ast.parse",
+  "status": "completed",
+  "verified": true,
+  "files_changed": [
+    "/Users/srini/Projects/kommit/app/api/analyze/route.ts"
+  ],
+  "lines_changed": 22,
+  "test_command": "cd /Users/srini/Projects/kommit; npx tsc --noEmit",
+  "test_output": "",
+  "elapsed_seconds": 17.3,
+  "why_context": "**Language detection in analyze/route.ts has been iterated on multiple times** (commits d2689ce, f5ede5c, 27096a4) \u2014 indicating this file is actively evolving. The Unicode-based detection was a known limitation being patched incrementally. The `translateToEnglish` function and `emit` helper already ",
+  "model": "advanced",
+  "repo": "/Users/srini/Projects/kommit",
+  "agent": "KOCODE v1.0.0",
+  "commit_hash": null
+}
