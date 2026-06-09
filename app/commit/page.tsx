@@ -69,13 +69,14 @@ function CheckoutForm({
         style={{
           marginTop: "20px",
           width: "100%",
-          padding: "14px 24px",
-          backgroundColor: "#3D5A36",
-          color: "#fff",
+          padding: "14px",
+          backgroundColor: "#ffde59",
+          color: "#1a1a1a",
           border: "none",
-          borderRadius: "8px",
-          fontSize: "16px",
+          borderRadius: "6px",
+          fontSize: "14px",
           fontWeight: "600",
+          fontFamily: "Inter, sans-serif",
           cursor: isLoading ? "not-allowed" : "pointer",
           opacity: isLoading ? 0.7 : 1,
         }}
@@ -140,7 +141,9 @@ export default function CommitPage() {
     <div
       style={{
         minHeight: "100vh",
-        backgroundColor: "#FAFAF8",
+        backgroundColor: "#ffffff",
+        fontFamily: "Inter, sans-serif",
+        fontSize: "14px",
         display: "flex",
         justifyContent: "center",
         alignItems: "flex-start",
@@ -157,32 +160,31 @@ export default function CommitPage() {
         {truth && (
           <div
             style={{
-              marginBottom: "32px",
-              padding: "24px",
-              backgroundColor: "#fff",
-              borderLeft: "4px solid #3D5A36",
+              border: "1px solid #e4e4e4",
               borderRadius: "8px",
-              boxShadow: "0 1px 4px rgba(0,0,0,0.06)",
+              padding: "20px 24px",
+              marginBottom: "12px",
+              backgroundColor: "#ffffff",
             }}
           >
             <p
               style={{
                 fontSize: "11px",
-                fontWeight: "700",
-                letterSpacing: "0.1em",
+                fontWeight: 500,
+                letterSpacing: "2px",
                 textTransform: "uppercase",
-                color: "#3D5A36",
+                color: "#9a9a9a",
                 marginBottom: "8px",
+                margin: "0 0 8px 0",
               }}
             >
-              Your Truth
+              YOUR TRUTH
             </p>
             <p
               style={{
-                fontSize: "22px",
-                fontWeight: "700",
+                fontSize: "14px",
                 color: "#1a1a1a",
-                lineHeight: "1.4",
+                lineHeight: "1.7",
                 margin: 0,
               }}
             >
@@ -193,24 +195,32 @@ export default function CommitPage() {
 
         {/* Commitment */}
         {commitment && (
-          <div style={{ marginBottom: "32px" }}>
+          <div
+            style={{
+              border: "1px solid #e4e4e4",
+              borderRadius: "8px",
+              padding: "20px 24px",
+              marginBottom: "12px",
+              backgroundColor: "#ffffff",
+            }}
+          >
             <p
               style={{
                 fontSize: "11px",
-                fontWeight: "700",
-                letterSpacing: "0.1em",
+                fontWeight: 500,
+                letterSpacing: "2px",
                 textTransform: "uppercase",
-                color: "#888",
-                marginBottom: "8px",
+                color: "#9a9a9a",
+                margin: "0 0 8px 0",
               }}
             >
-              Your Commitment
+              YOUR COMMITMENT
             </p>
             <p
               style={{
-                fontSize: "17px",
-                color: "#333",
-                lineHeight: "1.6",
+                fontSize: "14px",
+                color: "#1a1a1a",
+                lineHeight: "1.7",
                 margin: 0,
               }}
             >
@@ -226,12 +236,12 @@ export default function CommitPage() {
               display: "block",
               fontSize: "14px",
               fontWeight: "600",
-              color: "#333",
+              color: "#1a1a1a",
               marginBottom: "12px",
             }}
           >
             Stake Amount:{" "}
-            <span style={{ color: "#3D5A36", fontSize: "18px" }}>
+            <span style={{ color: "#1a1a1a", fontSize: "14px" }}>
               ${formattedStake}
             </span>
           </label>
@@ -244,7 +254,7 @@ export default function CommitPage() {
             onChange={(e) => setStakeAmount(parseInt(e.target.value, 10))}
             style={{
               width: "100%",
-              accentColor: "#3D5A36",
+              accentColor: "#ffde59",
               cursor: "pointer",
             }}
           />
@@ -253,7 +263,7 @@ export default function CommitPage() {
               display: "flex",
               justifyContent: "space-between",
               fontSize: "12px",
-              color: "#888",
+              color: "#9a9a9a",
               marginTop: "4px",
             }}
           >
@@ -269,7 +279,7 @@ export default function CommitPage() {
               display: "block",
               fontSize: "14px",
               fontWeight: "600",
-              color: "#333",
+              color: "#1a1a1a",
               marginBottom: "8px",
             }}
           >
@@ -282,11 +292,12 @@ export default function CommitPage() {
             placeholder="A cause I oppose"
             style={{
               width: "100%",
-              padding: "12px 14px",
-              fontSize: "15px",
-              border: "1px solid #ddd",
-              borderRadius: "8px",
-              backgroundColor: "#fff",
+              padding: "12px",
+              fontSize: "14px",
+              fontFamily: "Inter, sans-serif",
+              border: "1px solid #e4e4e4",
+              borderRadius: "6px",
+              backgroundColor: "#ffffff",
               color: "#1a1a1a",
               outline: "none",
               boxSizing: "border-box",
@@ -308,7 +319,7 @@ export default function CommitPage() {
           </Elements>
         ) : (
           !apiError && (
-            <p style={{ color: "#888", fontSize: "14px" }}>
+            <p style={{ color: "#9a9a9a", fontSize: "14px" }}>
               Preparing payment…
             </p>
           )
