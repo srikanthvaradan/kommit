@@ -127,6 +127,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       await deleteAudio(key);
     }
 
+    console.log("TRANSCRIPT RESULT:", { transcriptText, languageCode });
     return NextResponse.json({ transcript: transcriptText, languageCode });
   } catch (error: unknown) {
     if (key) {
