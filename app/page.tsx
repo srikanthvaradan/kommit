@@ -163,7 +163,7 @@ export default function Home() {
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          padding: "12px 40px",
+          padding: "8px 40px",
           borderBottom: "1px solid #f0f0f0",
           backgroundColor: "#ffffff",
         }}
