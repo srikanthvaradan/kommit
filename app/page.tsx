@@ -134,6 +134,8 @@ export default function Home() {
         color: "#1a1a1a",
         margin: "0",
         padding: "0",
+        display: "flex",
+        flexDirection: "column",
       }}
     >
       <style>{`
@@ -196,356 +198,358 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* Page content */}
-      <div
-        style={{
-          maxWidth: "560px",
-          margin: "0 auto",
-          padding: "48px 40px",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "flex-start",
-        }}
-      >
-        {/* Heading */}
-        <h1
+      {/* Centering wrapper */}
+      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 40px' }}>
+        {/* Page content */}
+        <div
           style={{
-            fontSize: "28px",
-            fontWeight: 300,
-            color: "#1a1a1a",
-            letterSpacing: "-0.5px",
-            margin: "0 0 8px 0",
-            textAlign: "left",
-            lineHeight: 1.3,
+            width: "100%",
+            maxWidth: "560px",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-start",
           }}
         >
-          What&apos;s weighing on you right now?
-        </h1>
-        <p
-          style={{
-            fontSize: "14px",
-            fontWeight: 400,
-            color: "#8a8a8a",
-            margin: "0 0 48px 0",
-            textAlign: "left",
-          }}
-        >
-          Speak or type. 10 agents. Zero judgment.
-        </p>
-
-        {/* Pill input */}
-        <div style={{
-          display: 'flex', alignItems: 'center', gap: '12px',
-          background: '#1a1a1a', borderRadius: '999px',
-          padding: '12px 16px 12px 20px', width: '100%', boxSizing: 'border-box',
-          marginBottom: '0',
-        }}>
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => { if (e.key === 'Enter') handleSubmit(); }}
+          {/* Heading */}
+          <h1
             style={{
-              flex: 1, border: 'none', background: 'transparent', color: '#fff',
-              fontSize: '14px', outline: 'none', fontFamily: 'Inter,sans-serif',
-            }}
-            placeholder="What's on your mind..."
-          />
-          <button onClick={handleRecord} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px', display: 'flex', alignItems: 'center' }}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={recording ? '#c0392b' : '#888'} strokeWidth="1.5" strokeLinecap="round">
-              <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
-              <path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/>
-              <line x1="8" y1="23" x2="16" y2="23"/>
-            </svg>
-          </button>
-          {input.trim() && (
-            <button onClick={() => handleSubmit()} style={{ background: '#C4922A', border: 'none', borderRadius: '50%', width: '32px', height: '32px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
-            </button>
-          )}
-        </div>
-
-        {/* Status text */}
-        {recording && (
-          <p style={{ fontSize: '14px', fontWeight: 400, color: '#c0392b', margin: '12px 0 0 0', textAlign: 'center', alignSelf: 'center' }}>
-            Recording… tap to stop
-          </p>
-        )}
-        {transcribing && (
-          <p style={{ fontSize: '14px', fontWeight: 400, color: '#8a8a8a', margin: '12px 0 0 0', textAlign: 'center', alignSelf: 'center' }}>
-            Transcribing…
-          </p>
-        )}
-        {voiceError && (
-          <p style={{ fontSize: '14px', fontWeight: 400, color: '#c0392b', margin: '12px 0 0 0', textAlign: 'center', alignSelf: 'center' }}>
-            {voiceError}
-          </p>
-        )}
-
-        {/* Privacy note */}
-        <p style={{ fontSize: '12px', color: '#888', textAlign: 'center', marginTop: '12px', marginBottom: '40px' }}>
-          Private. Deleted after analysis.
-        </p>
-
-        {/* Processing state */}
-        {processing && (
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              width: "100%",
-              marginBottom: "32px",
+              fontSize: "28px",
+              fontWeight: 300,
+              color: "#1a1a1a",
+              letterSpacing: "-0.5px",
+              margin: "0 0 8px 0",
+              textAlign: "left",
+              lineHeight: 1.3,
             }}
           >
-            <img
-              src="/logo_icon.png"
-              alt="Processing"
+            What&apos;s weighing on you right now?
+          </h1>
+          <p
+            style={{
+              fontSize: "14px",
+              fontWeight: 400,
+              color: "#8a8a8a",
+              margin: "0 0 48px 0",
+              textAlign: "left",
+            }}
+          >
+            Speak or type. 10 agents. Zero judgment.
+          </p>
+
+          {/* Pill input */}
+          <div style={{
+            display: 'flex', alignItems: 'center', gap: '12px',
+            background: '#1a1a1a', borderRadius: '999px',
+            padding: '12px 16px 12px 20px', width: '100%', boxSizing: 'border-box',
+            marginBottom: '0',
+          }}>
+            <input
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => { if (e.key === 'Enter') handleSubmit(); }}
               style={{
-                animation: "spin 4s linear infinite",
-                width: "70px",
-                height: "70px",
-                borderRadius: "50%",
-                objectFit: "cover",
-                marginBottom: "16px",
+                flex: 1, border: 'none', background: 'transparent', color: '#fff',
+                fontSize: '14px', outline: 'none', fontFamily: 'Inter,sans-serif',
               }}
+              placeholder="What's on your mind..."
             />
-            <button
-              onClick={() => setShowAgents((prev) => !prev)}
-              style={{
-                background: "none",
-                border: "none",
-                color: "#C4922A",
-                fontSize: "14px",
-                fontWeight: 500,
-                fontFamily: "Inter, sans-serif",
-                cursor: "pointer",
-                textDecoration: "underline",
-                padding: "0",
-                marginBottom: "12px",
-              }}
-            >
-              {showAgents ? "hide agents" : "show agents"}
+            <button onClick={handleRecord} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px', display: 'flex', alignItems: 'center' }}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={recording ? '#c0392b' : '#888'} strokeWidth="1.5" strokeLinecap="round">
+                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/>
+                <line x1="8" y1="23" x2="16" y2="23"/>
+              </svg>
             </button>
-
-            {showAgents && agentEvents.length > 0 && (
-              <ul
-                style={{
-                  margin: "0",
-                  padding: "0",
-                  listStyle: "none",
-                  width: "100%",
-                }}
-              >
-                {agentEvents.map((ev, i) => (
-                  <li
-                    key={i}
-                    style={{
-                      fontSize: "14px",
-                      fontWeight: 400,
-                      color: "#444",
-                      marginBottom: "8px",
-                      fontFamily: "Inter, sans-serif",
-                      animation: "fadeInUp 0.4s ease both",
-                      animationDelay: `${i * 0.08}s`,
-                      opacity: 0,
-                    }}
-                  >
-                    <span style={{ color: "#C4922A", fontWeight: 500 }}>{ev.agent}</span>
-                    {" — "}
-                    {ev.detail}
-                  </li>
-                ))}
-              </ul>
-            )}
-
-            {showAgents && agentEvents.length === 0 && (
-              <p
-                style={{
-                  fontSize: "14px",
-                  fontWeight: 400,
-                  color: "#8a8a8a",
-                  margin: "0",
-                }}
-              >
-                Waiting for agents…
-              </p>
+            {input.trim() && (
+              <button onClick={() => handleSubmit()} style={{ background: '#C4922A', border: 'none', borderRadius: '50%', width: '32px', height: '32px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+              </button>
             )}
           </div>
-        )}
 
-        {/* Crisis resources */}
-        {status === "crisis" && crisisResources && (
-          <div
-            style={{
-              width: "100%",
-              marginBottom: "32px",
-              padding: "20px",
-              backgroundColor: "#fff3f3",
-              borderRadius: "10px",
-              border: "1px solid #e4e4e4",
-              boxSizing: "border-box",
-            }}
-          >
-            <p
-              style={{
-                fontSize: "14px",
-                fontWeight: 500,
-                color: "#c0392b",
-                margin: "0 0 12px 0",
-              }}
-            >
-              You are not alone.
+          {/* Status text */}
+          {recording && (
+            <p style={{ fontSize: '14px', fontWeight: 400, color: '#c0392b', margin: '12px 0 0 0', textAlign: 'center', alignSelf: 'center' }}>
+              Recording… tap to stop
             </p>
-            <p style={{ margin: "0 0 6px 0", fontSize: "14px", fontWeight: 500, color: "#1a1a1a" }}>
-              {crisisResources.primary.name}
+          )}
+          {transcribing && (
+            <p style={{ fontSize: '14px', fontWeight: 400, color: '#8a8a8a', margin: '12px 0 0 0', textAlign: 'center', alignSelf: 'center' }}>
+              Transcribing…
             </p>
-            <p style={{ margin: "0 0 6px 0", fontSize: "14px", fontWeight: 400, color: "#1a1a1a" }}>
-              {crisisResources.primary.number}
+          )}
+          {voiceError && (
+            <p style={{ fontSize: '14px', fontWeight: 400, color: '#c0392b', margin: '12px 0 0 0', textAlign: 'center', alignSelf: 'center' }}>
+              {voiceError}
             </p>
-            <a
-              href={crisisResources.primary.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ color: "#c0392b", fontSize: "14px", fontWeight: 400 }}
-            >
-              {crisisResources.primary.url}
-            </a>
-          </div>
-        )}
+          )}
 
-        {/* Result card */}
-        {!processing && card && (
-          <div style={{ width: "100%", marginBottom: "32px" }}>
-            {/* What is happening */}
+          {/* Privacy note */}
+          <p style={{ fontSize: '12px', color: '#888', textAlign: 'center', marginTop: '12px', marginBottom: '40px' }}>
+            Private. Deleted after analysis.
+          </p>
+
+          {/* Processing state */}
+          {processing && (
             <div
               style={{
-                marginBottom: "12px",
-                padding: "16px 20px",
-                backgroundColor: "#ffffff",
-                borderRadius: "10px",
-                border: "1px solid #e4e4e4",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                width: "100%",
+                marginBottom: "32px",
               }}
             >
-              <p
+              <img
+                src="/logo_icon.png"
+                alt="Processing"
                 style={{
-                  margin: "0 0 6px 0",
-                  fontSize: "14px",
-                  fontWeight: 500,
-                  color: "#8a8a8a",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.08em",
+                  animation: "spin 4s linear infinite",
+                  width: "70px",
+                  height: "70px",
+                  borderRadius: "50%",
+                  objectFit: "cover",
+                  marginBottom: "16px",
                 }}
-              >
-                What is happening
-              </p>
-              <p style={{ margin: "0", fontSize: "14px", fontWeight: 400, color: "#1a1a1a", lineHeight: "1.6" }}>
-                {card.clarity}
-              </p>
-            </div>
-
-            {/* What you are avoiding */}
-            <div
-              style={{
-                marginBottom: "12px",
-                padding: "16px 20px",
-                backgroundColor: "#ffffff",
-                borderRadius: "10px",
-                border: "1px solid #e4e4e4",
-              }}
-            >
-              <p
+              />
+              <button
+                onClick={() => setShowAgents((prev) => !prev)}
                 style={{
-                  margin: "0 0 6px 0",
-                  fontSize: "14px",
-                  fontWeight: 500,
-                  color: "#8a8a8a",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.08em",
-                }}
-              >
-                What you are avoiding
-              </p>
-              <p style={{ margin: "0", fontSize: "14px", fontWeight: 400, color: "#1a1a1a", lineHeight: "1.6" }}>
-                {card.challenge}
-              </p>
-            </div>
-
-            {/* The truth */}
-            <div
-              style={{
-                marginBottom: "20px",
-                padding: "16px 20px",
-                backgroundColor: "#fffbf4",
-                borderRadius: "10px",
-                border: "1px solid #C4922A",
-              }}
-            >
-              <p
-                style={{
-                  margin: "0 0 6px 0",
-                  fontSize: "14px",
-                  fontWeight: 500,
+                  background: "none",
+                  border: "none",
                   color: "#C4922A",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.08em",
+                  fontSize: "14px",
+                  fontWeight: 500,
+                  fontFamily: "Inter, sans-serif",
+                  cursor: "pointer",
+                  textDecoration: "underline",
+                  padding: "0",
+                  marginBottom: "12px",
                 }}
               >
-                The truth
-              </p>
+                {showAgents ? "hide agents" : "show agents"}
+              </button>
+
+              {showAgents && agentEvents.length > 0 && (
+                <ul
+                  style={{
+                    margin: "0",
+                    padding: "0",
+                    listStyle: "none",
+                    width: "100%",
+                  }}
+                >
+                  {agentEvents.map((ev, i) => (
+                    <li
+                      key={i}
+                      style={{
+                        fontSize: "14px",
+                        fontWeight: 400,
+                        color: "#444",
+                        marginBottom: "8px",
+                        fontFamily: "Inter, sans-serif",
+                        animation: "fadeInUp 0.4s ease both",
+                        animationDelay: `${i * 0.08}s`,
+                        opacity: 0,
+                      }}
+                    >
+                      <span style={{ color: "#C4922A", fontWeight: 500 }}>{ev.agent}</span>
+                      {" — "}
+                      {ev.detail}
+                    </li>
+                  ))}
+                </ul>
+              )}
+
+              {showAgents && agentEvents.length === 0 && (
+                <p
+                  style={{
+                    fontSize: "14px",
+                    fontWeight: 400,
+                    color: "#8a8a8a",
+                    margin: "0",
+                  }}
+                >
+                  Waiting for agents…
+                </p>
+              )}
+            </div>
+          )}
+
+          {/* Crisis resources */}
+          {status === "crisis" && crisisResources && (
+            <div
+              style={{
+                width: "100%",
+                marginBottom: "32px",
+                padding: "20px",
+                backgroundColor: "#fff3f3",
+                borderRadius: "10px",
+                border: "1px solid #e4e4e4",
+                boxSizing: "border-box",
+              }}
+            >
               <p
                 style={{
-                  margin: "0",
+                  fontSize: "14px",
+                  fontWeight: 500,
+                  color: "#c0392b",
+                  margin: "0 0 12px 0",
+                }}
+              >
+                You are not alone.
+              </p>
+              <p style={{ margin: "0 0 6px 0", fontSize: "14px", fontWeight: 500, color: "#1a1a1a" }}>
+                {crisisResources.primary.name}
+              </p>
+              <p style={{ margin: "0 0 6px 0", fontSize: "14px", fontWeight: 400, color: "#1a1a1a" }}>
+                {crisisResources.primary.number}
+              </p>
+              <a
+                href={crisisResources.primary.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: "#c0392b", fontSize: "14px", fontWeight: 400 }}
+              >
+                {crisisResources.primary.url}
+              </a>
+            </div>
+          )}
+
+          {/* Result card */}
+          {!processing && card && (
+            <div style={{ width: "100%", marginBottom: "32px" }}>
+              {/* What is happening */}
+              <div
+                style={{
+                  marginBottom: "12px",
+                  padding: "16px 20px",
+                  backgroundColor: "#ffffff",
+                  borderRadius: "10px",
+                  border: "1px solid #e4e4e4",
+                }}
+              >
+                <p
+                  style={{
+                    margin: "0 0 6px 0",
+                    fontSize: "14px",
+                    fontWeight: 500,
+                    color: "#8a8a8a",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.08em",
+                  }}
+                >
+                  What is happening
+                </p>
+                <p style={{ margin: "0", fontSize: "14px", fontWeight: 400, color: "#1a1a1a", lineHeight: "1.6" }}>
+                  {card.clarity}
+                </p>
+              </div>
+
+              {/* What you are avoiding */}
+              <div
+                style={{
+                  marginBottom: "12px",
+                  padding: "16px 20px",
+                  backgroundColor: "#ffffff",
+                  borderRadius: "10px",
+                  border: "1px solid #e4e4e4",
+                }}
+              >
+                <p
+                  style={{
+                    margin: "0 0 6px 0",
+                    fontSize: "14px",
+                    fontWeight: 500,
+                    color: "#8a8a8a",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.08em",
+                  }}
+                >
+                  What you are avoiding
+                </p>
+                <p style={{ margin: "0", fontSize: "14px", fontWeight: 400, color: "#1a1a1a", lineHeight: "1.6" }}>
+                  {card.challenge}
+                </p>
+              </div>
+
+              {/* The truth */}
+              <div
+                style={{
+                  marginBottom: "20px",
+                  padding: "16px 20px",
+                  backgroundColor: "#fffbf4",
+                  borderRadius: "10px",
+                  border: "1px solid #C4922A",
+                }}
+              >
+                <p
+                  style={{
+                    margin: "0 0 6px 0",
+                    fontSize: "14px",
+                    fontWeight: 500,
+                    color: "#C4922A",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.08em",
+                  }}
+                >
+                  The truth
+                </p>
+                <p
+                  style={{
+                    margin: "0",
+                    fontSize: "14px",
+                    fontWeight: 400,
+                    color: "#1a1a1a",
+                    lineHeight: "1.6",
+                    fontStyle: "italic",
+                  }}
+                >
+                  {card.truth}
+                </p>
+              </div>
+
+              {/* Commitment */}
+              <p
+                style={{
                   fontSize: "14px",
                   fontWeight: 400,
                   color: "#1a1a1a",
-                  lineHeight: "1.6",
-                  fontStyle: "italic",
+                  lineHeight: "1.7",
+                  marginBottom: "20px",
                 }}
               >
-                {card.truth}
+                {card.commitment}
               </p>
+
+              {/* Back this with $5 */}
+              <a
+                href={
+                  "/commit?truth=" +
+                  encodeURIComponent(card.truth) +
+                  "&commitment=" +
+                  encodeURIComponent(card.commitment) +
+                  "&stakeAmount=500"
+                }
+                style={{
+                  display: "inline-block",
+                  backgroundColor: "#C4922A",
+                  color: "#ffffff",
+                  textDecoration: "none",
+                  borderRadius: "8px",
+                  padding: "10px 24px",
+                  fontSize: "14px",
+                  fontWeight: 500,
+                  fontFamily: "Inter, sans-serif",
+                  letterSpacing: "0.02em",
+                }}
+              >
+                Back this with $5
+              </a>
             </div>
-
-            {/* Commitment */}
-            <p
-              style={{
-                fontSize: "14px",
-                fontWeight: 400,
-                color: "#1a1a1a",
-                lineHeight: "1.7",
-                marginBottom: "20px",
-              }}
-            >
-              {card.commitment}
-            </p>
-
-            {/* Back this with $5 */}
-            <a
-              href={
-                "/commit?truth=" +
-                encodeURIComponent(card.truth) +
-                "&commitment=" +
-                encodeURIComponent(card.commitment) +
-                "&stakeAmount=500"
-              }
-              style={{
-                display: "inline-block",
-                backgroundColor: "#C4922A",
-                color: "#ffffff",
-                textDecoration: "none",
-                borderRadius: "8px",
-                padding: "10px 24px",
-                fontSize: "14px",
-                fontWeight: 500,
-                fontFamily: "Inter, sans-serif",
-                letterSpacing: "0.02em",
-              }}
-            >
-              Back this with $5
-            </a>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );
