@@ -167,7 +167,7 @@ export default function Home() {
         }}
       >
         {/* Logo */}
-        <img src="/logo_light.svg" alt="KOMMIT" style={{height:'48px', width:'auto'}} />
+        <img src="/logo_light.svg" alt="KOMMIT" style={{height:'80px', width:'auto'}} />
 
         {/* Nav links */}
         <div style={{ display: "flex", alignItems: "center", gap: "24px" }}>
@@ -271,11 +271,7 @@ export default function Home() {
               padding: 0,
             }}
           >
-            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#C4922A" strokeWidth="1.2" strokeLinecap="round">
-              <path d="M12 2C8.5 2 5.5 4.5 5.5 8c0 5.5 4 11 5.5 13 1.5-2 5.5-7.5 5.5-13 0-3.5-3-6-4.5-6z"/>
-              <path d="M9 8c0-1.7 1.3-3 3-3s3 1.3 3 3c0 3-2 6-3 8"/>
-              <path d="M7 9.5C7 7 9.2 5 12 5"/>
-            </svg>
+            <img src="/logo_icon.png" alt="Speak" style={{width:'60px',height:'60px',borderRadius:'50%',objectFit:'cover'}} />
             <span style={{fontSize:'8px',letterSpacing:'2px',color:'#C4922A',fontWeight:500}}>SPEAK</span>
           </button>
         </div>
