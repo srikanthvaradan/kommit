@@ -224,8 +224,10 @@ export default function Home() {
           }}
         >
           {/* Logo */}
-          <div style={{textAlign:'center', marginBottom:'48px', width:'100%'}}>
-            <span style={{fontSize:'48px', fontWeight:'300', letterSpacing:'12px', color:'#1a1a1a', fontFamily:'Inter,sans-serif'}}>KOMMIT</span>
+          <div style={{display:'flex', alignItems:'center', justifyContent:'center', lineHeight:1, marginBottom:'48px'}}>
+            <span style={{fontSize:'56px', fontWeight:'700', color:'#545454', fontFamily:'Inter,sans-serif', letterSpacing:'4px'}}>K</span>
+            <span style={{fontSize:'56px', fontWeight:'700', color:'#545454', fontFamily:'Inter,sans-serif', letterSpacing:'4px', background:'#F5C842', borderRadius:'50%', width:'52px', height:'52px', display:'inline-flex', alignItems:'center', justifyContent:'center', margin:'0 2px'}}>O</span>
+            <span style={{fontSize:'56px', fontWeight:'700', color:'#545454', fontFamily:'Inter,sans-serif', letterSpacing:'4px'}}>MMIT</span>
           </div>
 
           {/* Pill input */}
