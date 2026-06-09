@@ -1,0 +1,21 @@
+{
+  "id": "20260609_170835_778180",
+  "version": "1.0.0",
+  "timestamp": "2026-06-09T17:08:35.778187",
+  "project": "kommit",
+  "task": "OBJECTIVE: Edit /Users/srini/Projects/kommit/app/page.tsx\n\nThree fixes:\n\n1. AGENT DISPLAY: Add functional names mapping and show/hide with full detail on expand.\n\nAdd this mapping constant near the top of the component:\nconst AGENT_ROLES: Record&lt;string, string&gt; = {\n  &#x27;Gus Fring&#x27;: &#x27;Safety Check&#x27;,\n  &#x27;Agent Smith&#x27;: &#x27;Translation&#x27;,\n  &#x27;Hannibal&#x27;: &#x27;Sentiment Analysis&#x27;,\n  &#x27;T-1000&#x27;: &#x27;Evidence Search&#x27;,\n  &#x27;Tyler Durden&#x27;: &#x27;Situation Analysis&#x27;,\n  &#x27;Joker&#x27;: &#x27;Challenge Analysis&#x27;,\n  &#x27;Thanos&#x27;: &#x27;Verdict&#x27;,\n  &#x27;Mike Ehrmantraut&#x27;: &#x27;Audio Processing&#x27;,\n  &#x27;Bane&#x27;: &#x27;Location Detection&#x27;,\n  &quot;Ra&#x27;s al Ghul&quot;: &#x27;Commitment Engine&#x27;\n};\n\nAdd state: const [expandedAgents, setExpandedAgents] = useState&lt;Set&lt;number&gt;&gt;(new Set());\n\nUpdate each agent timeline item to show:\n- Functional name (from AGENT_ROLES) in bold\n- Short summary below\n- &quot;show work&quot; link that expands to reveal: character name in gold + full detail text\n\nWhen expanded show:\n&lt;div style={{background:&#x27;#f9f9f9&#x27;, borderRadius:&#x27;6px&#x27;, padding:&#x27;12px&#x27;, marginTop:&#x27;8px&#x27;}}&gt;\n  &lt;span style={{color:&#x27;#C4922A&#x27;, fontWeight:500, fontSize:&#x27;13px&#x27;}}&gt;{name}&lt;/span&gt;\n  &lt;p style={{fontSize:&#x27;13px&#x27;, color:&#x27;#555&#x27;, margin:&#x27;6px 0 0&#x27;, lineHeight:1.6}}&gt;{fullDetail}&lt;/p&gt;\n&lt;/div&gt;\n\nFor fullDetail use the complete unparsed detail (not truncated).\n\nAdd &quot;show agents&quot; / &quot;hide agents&quot; toggle button above the timeline.\nDefault: agents hidden, toggle shows them.\n\n2. COMMITMENT CARD: Find the commitment text paragraph (the one before &quot;Back this with $5&quot; button) and wrap it in a card:\n&lt;div style={{border:&#x27;1px solid #e4e4e4&#x27;, borderRadius:&#x27;8px&#x27;, padding:&#x27;24px 28px&#x27;, marginBottom:&#x27;24px&#x27;, background:&#x27;#fff&#x27;}}&gt;\n  &lt;p style={{fontSize:&#x27;11px&#x27;, fontWeight:500, color:&#x27;#9a9a9a&#x27;, letterSpacing:&#x27;2px&#x27;, margin:&#x27;0 0 12px&#x27;}}&gt;YOUR COMMITMENT&lt;/p&gt;\n  &lt;p style={{fontSize:&#x27;14px&#x27;, color:&#x27;#1a1a1a&#x27;, lineHeight:1.7, margin:0}}&gt;{card.commitment}&lt;/p&gt;\n&lt;/div&gt;\n\nFILES: /Users/srini/Projects/kommit/app/page.tsx\n\nACCEPTANCE CRITERIA:\nAgents show functional names publicly\nShow work reveals character name and full detail\nAgents hidden by default with toggle\nCommitment text is in a card\nNo TypeScript errors\n\nTEST: cd /Users/srini/Projects/kommit; npx tsc --noEmit\n\nDO NOT: break card display or submit logic\nDO NOT: use ast.parse",
+  "status": "completed",
+  "verified": true,
+  "files_changed": [
+    "/Users/srini/Projects/kommit/app/page.tsx"
+  ],
+  "lines_changed": 93,
+  "test_command": "cd /Users/srini/Projects/kommit; npx tsc --noEmit",
+  "test_output": "",
+  "elapsed_seconds": 87.3,
+  "why_context": null,
+  "model": "advanced",
+  "repo": "/Users/srini/Projects/kommit",
+  "agent": "KOCODE v1.0.0",
+  "commit_hash": null
+}

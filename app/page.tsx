@@ -10,6 +10,11 @@ interface AgentEvent {
   query?: string;
   truth?: string;
   detail?: string;
+  category?: string;
+  phrases?: string[];
+  sources?: number;
+  read?: string;
+  avoided?: string;
   [key: string]: unknown;
 }
 
@@ -29,6 +34,19 @@ interface CrisisResources {
   };
 }
 
+const AGENT_ROLES: Record<string, string> = {
+  'Gus Fring': 'Safety Check',
+  'Agent Smith': 'Translation',
+  'Hannibal': 'Sentiment Analysis',
+  'T-1000': 'Evidence Search',
+  'Tyler Durden': 'Situation Analysis',
+  'Joker': 'Challenge Analysis',
+  'Thanos': 'Verdict',
+  'Mike Ehrmantraut': 'Audio Processing',
+  'Bane': 'Location Detection',
+  "Ra's al Ghul": 'Commitment Engine'
+};
+
 export default function Home() {
   const [input, setInput] = useState<string>("");
   const [status, setStatus] = useState<"idle" | "processing" | "done" | "crisis">("idle");
@@ -38,6 +56,8 @@ export default function Home() {
   const [recording, setRecording] = useState<boolean>(false);
   const [transcribing, setTranscribing] = useState<boolean>(false);
   const [voiceError, setVoiceError] = useState<string | null>(null);
+  const [expandedAgents, setExpandedAgents] = useState<Set<number>>(new Set());
+  const [showAgents, setShowAgents] = useState<boolean>(false);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
 
   async function handleRecord() {
@@ -79,6 +99,8 @@ export default function Home() {
     setStatus("processing");
     setAgentEvents([]);
     setCard(null);
+    setExpandedAgents(new Set());
+    setShowAgents(false);
 
     const res = await fetch("/api/analyze", {
       method: "POST",
@@ -122,6 +144,46 @@ export default function Home() {
       }
     }
   }
+
+  function toggleAgent(i: number) {
+    setExpandedAgents((prev) => {
+      const next = new Set(prev);
+      if (next.has(i)) {
+        next.delete(i);
+      } else {
+        next.add(i);
+      }
+      return next;
+    });
+  }
+
+  const getAgentSummary = (p: AgentEvent): string => {
+    if (p.agent === 'Gus Fring') return `Input classified as ${p.category ?? ''}`;
+    if (p.agent === 'Bane') return (p.detail as string) || '';
+    if (p.agent === 'Mike Ehrmantraut') return (p.detail as string) || '';
+    if (p.agent === 'Hannibal') return `Sentiment: ${p.sentiment ?? ''} — Key phrases: ${(p.phrases ?? []).slice(0, 3).join(', ')}`;
+    if (p.agent === 'T-1000') return `Searched: "${p.query ?? ''}" — ${p.sources ?? 0} sources found`;
+    if (p.agent === 'Tyler Durden') return p.read ? (p.read as string).slice(0, 80) + '…' : '';
+    if (p.agent === 'Joker') return p.avoided ? (p.avoided as string).slice(0, 80) + '…' : '';
+    if (p.agent === 'Thanos') return p.truth ? (p.truth as string).slice(0, 80) + '…' : 'Delivering verdict...';
+    if (p.agent === 'Agent Smith') return (p.detail as string) || 'Translated to English';
+    if (p.agent === "Ra's al Ghul") return (p.detail as string) || 'Commitment contract prepared';
+    return (p.decision as string) || (p.detail as string) || '';
+  };
+
+  const getAgentFullDetail = (p: AgentEvent): string => {
+    if (p.agent === 'Gus Fring') return `Input classified as ${p.category ?? ''}`;
+    if (p.agent === 'Bane') return (p.detail as string) || '';
+    if (p.agent === 'Mike Ehrmantraut') return (p.detail as string) || '';
+    if (p.agent === 'Hannibal') return `Sentiment: ${p.sentiment ?? ''} — Key phrases: ${(p.phrases ?? []).join(', ')}`;
+    if (p.agent === 'T-1000') return `Searched: "${p.query ?? ''}" — ${p.sources ?? 0} sources found`;
+    if (p.agent === 'Tyler Durden') return (p.read as string) || '';
+    if (p.agent === 'Joker') return (p.avoided as string) || '';
+    if (p.agent === 'Thanos') return (p.truth as string) || 'Delivering verdict...';
+    if (p.agent === 'Agent Smith') return (p.detail as string) || 'Translated to English';
+    if (p.agent === "Ra's al Ghul") return (p.detail as string) || 'Commitment contract prepared';
+    return (p.decision as string) || (p.detail as string) || '';
+  };
 
   const processing = status === "processing";
 
@@ -296,27 +358,41 @@ export default function Home() {
             </div>
           )}
 
-          {/* Agent timeline — always visible during and after processing */}
+          {/* Agent timeline — show/hide toggle + collapsible list */}
           {agentEvents.length > 0 && (
             <div style={{width:'100%', marginBottom:'24px'}}>
-              {agentEvents.map((event, i) => {
+              {/* Toggle button */}
+              <button
+                onClick={() => setShowAgents((v) => !v)}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  padding: '0 0 12px 0',
+                  fontSize: '12px',
+                  color: '#9a9a9a',
+                  letterSpacing: '1px',
+                  fontFamily: 'Inter, sans-serif',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                }}
+              >
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style={{transition:'transform 0.2s', transform: showAgents ? 'rotate(90deg)' : 'rotate(0deg)'}}>
+                  <path d="M4 2l4 4-4 4" stroke="#9a9a9a" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                {showAgents ? 'hide agents' : 'show agents'}
+              </button>
+
+              {/* Agent list */}
+              {showAgents && agentEvents.map((event, i) => {
                 const parsed = typeof event === 'string' ? JSON.parse(event) : event;
                 const name = parsed.agent || '';
                 if (!name) return null;
-                const getAgentDetail = (p: AgentEvent): string => {
-                  if (p.agent === 'Gus Fring') return `Input classified as ${(p as any).category}`;
-                  if (p.agent === 'Bane') return (p.detail as string) || '';
-                  if (p.agent === 'Mike Ehrmantraut') return (p.detail as string) || '';
-                  if (p.agent === 'Hannibal') return `Sentiment: ${p.sentiment} — Key phrases: ${((p as any).phrases||[]).slice(0,3).join(', ')}`;
-                  if (p.agent === 'T-1000') return `Searched: "${p.query}" — ${(p as any).sources||0} sources found`;
-                  if (p.agent === 'Tyler Durden') return (p as any).read ? (p as any).read.slice(0,120)+'...' : '';
-                  if (p.agent === 'Joker') return (p as any).avoided ? (p as any).avoided.slice(0,120)+'...' : '';
-                  if (p.agent === 'Thanos') return p.truth ? p.truth.slice(0,120)+'...' : 'Delivering verdict...';
-                  if (p.agent === 'Agent Smith') return (p.detail as string) || 'Translated to English';
-                  if (p.agent === "Ra's al Ghul") return (p.detail as string) || 'Commitment contract prepared';
-                  return (p.decision as string) || (p.detail as string) || '';
-                };
-                const detail = getAgentDetail(parsed);
+                const roleName = AGENT_ROLES[name] || name;
+                const summary = getAgentSummary(parsed);
+                const fullDetail = getAgentFullDetail(parsed);
+                const isExpanded = expandedAgents.has(i);
                 return (
                   <div key={i} style={{display:'flex', gap:'12px', marginBottom:'0', position:'relative'}}>
                     <div style={{display:'flex', flexDirection:'column', alignItems:'center', width:'20px', flexShrink:0}}>
@@ -329,9 +405,32 @@ export default function Home() {
                     </div>
                     <div style={{paddingBottom:'16px', flex:1}}>
                       <div style={{display:'flex', alignItems:'center', gap:'8px', marginBottom:'2px'}}>
-                        <span style={{fontSize:'13px', fontWeight:500, color:'#1a1a1a'}}>{name}</span>
+                        <span style={{fontSize:'13px', fontWeight:600, color:'#1a1a1a'}}>{roleName}</span>
                       </div>
-                      {detail && <p style={{fontSize:'13px', color:'#8a8a8a', margin:'0', lineHeight:1.5}}>{detail}</p>}
+                      {summary && (
+                        <p style={{fontSize:'13px', color:'#8a8a8a', margin:'0 0 4px', lineHeight:1.5}}>{summary}</p>
+                      )}
+                      <button
+                        onClick={() => toggleAgent(i)}
+                        style={{
+                          background: 'none',
+                          border: 'none',
+                          cursor: 'pointer',
+                          padding: 0,
+                          fontSize: '12px',
+                          color: '#C4922A',
+                          fontFamily: 'Inter, sans-serif',
+                          textDecoration: 'underline',
+                        }}
+                      >
+                        {isExpanded ? 'hide work' : 'show work'}
+                      </button>
+                      {isExpanded && (
+                        <div style={{background:'#f9f9f9', borderRadius:'6px', padding:'12px', marginTop:'8px'}}>
+                          <span style={{color:'#C4922A', fontWeight:500, fontSize:'13px'}}>{name}</span>
+                          <p style={{fontSize:'13px', color:'#555', margin:'6px 0 0', lineHeight:1.6}}>{fullDetail}</p>
+                        </div>
+                      )}
                     </div>
                   </div>
                 );
@@ -471,17 +570,11 @@ export default function Home() {
                 </p>
               </div>
 
-              {/* Commitment */}
-              <p
-                style={{
-                  fontSize: "14px",
-                  color: "#1a1a1a",
-                  lineHeight: "1.7",
-                  marginBottom: "24px",
-                }}
-              >
-                {card.commitment}
-              </p>
+              {/* Commitment card */}
+              <div style={{border:'1px solid #e4e4e4', borderRadius:'8px', padding:'24px 28px', marginBottom:'24px', background:'#fff'}}>
+                <p style={{fontSize:'11px', fontWeight:500, color:'#9a9a9a', letterSpacing:'2px', margin:'0 0 12px'}}>YOUR COMMITMENT</p>
+                <p style={{fontSize:'14px', color:'#1a1a1a', lineHeight:1.7, margin:0}}>{card.commitment}</p>
+              </div>
 
               {/* Back this with $5 */}
               <a
