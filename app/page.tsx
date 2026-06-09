@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 const ACCENT = "#3D5A36";
 const BG = "#FAFAF8";
@@ -33,11 +33,12 @@ export default function Home() {
   const [card, setCard] = useState<Card | null>(null);
   const [crisisResources, setCrisisResources] = useState<CrisisResources | null>(null);
   const [recording, setRecording] = useState<boolean>(false);
-  const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
+  const [transcribing, setTranscribing] = useState<boolean>(false);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
 
   async function handleRecord() {
     if (recording) {
-      mediaRecorder?.stop();
+      mediaRecorderRef.current?.stop();
       setRecording(false);
       return;
     }
@@ -46,6 +47,7 @@ export default function Home() {
     const chunks: BlobPart[] = [];
     recorder.ondataavailable = (e) => chunks.push(e.data);
     recorder.onstop = async () => {
+      setTranscribing(true);
       const blob = new Blob(chunks, { type: "audio/webm" });
       const formData = new FormData();
       formData.append("audio", blob, "recording.webm");
@@ -53,9 +55,10 @@ export default function Home() {
       const data = await res.json();
       if (data.transcript) setInput(data.transcript);
       stream.getTracks().forEach((t) => t.stop());
+      setTranscribing(false);
     };
     recorder.start();
-    setMediaRecorder(recorder);
+    mediaRecorderRef.current = recorder;
     setRecording(true);
   }
 
@@ -211,6 +214,11 @@ export default function Home() {
             {recording ? "Stop recording" : "🎤 Speak"}
           </button>
         </div>
+        {transcribing && (
+          <p style={{ fontSize: "0.9rem", color: "#555", fontStyle: "italic", marginBottom: "16px" }}>
+            Transcribing...
+          </p>
+        )}
 
         {/* Processing: agent events */}
         {status === "processing" && agentEvents.length > 0 && (
