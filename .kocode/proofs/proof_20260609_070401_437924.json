@@ -1,0 +1,21 @@
+{
+  "id": "20260609_070401_437859",
+  "version": "1.0.0",
+  "timestamp": "2026-06-09T07:04:01.437868",
+  "project": "kommit",
+  "task": "OBJECTIVE: Create /Users/srini/Projects/kommit/lib/db.ts\n\nNeon PostgreSQL connection and commitments table for KOMMIT.\n\nUse EXACTLY:\nimport { neon } from &quot;@neondatabase/serverless&quot;;\nconst sql = neon(process.env.DATABASE_URL!);\n\nExport this type:\nexport type CommitmentStatus = &quot;pending&quot; | &quot;completed&quot; | &quot;forfeited&quot;;\n\nExport this interface:\nexport interface CommitmentRow {\n  id: string;\n  commitment_text: string;\n  stake_amount: number;\n  forfeit_destination: string;\n  avoided_truth: string;\n  due_date: string;\n  status: CommitmentStatus;\n  stripe_payment_intent_id: string;\n  created_at: string;\n}\n\nExport these three functions:\n\n1. initSchema(): Promise&lt;void&gt;\n   Runs: CREATE TABLE IF NOT EXISTS commitments (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), commitment_text TEXT NOT NULL, stake_amount INTEGER NOT NULL, forfeit_destination TEXT NOT NULL, avoided_truth TEXT NOT NULL, due_date TIMESTAMPTZ NOT NULL, status TEXT NOT NULL DEFAULT &#x27;pending&#x27;, stripe_payment_intent_id TEXT NOT NULL, created_at TIMESTAMPTZ DEFAULT NOW())\n\n2. saveCommitment(data: Omit&lt;CommitmentRow, &quot;id&quot; | &quot;created_at&quot;&gt;): Promise&lt;string&gt;\n   Inserts row, returns generated id as string.\n\n3. getCommitment(id: string): Promise&lt;CommitmentRow | null&gt;\n   Returns row or null.\n\nFile header comment and JSDoc on all exports.\n\nFILES: /Users/srini/Projects/kommit/lib/db.ts\n\nACCEPTANCE CRITERIA:\nAll three functions exported\nCommitmentRow and CommitmentStatus exported\nUses process.env.DATABASE_URL!\nNo TypeScript errors\n\nTEST: cd /Users/srini/Projects/kommit; npx tsc --noEmit\n\nDO NOT: hardcode connection strings\nDO NOT: use ast.parse",
+  "status": "completed",
+  "verified": true,
+  "files_changed": [
+    "/Users/srini/Projects/kommit/lib/db.ts"
+  ],
+  "lines_changed": 132,
+  "test_command": "cd /Users/srini/Projects/kommit; npx tsc --noEmit",
+  "test_output": "",
+  "elapsed_seconds": 17.6,
+  "why_context": null,
+  "model": "advanced",
+  "repo": "/Users/srini/Projects/kommit",
+  "agent": "KOCODE v1.0.0",
+  "commit_hash": null
+}
