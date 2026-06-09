@@ -26,6 +26,7 @@ interface AgentEvent {
   phrases?: string[];
   sources?: number;
   sourceDetails?: SourceDetail[];
+  sourceList?: SourceDetail[];
   scores?: SentimentScores;
   read?: string;
   avoided?: string;
@@ -223,9 +224,9 @@ export default function Home() {
               <span style={{ fontWeight: 600, color: '#1a1a1a' }}>Search query:</span> {p.query}
             </p>
           )}
-          {p.sourceDetails && p.sourceDetails.length > 0 ? (
-            p.sourceDetails.map((src, idx) => (
-              <div key={idx} style={{ marginBottom: idx < p.sourceDetails!.length - 1 ? '12px' : '0', paddingBottom: idx < p.sourceDetails!.length - 1 ? '12px' : '0', borderBottom: idx < p.sourceDetails!.length - 1 ? '1px solid #e8e8e8' : 'none' }}>
+          {(p.sourceList || p.sourceDetails) && ((p.sourceList || p.sourceDetails) as SourceDetail[]).length > 0 ? (
+            ((p.sourceList || p.sourceDetails) as SourceDetail[]).map((src, idx) => (
+              <div key={idx} style={{ marginBottom: idx < ((p.sourceList || p.sourceDetails) as SourceDetail[]).length - 1 ? '12px' : '0', paddingBottom: idx < ((p.sourceList || p.sourceDetails) as SourceDetail[]).length - 1 ? '12px' : '0', borderBottom: idx < ((p.sourceList || p.sourceDetails) as SourceDetail[]).length - 1 ? '1px solid #e8e8e8' : 'none' }}>
                 <p style={{ fontSize: '13px', fontWeight: 700, color: '#1a1a1a', margin: '0 0 4px' }}>{src.title}</p>
                 {src.highlight && <p style={{ fontSize: '13px', color: '#555', margin: '0 0 4px', lineHeight: 1.5 }}>{src.highlight}</p>}
                 {src.url && (
