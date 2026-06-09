@@ -14,8 +14,12 @@ const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
 
 function CheckoutForm({
   stakeAmount,
+  forfeitDestination,
+  searchParams,
 }: {
   stakeAmount: number;
+  forfeitDestination: string;
+  searchParams: ReturnType<typeof useSearchParams>;
 }) {
   const stripe = useStripe();
   const elements = useElements();
@@ -29,10 +33,19 @@ function CheckoutForm({
     setIsLoading(true);
     setErrorMessage(null);
 
+    const params = new URLSearchParams({
+      truth: searchParams.get("truth") || "",
+      commitment: searchParams.get("commitment") || "",
+      stakeAmount: String(stakeAmount),
+      forfeitDestination: forfeitDestination,
+      dueDate: new Date(Date.now() + 86400000).toISOString()
+    });
+    const returnUrl = `${window.location.origin}/success?${params.toString()}`;
+
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: window.location.origin + "/success",
+        return_url: returnUrl,
       },
     });
 
@@ -292,7 +305,7 @@ export default function CommitPage() {
             stripe={stripePromise}
             options={{ clientSecret }}
           >
-            <CheckoutForm stakeAmount={stakeAmount} />
+            <CheckoutForm stakeAmount={stakeAmount} forfeitDestination={forfeitDestination} searchParams={searchParams} />
           </Elements>
         ) : (
           !apiError && (
