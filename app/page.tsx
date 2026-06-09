@@ -202,7 +202,7 @@ export default function Home() {
       </nav>
 
       {/* Centering wrapper */}
-      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 40px' }}>
+      <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "0 40px" }}>
         {/* Page content */}
         <div
           style={{
