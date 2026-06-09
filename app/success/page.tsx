@@ -54,6 +54,11 @@ export default function SuccessPage() {
     if (parsed) {
       save(parsed);
     }
+
+    // Remove sensitive data from URL immediately
+    const cleanUrl = window.location.pathname + '?payment_intent=' + (new URLSearchParams(window.location.search).get('payment_intent') || '');
+    window.history.replaceState({}, '', cleanUrl);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

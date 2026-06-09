@@ -1,0 +1,21 @@
+{
+  "id": "20260609_200415_406261",
+  "version": "1.0.0",
+  "timestamp": "2026-06-09T20:04:15.406271",
+  "project": "kommit",
+  "task": "OBJECTIVE: Create /Users/srini/Projects/kommit/scripts/create-auth-tables.ts\n\nCreate a script that runs SQL to add auth tables to Neon DB:\n\nimport { neon } from &#x27;@neondatabase/serverless&#x27;;\n\nconst sql = neon(process.env.DATABASE_URL!);\n\nasync function main() {\n  await sql`\n    CREATE TABLE IF NOT EXISTS users (\n      id SERIAL PRIMARY KEY,\n      email TEXT UNIQUE NOT NULL,\n      created_at TIMESTAMPTZ DEFAULT NOW()\n    )\n  `;\n\n  await sql`\n    CREATE TABLE IF NOT EXISTS otp_tokens (\n      id SERIAL PRIMARY KEY,\n      email TEXT NOT NULL,\n      code TEXT NOT NULL,\n      expires_at TIMESTAMPTZ NOT NULL,\n      used BOOLEAN DEFAULT FALSE,\n      created_at TIMESTAMPTZ DEFAULT NOW()\n    )\n  `;\n\n  await sql`\n    CREATE TABLE IF NOT EXISTS user_sessions (\n      id SERIAL PRIMARY KEY,\n      user_id INTEGER REFERENCES users(id),\n      token TEXT UNIQUE NOT NULL,\n      expires_at TIMESTAMPTZ NOT NULL,\n      created_at TIMESTAMPTZ DEFAULT NOW()\n    )\n  `;\n\n  await sql`\n    ALTER TABLE commitments ADD COLUMN IF NOT EXISTS user_id INTEGER REFERENCES users(id)\n  `;\n\n  console.log(&#x27;Auth tables created successfully&#x27;);\n}\n\nmain().catch(console.error);\n\nFILES: /Users/srini/Projects/kommit/scripts/create-auth-tables.ts\n\nACCEPTANCE CRITERIA:\nScript creates users, otp_tokens, user_sessions tables\nAdds user_id to commitments\nNo TypeScript errors\n\nTEST: cd /Users/srini/Projects/kommit; npx tsc --noEmit\n\nDO NOT: use ast.parse",
+  "status": "completed",
+  "verified": true,
+  "files_changed": [
+    "/Users/srini/Projects/kommit/scripts/create-auth-tables.ts"
+  ],
+  "lines_changed": 42,
+  "test_command": "cd /Users/srini/Projects/kommit; npx tsc --noEmit",
+  "test_output": "",
+  "elapsed_seconds": 8.5,
+  "why_context": null,
+  "model": "advanced",
+  "repo": "/Users/srini/Projects/kommit",
+  "agent": "KOCODE v1.0.0",
+  "commit_hash": null
+}
