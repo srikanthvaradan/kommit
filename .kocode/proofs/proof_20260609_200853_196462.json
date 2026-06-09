@@ -1,0 +1,23 @@
+{
+  "id": "20260609_200853_196379",
+  "version": "1.0.0",
+  "timestamp": "2026-06-09T20:08:53.196386",
+  "project": "kommit",
+  "task": "OBJECTIVE: Create three auth API routes in /Users/srini/Projects/Kommit/app/api/auth/\n\nCreate /Users/srini/Projects/Kommit/app/api/auth/send-otp/route.ts:\n\nimport { NextRequest, NextResponse } from &#x27;next/server&#x27;;\nimport { neon } from &#x27;@neondatabase/serverless&#x27;;\nimport { Resend } from &#x27;resend&#x27;;\n\nconst resend = new Resend(process.env.RESEND_API_KEY);\n\nexport async function POST(req: NextRequest) {\n  const { email } = await req.json();\n  if (!email || !email.includes(&#x27;@&#x27;)) return NextResponse.json({ error: &#x27;Invalid email&#x27; }, { status: 400 });\n\n  const sql = neon(process.env.DATABASE_URL!);\n  const code = Math.floor(100000 + Math.random() * 900000).toString();\n  const expiresAt = new Date(Date.now() + 10 * 60 * 1000);\n\n  await sql`INSERT INTO users (email) VALUES (${email}) ON CONFLICT (email) DO NOTHING`;\n  await sql`INSERT INTO otp_tokens (email, code, expires_at) VALUES (${email}, ${code}, ${expiresAt.toISOString()})`;\n\n  await resend.emails.send({\n    from: process.env.RESEND_FROM!,\n    to: email,\n    subject: &#x27;Your KOMMIT code&#x27;,\n    html: `&lt;p&gt;Your KOMMIT verification code is: &lt;strong&gt;${code}&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Expires in 10 minutes.&lt;/p&gt;`\n  });\n\n  return NextResponse.json({ ok: true });\n}\n\nCreate /Users/srini/Projects/Kommit/app/api/auth/verify-otp/route.ts:\n\nimport { NextRequest, NextResponse } from &#x27;next/server&#x27;;\nimport { neon } from &#x27;@neondatabase/serverless&#x27;;\nimport { randomBytes } from &#x27;crypto&#x27;;\n\nexport async function POST(req: NextRequest) {\n  const { email, code } = await req.json();\n  const sql = neon(process.env.DATABASE_URL!);\n\n  const tokens = await sql`\n    SELECT * FROM otp_tokens \n    WHERE email = ${email} AND code = ${code} AND used = false AND expires_at &gt; NOW()\n    ORDER BY created_at DESC LIMIT 1\n  `;\n\n  if (!tokens.length) return NextResponse.json({ error: &#x27;Invalid or expired code&#x27; }, { status: 401 });\n\n  await sql`UPDATE otp_tokens SET used = true WHERE id = ${tokens[0].id}`;\n\n  const user = await sql`SELECT id FROM users WHERE email = ${email}`;\n  const userId = user[0].id;\n\n  const token = randomBytes(32).toString(&#x27;hex&#x27;);\n  const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);\n  await sql`INSERT INTO user_sessions (user_id, token, expires_at) VALUES (${userId}, ${token}, ${expiresAt.toISOString()})`;\n\n  const response = NextResponse.json({ ok: true });\n  response.cookies.set(&#x27;kommit_session&#x27;, token, {\n    httpOnly: true,\n    secure: process.env.NODE_ENV === &#x27;production&#x27;,\n    sameSite: &#x27;lax&#x27;,\n    expires: expiresAt,\n    path: &#x27;/&#x27;\n  });\n\n  return response;\n}\n\nCreate /Users/srini/Projects/Kommit/app/api/auth/me/route.ts:\n\nimport { NextRequest, NextResponse } from &#x27;next/server&#x27;;\nimport { neon } from &#x27;@neondatabase/serverless&#x27;;\n\nexport async function GET(req: NextRequest) {\n  const token = req.cookies.get(&#x27;kommit_session&#x27;)?.value;\n  if (!token) return NextResponse.json({ user: null });\n\n  const sql = neon(process.env.DATABASE_URL!);\n  const sessions = await sql`\n    SELECT u.id, u.email FROM user_sessions s\n    JOIN users u ON s.user_id = u.id\n    WHERE s.token = ${token} AND s.expires_at &gt; NOW()\n  `;\n\n  if (!sessions.length) return NextResponse.json({ user: null });\n  return NextResponse.json({ user: sessions[0] });\n}\n\nFILES: /Users/srini/Projects/Kommit/app/api/auth/send-otp/route.ts\n       /Users/srini/Projects/Kommit/app/api/auth/verify-otp/route.ts\n       /Users/srini/Projects/Kommit/app/api/auth/me/route.ts\n\nACCEPTANCE CRITERIA:\nAll three routes created\nNo TypeScript errors\n\nTEST: cd /Users/srini/Projects/Kommit; npx tsc --noEmit\n\nDO NOT: use ast.parse",
+  "status": "completed",
+  "verified": true,
+  "files_changed": [
+    "/Users/srini/Projects/Kommit/app/api/auth/send-otp/route.ts",
+    "/Users/srini/Projects/Kommit/app/api/auth/verify-otp/route.ts",
+    "/Users/srini/Projects/Kommit/app/api/auth/me/route.ts"
+  ],
+  "lines_changed": 83,
+  "test_command": "cd /Users/srini/Projects/Kommit; npx tsc --noEmit",
+  "test_output": "",
+  "elapsed_seconds": 29.2,
+  "why_context": null,
+  "model": "advanced",
+  "repo": "/Users/srini/Projects/kommit",
+  "agent": "KOCODE v1.0.0",
+  "commit_hash": null
+}
