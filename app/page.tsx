@@ -2,9 +2,6 @@
 
 import { useState, useRef } from "react";
 
-const ACCENT = "#3D5A36";
-const BG = "#FAFAF8";
-
 interface AgentEvent {
   agent: string;
   detail: string;
@@ -131,14 +128,23 @@ export default function Home() {
     <div
       style={{
         minHeight: "100vh",
-        backgroundColor: BG,
-        fontFamily: "Georgia, serif",
+        backgroundColor: "#ffffff",
+        fontFamily: "Inter, sans-serif",
+        fontSize: "14px",
         color: "#1a1a1a",
-        padding: "0",
         margin: "0",
+        padding: "0",
       }}
     >
       <style>{`
+        @keyframes breathe {
+          0%, 100% { transform: scale(1); }
+          50% { transform: scale(1.05); }
+        }
+        @keyframes ring {
+          0% { opacity: 0.25; transform: scale(1); }
+          100% { opacity: 0; transform: scale(1.55); }
+        }
         @keyframes spin {
           from { transform: rotate(0deg); }
           to { transform: rotate(360deg); }
@@ -149,170 +155,378 @@ export default function Home() {
         }
       `}</style>
 
-      <div
+      {/* Nav */}
+      <nav
         style={{
-          maxWidth: "640px",
-          margin: "0 auto",
-          padding: "48px 24px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          padding: "0 32px",
+          height: "56px",
+          borderBottom: "1px solid #f0f0f0",
+          backgroundColor: "#ffffff",
         }}
       >
-        {/* Header */}
-        <header style={{ marginBottom: "40px" }}>
-          <h1
+        {/* Logo */}
+        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          <div
             style={{
-              fontSize: "2.8rem",
-              fontWeight: "bold",
-              color: ACCENT,
-              margin: "0 0 8px 0",
-              letterSpacing: "0.04em",
+              width: "28px",
+              height: "28px",
+              backgroundColor: "#545454",
+              borderRadius: "4px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
             }}
           >
-            KOMMIT
-          </h1>
-          <p
+            <span
+              style={{
+                color: "#C4922A",
+                fontSize: "14px",
+                fontWeight: 700,
+                lineHeight: 1,
+              }}
+            >
+              K
+            </span>
+          </div>
+          <span
             style={{
-              fontSize: "1.1rem",
-              color: "#555",
-              margin: "0",
-              fontStyle: "italic",
-            }}
-          >
-            Your word, backed.
-          </p>
-        </header>
-
-        {/* Input area */}
-        <div style={{ marginBottom: "24px" }}>
-          <textarea
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="What is weighing on you?"
-            rows={4}
-            style={{
-              width: "100%",
-              padding: "16px",
-              fontSize: "1rem",
-              fontFamily: "Georgia, serif",
-              border: `1.5px solid ${ACCENT}`,
-              borderRadius: "6px",
-              backgroundColor: "#fff",
+              fontSize: "14px",
+              fontWeight: 500,
               color: "#1a1a1a",
-              resize: "vertical",
-              boxSizing: "border-box",
-              outline: "none",
+              letterSpacing: "0.08em",
             }}
-          />
+          >
+            OMMIT
+          </span>
         </div>
 
-        <div style={{ display: "flex", gap: "12px", marginBottom: "32px" }}>
+        {/* Nav links */}
+        <div style={{ display: "flex", alignItems: "center", gap: "24px" }}>
+          <a
+            href="/dashboard"
+            style={{
+              fontSize: "14px",
+              fontWeight: 500,
+              color: "#1a1a1a",
+              textDecoration: "none",
+            }}
+          >
+            Dashboard
+          </a>
+          <a
+            href="/login"
+            style={{
+              fontSize: "14px",
+              fontWeight: 500,
+              color: "#1a1a1a",
+              textDecoration: "none",
+            }}
+          >
+            Login
+          </a>
+        </div>
+      </nav>
+
+      {/* Page content */}
+      <div
+        style={{
+          maxWidth: "560px",
+          margin: "0 auto",
+          padding: "72px 24px 48px",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        {/* Heading */}
+        <h1
+          style={{
+            fontSize: "14px",
+            fontWeight: 300,
+            color: "#1a1a1a",
+            letterSpacing: "-0.8px",
+            margin: "0 0 10px 0",
+            textAlign: "center",
+            lineHeight: 1.5,
+          }}
+        >
+          What&apos;s weighing on you right now?
+        </h1>
+        <p
+          style={{
+            fontSize: "14px",
+            fontWeight: 400,
+            color: "#8a8a8a",
+            margin: "0 0 48px 0",
+            textAlign: "center",
+          }}
+        >
+          Speak or type. 10 agents. Zero judgment.
+        </p>
+
+        {/* Speak button */}
+        <div style={{ position: "relative", marginBottom: "32px" }}>
+          {/* Pulse ring */}
+          <div
+            style={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              width: "100px",
+              height: "100px",
+              borderRadius: "50%",
+              border: "1.5px solid #C4922A",
+              transform: "translate(-50%, -50%)",
+              animation: "ring 2.5s ease-out infinite",
+              pointerEvents: "none",
+            }}
+          />
+          {/* Button */}
+          <button
+            onClick={handleRecord}
+            style={{
+              width: "100px",
+              height: "100px",
+              borderRadius: "50%",
+              border: recording ? "2px solid #c0392b" : "1.5px solid #C4922A",
+              backgroundColor: "#ffffff",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              animation: "breathe 3s ease-in-out infinite",
+              position: "relative",
+              zIndex: 1,
+              padding: 0,
+            }}
+          >
+            <img
+              src="/logo-icon.png"
+              alt="Speak"
+              style={{
+                width: "60px",
+                height: "60px",
+                borderRadius: "50%",
+                objectFit: "cover",
+              }}
+            />
+          </button>
+        </div>
+
+        {/* Status text under button */}
+        {recording && (
+          <p
+            style={{
+              fontSize: "14px",
+              fontWeight: 400,
+              color: "#c0392b",
+              margin: "0 0 16px 0",
+              textAlign: "center",
+            }}
+          >
+            Recording… tap to stop
+          </p>
+        )}
+        {transcribing && (
+          <p
+            style={{
+              fontSize: "14px",
+              fontWeight: 400,
+              color: "#8a8a8a",
+              margin: "0 0 16px 0",
+              textAlign: "center",
+            }}
+          >
+            Transcribing…
+          </p>
+        )}
+        {voiceError && (
+          <p
+            style={{
+              fontSize: "14px",
+              fontWeight: 400,
+              color: "#c0392b",
+              margin: "0 0 16px 0",
+              textAlign: "center",
+            }}
+          >
+            {voiceError}
+          </p>
+        )}
+
+        {/* OR divider */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            width: "100%",
+            marginBottom: "24px",
+            gap: "12px",
+          }}
+        >
+          <div style={{ flex: 1, height: "1px", backgroundColor: "#e4e4e4" }} />
+          <span
+            style={{
+              fontSize: "14px",
+              fontWeight: 400,
+              color: "#8a8a8a",
+            }}
+          >
+            or
+          </span>
+          <div style={{ flex: 1, height: "1px", backgroundColor: "#e4e4e4" }} />
+        </div>
+
+        {/* Input box */}
+        <div
+          style={{
+            width: "100%",
+            border: "1px solid #e4e4e4",
+            borderRadius: "10px",
+            padding: "4px 4px 4px 18px",
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            backgroundColor: "#ffffff",
+            boxSizing: "border-box",
+            marginBottom: "12px",
+          }}
+        >
+          <input
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !processing) handleSubmit();
+            }}
+            placeholder="Type what's on your mind…"
+            style={{
+              flex: 1,
+              border: "none",
+              outline: "none",
+              fontSize: "14px",
+              fontWeight: 400,
+              fontFamily: "Inter, sans-serif",
+              color: "#1a1a1a",
+              backgroundColor: "transparent",
+              padding: "8px 0",
+            }}
+          />
           <button
             onClick={() => handleSubmit()}
             disabled={processing}
             style={{
-              backgroundColor: processing ? "#aaa" : ACCENT,
-              color: "#fff",
+              width: "38px",
+              height: "38px",
+              borderRadius: "50%",
+              backgroundColor: processing ? "#d4a85a" : "#C4922A",
               border: "none",
-              borderRadius: "6px",
-              padding: "14px 32px",
-              fontSize: "1rem",
-              fontFamily: "Georgia, serif",
               cursor: processing ? "not-allowed" : "pointer",
-              letterSpacing: "0.02em",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexShrink: 0,
             }}
           >
-            Find the truth
-          </button>
-          <button
-            onClick={handleRecord}
-            style={{
-              backgroundColor: recording ? "#7a3a3a" : "#fff",
-              color: recording ? "#fff" : ACCENT,
-              border: `1.5px solid ${recording ? "#7a3a3a" : ACCENT}`,
-              borderRadius: "6px",
-              padding: "14px 32px",
-              fontSize: "1rem",
-              fontFamily: "Georgia, serif",
-              cursor: "pointer",
-              letterSpacing: "0.02em",
-            }}
-          >
-            {recording ? "Stop recording" : "🎤 Speak"}
+            {/* Arrow-up icon */}
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M8 13V3M8 3L4 7M8 3L12 7"
+                stroke="#ffffff"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
           </button>
         </div>
 
-        {voiceError && <p style={{ color: "red", fontSize: 12 }}>{voiceError}</p>}
-        {transcribing && (
-          <p style={{ fontSize: "0.9rem", color: "#555", fontStyle: "italic", marginBottom: "16px" }}>
-            Transcribing...
-          </p>
-        )}
+        {/* Privacy note */}
+        <p
+          style={{
+            fontSize: "14px",
+            fontWeight: 400,
+            color: "#b0aaa0",
+            margin: "0 0 40px 0",
+            textAlign: "center",
+          }}
+        >
+          Private. Deleted after analysis.
+        </p>
 
-        {/* Processing: animated O icon + agent feed toggle */}
+        {/* Processing state */}
         {processing && (
           <div
             style={{
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
+              width: "100%",
               marginBottom: "32px",
-              paddingTop: "16px",
             }}
           >
-            {/* Spinning O icon */}
             <img
-              src="/Kommit_Icon.png"
+              src="/logo-icon.png"
               alt="Processing"
               style={{
                 animation: "spin 4s linear infinite",
-                width: 120,
-                height: 120,
+                width: "48px",
+                height: "48px",
+                borderRadius: "50%",
+                marginBottom: "16px",
               }}
             />
-
-            {/* Show agents toggle */}
             <button
               onClick={() => setShowAgents((prev) => !prev)}
               style={{
-                marginTop: "20px",
                 background: "none",
                 border: "none",
-                color: ACCENT,
-                fontSize: "0.85rem",
-                fontFamily: "Georgia, serif",
+                color: "#C4922A",
+                fontSize: "14px",
+                fontWeight: 500,
+                fontFamily: "Inter, sans-serif",
                 cursor: "pointer",
                 textDecoration: "underline",
-                letterSpacing: "0.02em",
                 padding: "0",
+                marginBottom: "12px",
               }}
             >
               {showAgents ? "hide agents" : "show agents"}
             </button>
 
-            {/* Agent feed list */}
             {showAgents && agentEvents.length > 0 && (
               <ul
                 style={{
-                  marginTop: "16px",
+                  margin: "0",
                   padding: "0",
                   listStyle: "none",
                   width: "100%",
-                  maxWidth: "480px",
                 }}
               >
                 {agentEvents.map((ev, i) => (
                   <li
                     key={i}
                     style={{
-                      fontSize: "0.85rem",
+                      fontSize: "14px",
+                      fontWeight: 400,
                       color: "#444",
                       marginBottom: "8px",
-                      fontFamily: "Georgia, serif",
+                      fontFamily: "Inter, sans-serif",
                       animation: "fadeInUp 0.4s ease both",
                       animationDelay: `${i * 0.08}s`,
                       opacity: 0,
                     }}
                   >
-                    <strong style={{ color: ACCENT }}>{ev.agent}</strong>
+                    <span style={{ color: "#C4922A", fontWeight: 500 }}>{ev.agent}</span>
                     {" — "}
                     {ev.detail}
                   </li>
@@ -323,10 +537,10 @@ export default function Home() {
             {showAgents && agentEvents.length === 0 && (
               <p
                 style={{
-                  marginTop: "12px",
-                  fontSize: "0.8rem",
-                  color: "#888",
-                  fontStyle: "italic",
+                  fontSize: "14px",
+                  fontWeight: 400,
+                  color: "#8a8a8a",
+                  margin: "0",
                 }}
               >
                 Waiting for agents…
@@ -339,66 +553,68 @@ export default function Home() {
         {status === "crisis" && crisisResources && (
           <div
             style={{
+              width: "100%",
               marginBottom: "32px",
-              padding: "24px",
+              padding: "20px",
               backgroundColor: "#fff3f3",
-              borderRadius: "6px",
-              border: "1.5px solid #c0392b",
+              borderRadius: "10px",
+              border: "1px solid #e4e4e4",
+              boxSizing: "border-box",
             }}
           >
             <p
               style={{
-                fontSize: "1.2rem",
-                fontWeight: "bold",
+                fontSize: "14px",
+                fontWeight: 500,
                 color: "#c0392b",
-                margin: "0 0 16px 0",
+                margin: "0 0 12px 0",
               }}
             >
               You are not alone.
             </p>
-            <p style={{ margin: "0 0 8px 0", fontSize: "1rem", color: "#1a1a1a" }}>
-              <strong>{crisisResources.primary.name}</strong>
+            <p style={{ margin: "0 0 6px 0", fontSize: "14px", fontWeight: 500, color: "#1a1a1a" }}>
+              {crisisResources.primary.name}
             </p>
-            <p style={{ margin: "0 0 8px 0", fontSize: "1rem", color: "#1a1a1a" }}>
+            <p style={{ margin: "0 0 6px 0", fontSize: "14px", fontWeight: 400, color: "#1a1a1a" }}>
               {crisisResources.primary.number}
             </p>
             <a
               href={crisisResources.primary.url}
               target="_blank"
               rel="noopener noreferrer"
-              style={{ color: "#c0392b", fontSize: "1rem" }}
+              style={{ color: "#c0392b", fontSize: "14px", fontWeight: 400 }}
             >
               {crisisResources.primary.url}
             </a>
           </div>
         )}
 
-        {/* Card — only shown when not processing */}
+        {/* Result card */}
         {!processing && card && (
-          <div style={{ marginBottom: "32px" }}>
+          <div style={{ width: "100%", marginBottom: "32px" }}>
             {/* What is happening */}
             <div
               style={{
-                marginBottom: "16px",
-                padding: "20px",
-                backgroundColor: "#fff",
-                borderRadius: "6px",
-                border: `1px solid #d0d8cf`,
+                marginBottom: "12px",
+                padding: "16px 20px",
+                backgroundColor: "#ffffff",
+                borderRadius: "10px",
+                border: "1px solid #e4e4e4",
               }}
             >
               <p
                 style={{
-                  margin: "0 0 8px 0",
-                  fontSize: "0.75rem",
+                  margin: "0 0 6px 0",
+                  fontSize: "14px",
+                  fontWeight: 500,
+                  color: "#8a8a8a",
                   textTransform: "uppercase",
-                  letterSpacing: "0.1em",
-                  color: "#888",
-                  fontFamily: "sans-serif",
+                  letterSpacing: "0.08em",
                 }}
               >
                 What is happening
               </p>
-              <p style={{ margin: "0", fontSize: "1rem", color: "#1a1a1a", lineHeight: "1.6" }}>
+              <p style={{ margin: "0", fontSize: "14px", fontWeight: 400, color: "#1a1a1a", lineHeight: "1.6" }}>
                 {card.clarity}
               </p>
             </div>
@@ -406,26 +622,26 @@ export default function Home() {
             {/* What you are avoiding */}
             <div
               style={{
-                marginBottom: "16px",
-                padding: "20px",
-                backgroundColor: "#fff",
-                borderRadius: "6px",
-                border: `1px solid #d0d8cf`,
+                marginBottom: "12px",
+                padding: "16px 20px",
+                backgroundColor: "#ffffff",
+                borderRadius: "10px",
+                border: "1px solid #e4e4e4",
               }}
             >
               <p
                 style={{
-                  margin: "0 0 8px 0",
-                  fontSize: "0.75rem",
+                  margin: "0 0 6px 0",
+                  fontSize: "14px",
+                  fontWeight: 500,
+                  color: "#8a8a8a",
                   textTransform: "uppercase",
-                  letterSpacing: "0.1em",
-                  color: "#888",
-                  fontFamily: "sans-serif",
+                  letterSpacing: "0.08em",
                 }}
               >
                 What you are avoiding
               </p>
-              <p style={{ margin: "0", fontSize: "1rem", color: "#1a1a1a", lineHeight: "1.6" }}>
+              <p style={{ margin: "0", fontSize: "14px", fontWeight: 400, color: "#1a1a1a", lineHeight: "1.6" }}>
                 {card.challenge}
               </p>
             </div>
@@ -433,22 +649,21 @@ export default function Home() {
             {/* The truth */}
             <div
               style={{
-                marginBottom: "24px",
-                padding: "20px",
-                backgroundColor: "#f0f4ef",
-                borderRadius: "6px",
-                border: `1.5px solid ${ACCENT}`,
+                marginBottom: "20px",
+                padding: "16px 20px",
+                backgroundColor: "#fffbf4",
+                borderRadius: "10px",
+                border: "1px solid #C4922A",
               }}
             >
               <p
                 style={{
-                  margin: "0 0 8px 0",
-                  fontSize: "0.75rem",
+                  margin: "0 0 6px 0",
+                  fontSize: "14px",
+                  fontWeight: 500,
+                  color: "#C4922A",
                   textTransform: "uppercase",
-                  letterSpacing: "0.1em",
-                  color: ACCENT,
-                  fontFamily: "sans-serif",
-                  fontWeight: "bold",
+                  letterSpacing: "0.08em",
                 }}
               >
                 The truth
@@ -456,7 +671,8 @@ export default function Home() {
               <p
                 style={{
                   margin: "0",
-                  fontSize: "1.05rem",
+                  fontSize: "14px",
+                  fontWeight: 400,
                   color: "#1a1a1a",
                   lineHeight: "1.6",
                   fontStyle: "italic",
@@ -469,11 +685,11 @@ export default function Home() {
             {/* Commitment */}
             <p
               style={{
-                fontSize: "1.1rem",
+                fontSize: "14px",
+                fontWeight: 400,
                 color: "#1a1a1a",
                 lineHeight: "1.7",
-                marginBottom: "24px",
-                padding: "0 4px",
+                marginBottom: "20px",
               }}
             >
               {card.commitment}
@@ -490,13 +706,14 @@ export default function Home() {
               }
               style={{
                 display: "inline-block",
-                backgroundColor: ACCENT,
-                color: "#fff",
+                backgroundColor: "#C4922A",
+                color: "#ffffff",
                 textDecoration: "none",
-                borderRadius: "6px",
-                padding: "14px 32px",
-                fontSize: "1rem",
-                fontFamily: "Georgia, serif",
+                borderRadius: "8px",
+                padding: "10px 24px",
+                fontSize: "14px",
+                fontWeight: 500,
+                fontFamily: "Inter, sans-serif",
                 letterSpacing: "0.02em",
               }}
             >
