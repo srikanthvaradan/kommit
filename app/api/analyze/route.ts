@@ -105,13 +105,18 @@ export async function POST(request: NextRequest): Promise<Response> {
               new DetectDominantLanguageCommand({ Text: text.slice(0, 300) })
             );
             const topLang = langResult.Languages?.[0];
-            if (topLang && topLang.Score && topLang.Score > 0.7 && topLang.LanguageCode !== "en") {
+            if (topLang && topLang.Score && topLang.Score > 0.5 && topLang.LanguageCode !== "en") {
               detectedLanguage = topLang.LanguageCode!;
             }
           } catch {
             // keep detectedLanguage as "en"
           }
         }
+
+        if (detectedLanguage === "en" && /[\u0B80-\u0BFF]/.test(text)) detectedLanguage = "ta";
+        if (detectedLanguage === "en" && /[\u0900-\u097F]/.test(text)) detectedLanguage = "hi";
+        if (detectedLanguage === "en" && /[\u0600-\u06FF]/.test(text)) detectedLanguage = "ar";
+        if (detectedLanguage === "en" && /[\u4E00-\u9FFF]/.test(text)) detectedLanguage = "zh";
 
         if (detectedLanguage !== "en") {
           processText = await translateToEnglish(text, detectedLanguage);
