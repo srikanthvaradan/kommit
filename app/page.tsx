@@ -851,13 +851,12 @@ export default function Home() {
 
               {/* Back this with $5 */}
               <a
-                href={
-                  "/commit?truth=" +
-                  encodeURIComponent(card.truth) +
-                  "&commitment=" +
-                  encodeURIComponent(card.commitment) +
-                  "&stakeAmount=500"
-                }
+                href="/commit"
+                onClick={(e) => {
+                  e.preventDefault();
+                  sessionStorage.setItem('kommit_pending', JSON.stringify({ truth: card.truth, commitment: card.commitment }));
+                  window.location.href = '/commit';
+                }}
                 style={{
                   display: "block",
                   backgroundColor: "#ffde59",

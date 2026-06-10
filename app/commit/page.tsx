@@ -72,9 +72,19 @@ function CheckoutForm({ stakeAmount, forfeitDestination, searchParams, joinPool 
 
 function CommitPageInner() {
   const searchParams = useSearchParams();
-  const truth = searchParams.get('truth') ?? '';
-  const commitment = searchParams.get('commitment') ?? '';
   const stakeParam = searchParams.get('stake');
+  // Read truth/commitment from sessionStorage (not URL — keeps data off back button)
+  const [truth, setTruth] = useState('');
+  const [commitment, setCommitment] = useState('');
+  useEffect(() => {
+    const pending = sessionStorage.getItem('kommit_pending');
+    if (pending) {
+      const { truth: t, commitment: c } = JSON.parse(pending);
+      setTruth(t || '');
+      setCommitment(c || '');
+      sessionStorage.removeItem('kommit_pending');
+    }
+  }, []);
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [stakeAmount, setStakeAmount] = useState<number>(stakeParam ? parseInt(stakeParam, 10) : 500);
   const [joinPool, setJoinPool] = useState(false);
