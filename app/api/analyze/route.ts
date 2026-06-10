@@ -140,6 +140,8 @@ export async function POST(request: NextRequest): Promise<Response> {
             return;
           }
         }
+        // All safety checks passed — emit Gus Fring
+        emit({ agent: "Gus Fring", category, decision: gatekeeperDecision });
 
         if (body.isVoice) emit({ agent: "Mike Ehrmantraut", decision: "Audio processed", detail: "Voice recording deleted from S3 after transcription. No audio data retained.", audioDeleted: true });
 
