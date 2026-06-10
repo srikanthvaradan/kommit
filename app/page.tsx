@@ -574,7 +574,7 @@ export default function Home() {
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => { if (e.key === 'Enter') handleSubmit(); }}
+              onKeyDown={(e) => { if (e.key === 'Enter' && input.trim()) { e.preventDefault(); handleSubmit(); } }}
               style={{
                 flex: 1, border: 'none', background: 'transparent', color: '#fff',
                 fontSize: '14px', outline: 'none', fontFamily: 'Inter, sans-serif',
@@ -880,6 +880,20 @@ export default function Home() {
             </div>
           )}
         </div>
+      </div>
+
+      {/* Footer */}
+      <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, padding: '12px 40px', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '24px', background: 'transparent' }}>
+        <a href="mailto:hello@kommit.ai" style={{ fontSize: '12px', color: '#9a9a9a', textDecoration: 'none', fontFamily: 'Inter, sans-serif' }}>hello@kommit.ai</a>
+        <span style={{ fontSize: '12px', color: '#e4e4e4' }}>·</span>
+        <a href="/dashboard" style={{ fontSize: '12px', color: '#9a9a9a', textDecoration: 'none', fontFamily: 'Inter, sans-serif' }}>Dashboard</a>
+      </div>
+
+      {/* Footer */}
+      <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, padding: '12px 40px', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '24px', background: 'transparent' }}>
+        <a href="mailto:hello@kommit.ai" style={{ fontSize: '12px', color: '#9a9a9a', textDecoration: 'none', fontFamily: 'Inter, sans-serif' }}>hello@kommit.ai</a>
+        <span style={{ fontSize: '12px', color: '#e4e4e4' }}>·</span>
+        <a href="/dashboard" style={{ fontSize: '12px', color: '#9a9a9a', textDecoration: 'none', fontFamily: 'Inter, sans-serif' }}>Dashboard</a>
       </div>
       {showLoginModal && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 200, padding: '24px' }} onClick={(e) => { if (e.target === e.currentTarget) setShowLoginModal(false); }}>

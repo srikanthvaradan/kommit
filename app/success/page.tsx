@@ -331,6 +331,7 @@ function SuccessPageInner() {
           >
             Come back by {formattedDueDate}. Your word is on the line.
           </p>
+          <a href="/" style={{ display: 'block', textAlign: 'center', fontSize: '13px', color: '#9a9a9a', marginTop: '24px', textDecoration: 'none' }}>← Start a new session</a>
         </div>
       </main>
     </>
