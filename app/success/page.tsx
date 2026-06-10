@@ -51,13 +51,24 @@ function SuccessPageInner() {
       }
     }
 
-    if (parsed) {
-      save(parsed);
+    // Always save — use sessionStorage if available, fall back to URL params
+    const urlParams = new URLSearchParams(window.location.search);
+    const cardToSave: KommitCard = parsed || {
+      truth: urlParams.get("truth") || "",
+      commitment: urlParams.get("commitment") || "",
+      stakeAmount: parseInt(urlParams.get("stake") || "500", 10),
+      forfeitDestination: urlParams.get("forfeit") || "KOMMIT pool member",
+      dueDate: urlParams.get("due") || new Date(Date.now() + 86400000).toISOString(),
+    };
+    if (cardToSave.commitment) {
+      save(cardToSave);
     }
 
-    // Remove sensitive data from URL immediately
-    const cleanUrl = window.location.pathname + '?payment_intent=' + (new URLSearchParams(window.location.search).get('payment_intent') || '');
-    window.history.replaceState({}, '', cleanUrl);
+    // Remove sensitive data from URL after reading (delayed to ensure params are read first)
+    setTimeout(() => {
+      const cleanUrl = window.location.pathname + '?payment_intent=' + (new URLSearchParams(window.location.search).get('payment_intent') || '');
+      window.history.replaceState({}, '', cleanUrl);
+    }, 2000);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

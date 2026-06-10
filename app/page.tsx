@@ -560,7 +560,7 @@ export default function Home() {
           }}
         >
           {/* Logo */}
-          <img src="/kommit_logo_light.svg?v=1781022912" alt="KOMMIT" style={{height:'200px', width:'auto', marginBottom:'48px'}} />
+          <img src="/Kommit_logo_light.svg?v=1781022912" alt="KOMMIT" style={{height:'200px', width:'auto', marginBottom:'48px'}} />
 
           {/* Pill input */}
           <div style={{
