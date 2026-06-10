@@ -523,18 +523,6 @@ export default function Home() {
 
         {/* Nav links */}
         <div style={{ display: "flex", alignItems: "center", gap: "24px" }}>
-          <a
-            href="/dashboard"
-            style={{
-              fontSize: "14px",
-              fontWeight: 400,
-              color: "#8a8a8a",
-              textDecoration: "none",
-              fontFamily: "Inter, sans-serif",
-            }}
-          >
-            Dashboard
-          </a>
           {currentUser ? (
             <>
               <a href="/dashboard" style={{ fontSize: "14px", fontWeight: 400, color: "#8a8a8a", textDecoration: "none", fontFamily: "Inter, sans-serif" }}>Dashboard</a>
