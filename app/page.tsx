@@ -618,7 +618,7 @@ export default function Home() {
 
           {/* Privacy note */}
           <p style={{ fontSize: '14px', color: '#888', textAlign: 'center', marginTop: '12px', marginBottom: '40px' }}>
-            Private. Deleted after analysis.
+            
           </p>
 
           {/* Processing state */}

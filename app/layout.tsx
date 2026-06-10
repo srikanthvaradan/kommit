@@ -13,6 +13,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  icons: {
+    icon: "/ko_icon_light.svg",
+    apple: "/ko_icon_light.svg",
+  },
   title: "KOMMIT — Your word, backed.",
   description: "Zero-context clarity tool. AI agents deliberate about the truth you're avoiding, then bind you to act with a stake that hurts.",
 };

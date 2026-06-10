@@ -194,7 +194,10 @@ export default function DashboardPage() {
       </nav>
 
       <div style={{ maxWidth: "720px", margin: "0 auto", padding: "88px 24px 48px", filter: showLogin ? "blur(4px)" : "none", pointerEvents: showLogin ? "none" : "auto" }}>
-        <h1 style={{ fontSize: "28px", fontWeight: 700, color: "#1a1a1a", marginBottom: "32px" }}>Your commitments</h1>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
+          <h1 style={{ fontSize: "28px", fontWeight: 700, color: "#1a1a1a", margin: 0 }}>Your commitments</h1>
+          <a href="/" style={{ padding: '10px 20px', backgroundColor: '#ffde59', color: '#1a1a1a', border: 'none', borderRadius: '6px', fontSize: '13px', fontWeight: 600, fontFamily: 'Inter, sans-serif', textDecoration: 'none', cursor: 'pointer' }}>+ New session</a>
+        </div>
 
         {/* Stats Row 1 */}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "12px", marginBottom: "12px" }}>
@@ -292,6 +295,9 @@ export default function DashboardPage() {
           </div>
         )}
       </div>
+      <div style={{ borderTop: '1px solid #e4e4e4', marginTop: '48px', padding: '24px 0', textAlign: 'center' }}>
+          <a href="mailto:hello@kommit.ai" style={{ fontSize: '12px', color: '#9a9a9a', textDecoration: 'none', fontFamily: 'Inter, sans-serif' }}>hello@kommit.ai</a>
+        </div>
     </div>
   );
 }
