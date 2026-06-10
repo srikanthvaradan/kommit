@@ -77,16 +77,55 @@ function CommitPageInner() {
   const [truth, setTruth] = useState('');
   const [commitment, setCommitment] = useState('');
   const [dataLoaded, setDataLoaded] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [loginEmail, setLoginEmail] = useState('');
+  const [loginCode, setLoginCode] = useState('');
+  const [loginOtpSent, setLoginOtpSent] = useState(false);
+  const [loginError, setLoginError] = useState<string | null>(null);
+  const [loginSending, setLoginSending] = useState(false);
+  const [loginVerifying, setLoginVerifying] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   useEffect(() => {
+    // Check for data
     const pending = sessionStorage.getItem('kommit_pending');
-    if (pending) {
-      const { truth: t, commitment: c } = JSON.parse(pending);
-      setTruth(t || '');
-      setCommitment(c || '');
-      sessionStorage.removeItem('kommit_pending');
+    if (!pending) {
+      window.location.href = '/';
+      return;
     }
+    const { truth: t, commitment: c } = JSON.parse(pending);
+    setTruth(t || '');
+    setCommitment(c || '');
+    sessionStorage.removeItem('kommit_pending');
     setDataLoaded(true);
+
+    // Check auth
+    fetch('/api/auth/me').then(r => r.json()).then(d => {
+      if (d.user) setIsLoggedIn(true);
+      else setShowLoginModal(true);
+    });
   }, []);
+
+  async function sendLoginOtp() {
+    setLoginSending(true); setLoginError(null);
+    try {
+      const res = await fetch('/api/auth/send-otp', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: loginEmail }) });
+      const d = await res.json();
+      if (res.ok) setLoginOtpSent(true); else setLoginError(d.error || 'Failed to send code');
+    } catch { setLoginError('Something went wrong'); }
+    setLoginSending(false);
+  }
+
+  async function verifyLoginOtp() {
+    setLoginVerifying(true); setLoginError(null);
+    try {
+      const res = await fetch('/api/auth/verify-otp', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: loginEmail, code: loginCode }) });
+      const d = await res.json();
+      if (res.ok) { setIsLoggedIn(true); setShowLoginModal(false); }
+      else setLoginError(d.error || 'Invalid code');
+    } catch { setLoginError('Something went wrong'); }
+    setLoginVerifying(false);
+  }
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [stakeAmount, setStakeAmount] = useState<number>(stakeParam ? parseInt(stakeParam, 10) : 500);
   const [joinPool, setJoinPool] = useState(false);
@@ -177,6 +216,37 @@ function CommitPageInner() {
           </div>
         </div>
       </div>
+
+      {showLoginModal && (
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 200, padding: '24px' }}>
+          <div style={{ background: '#fff', borderRadius: '12px', padding: '40px', maxWidth: '400px', width: '100%', position: 'relative' as const }}>
+            <h2 style={{ fontSize: '22px', fontWeight: 700, color: '#1a1a1a', marginBottom: '8px' }}>Sign in to commit</h2>
+            <p style={{ fontSize: '14px', color: '#9a9a9a', marginBottom: '28px' }}>Your commitment needs a home. Sign in so you can track it.</p>
+            {!loginOtpSent ? (
+              <>
+                <input type="email" value={loginEmail} onChange={e => setLoginEmail(e.target.value)} onKeyDown={e => { if (e.key === 'Enter') sendLoginOtp(); }} placeholder="your@email.com"
+                  style={{ width: '100%', padding: '12px', fontSize: '14px', fontFamily: 'Inter, sans-serif', border: '1px solid #e4e4e4', borderRadius: '6px', color: '#1a1a1a', backgroundColor: '#fff', outline: 'none', boxSizing: 'border-box' as const, marginBottom: '12px' }} />
+                <button onClick={sendLoginOtp} disabled={loginSending || !loginEmail.includes('@')}
+                  style={{ width: '100%', padding: '14px', backgroundColor: '#1a1a1a', color: '#fff', border: 'none', borderRadius: '6px', fontSize: '14px', fontWeight: 500, fontFamily: 'Inter, sans-serif', cursor: loginSending ? 'not-allowed' : 'pointer', opacity: loginSending || !loginEmail.includes('@') ? 0.5 : 1 }}>
+                  {loginSending ? 'Sending…' : 'Send code'}
+                </button>
+              </>
+            ) : (
+              <>
+                <p style={{ fontSize: '13px', color: '#9a9a9a', marginBottom: '16px' }}>Code sent to <strong>{loginEmail}</strong></p>
+                <input type="text" value={loginCode} onChange={e => setLoginCode(e.target.value.replace(/\D/g, ''))} onKeyDown={e => { if (e.key === 'Enter' && loginCode.length === 6) verifyLoginOtp(); }} placeholder="000000" maxLength={6}
+                  style={{ width: '100%', padding: '16px', fontSize: '24px', fontFamily: 'Inter, sans-serif', border: '1px solid #e4e4e4', borderRadius: '6px', color: '#1a1a1a', backgroundColor: '#fff', outline: 'none', boxSizing: 'border-box' as const, marginBottom: '12px', letterSpacing: '12px', textAlign: 'center' as const }} />
+                <button onClick={verifyLoginOtp} disabled={loginVerifying || loginCode.length !== 6}
+                  style={{ width: '100%', padding: '14px', backgroundColor: '#ffde59', color: '#1a1a1a', border: 'none', borderRadius: '6px', fontSize: '14px', fontWeight: 600, fontFamily: 'Inter, sans-serif', cursor: loginVerifying || loginCode.length !== 6 ? 'not-allowed' : 'pointer', opacity: loginVerifying || loginCode.length !== 6 ? 0.5 : 1 }}>
+                  {loginVerifying ? 'Verifying…' : 'Verify'}
+                </button>
+              </>
+            )}
+            {loginError && <p style={{ color: '#c0392b', fontSize: '13px', marginTop: '12px' }}>{loginError}</p>}
+            <p style={{ fontSize: '12px', color: '#9a9a9a', textAlign: 'center' as const, marginTop: '16px' }}>No password. No account setup.</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

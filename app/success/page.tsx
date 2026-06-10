@@ -22,6 +22,13 @@ function SuccessPageInner() {
   const [saveError, setSaveError] = useState<string | null>(null);
 
   useEffect(() => {
+    // Redirect home if user presses back
+    window.history.pushState(null, '', window.location.href);
+    window.addEventListener('popstate', () => { window.location.href = '/'; });
+    return () => window.removeEventListener('popstate', () => { window.location.href = '/'; });
+  }, []);
+
+  useEffect(() => {
     const stored = sessionStorage.getItem("kommit_card");
     const parsed: KommitCard | null = stored ? JSON.parse(stored) : null;
     sessionStorage.removeItem("kommit_card");

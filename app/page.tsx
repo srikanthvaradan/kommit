@@ -872,6 +872,10 @@ export default function Home() {
 
 
 
+        {/* Footer */}
+        <div style={{ textAlign: 'center', padding: '32px 0 16px' }}>
+          <a href="mailto:hello@kommit.ai" style={{ fontSize: '12px', color: '#c0beb6', textDecoration: 'none', fontFamily: 'Inter, sans-serif' }}>hello@kommit.ai</a>
+        </div>
       {showLoginModal && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 200, padding: '24px' }}
           onClick={(e) => { if (e.target === e.currentTarget) setShowLoginModal(false); }}
