@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from "next/navigation";
 
 interface KommitCard {
@@ -11,7 +11,7 @@ interface KommitCard {
   dueDate: string;
 }
 
-export default function SuccessPage() {
+function SuccessPageInner() {
   const searchParams = useSearchParams();
   const paymentIntentId = searchParams.get("payment_intent") ?? "";
 
@@ -323,4 +323,8 @@ export default function SuccessPage() {
       </main>
     </>
   );
+}
+
+export default function SuccessPage() {
+  return <Suspense fallback={null}><SuccessPageInner /></Suspense>;
 }
