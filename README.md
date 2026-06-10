@@ -1,36 +1,63 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# KOMMIT
 
-## Getting Started
+Your word, backed.
 
-First, run the development server:
+## What it does
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+You type what's weighing on you. Ten AI agents argue about it. They surface the truth you're avoiding, not the one you want to hear. Then you back your commitment with money that actually hurts to lose.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+If you follow through, your money comes back. If you don't, it goes to a random KOMMIT member — with a note that just says "Failed to KOMMIT."
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+That's the mechanic. The AI is the entry point. The money is the product.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Why this exists
 
-## Learn More
+Every clarity tool softens. ChatGPT has your history and accommodates you. Therapists charge $300 an hour. Journaling has no consequence.
 
-To learn more about Next.js, take a look at the following resources:
+KOMMIT has zero context about you. Only this moment. And $5 on the line changes behavior in ways that a chatbot never will. Forty years of behavioral economics says so.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## The agent pipeline
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Five agents run in sequence. Each one makes a decision.
 
-## Deploy on Vercel
+- **Safety Check (Gus Fring)** — classifies the input before anything fires. Crisis inputs get resources, not analysis.
+- **Language Agent (Agent Smith)** — detects language, routes to translation if needed. Card comes back in your language.
+- **Comprehend Agent (Hannibal)** — sentiment scores and key phrases. Feeds the search.
+- **Query Agent (T-1000)** — builds a semantic Exa search from your key phrases. Not generic wellness results. Your situation, grounded in what's actually happening in the world.
+- **Synthesis Agent (Thanos)** — picks the model, picks the prompt, delivers the truth.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The deliberation happens between Clarity, Challenge, and Verdict — three perspectives on the same input, resolved into one card.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## The Stripe mechanic
+
+This is not Stripe as infrastructure. This is Stripe as the product.
+
+User sets their own stake ($5 floor). On forfeit, the stake routes to a random KOMMIT pool member with the metadata "Failed to KOMMIT." That stranger gets curious. They sign up. They become a user. Eventually their stake goes to another stranger.
+
+Stripe Connect is the payout layer. Approval is in progress. The architecture is real.
+
+## Tech stack
+
+Every sponsor tool is load-bearing. Remove any one and something breaks.
+
+- **AWS Transcribe** — voice input, auto language detection, 20+ languages
+- **AWS Comprehend** — sentiment and key phrase extraction, always on English post-translation
+- **Amazon Translate** — non-English to English before analysis
+- **Exa** — situational semantic search, query built by Claude from Comprehend key phrases
+- **Claude Haiku** — English synthesis, safety classification
+- **Gemini Flash** — non-English synthesis, better Asian language quality
+- **Stripe** — behavioral commitment mechanic, pool routing on forfeit
+- **Vercel** — deployment, edge functions, country detection for crisis resources
+- **Neon PostgreSQL** — users, sessions, commitments, OTP tokens
+
+## Crisis handling
+
+Every input is classified before any processing begins. Crisis inputs get country-specific resources immediately. No card generated. No commitment asked for. This was not an afterthought.
+
+Tamil crisis inputs run a second safety check after translation. The pipeline catches what the original language check cannot.
+
+## Live
+
+https://kommit-ai.vercel.app
+
+Built solo in 30 hours at SuperAI NEXT Hackathon, Singapore, June 2026.
