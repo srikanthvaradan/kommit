@@ -80,7 +80,7 @@ export async function POST(request: NextRequest): Promise<Response> {
         if (category === "crisis") {
           const country = getCountryFromHeaders(request.headers);
           const resources = getCrisisResources(country);
-          emit({ type: "crisis", resources });
+          emit({ type: "crisis", crisisResources: resources });
           controller.close();
           return;
         }
@@ -122,6 +122,23 @@ export async function POST(request: NextRequest): Promise<Response> {
         if (detectedLanguage !== "en") {
           processText = await translateToEnglish(text, detectedLanguage);
           emit({ agent: "Agent Smith", decision: "translated", detail: `Detected ${detectedLanguage}, translated to English`, language: detectedLanguage });
+        }
+
+        if (processText !== text) {
+          // Re-run safety check on translated English text
+          const translatedCategory = classify(processText);
+          if (translatedCategory === "crisis") {
+            const country = getCountryFromHeaders(request.headers);
+            const resources = getCrisisResources(country);
+            emit({ type: "crisis", crisisResources: resources });
+            controller.close();
+            return;
+          }
+          if (translatedCategory === "unsafe") {
+            emit({ type: "blocked" });
+            controller.close();
+            return;
+          }
         }
 
         if (body.isVoice) emit({ agent: "Mike Ehrmantraut", decision: "Audio processed", detail: "Voice recording deleted from S3 after transcription. No audio data retained.", audioDeleted: true });
@@ -231,7 +248,7 @@ export async function POST(request: NextRequest): Promise<Response> {
           encoder.encode(`data: ${JSON.stringify({ type: "error", message })}\n\n`)
         );
       } finally {
-        controller.close();
+        try { controller.close(); } catch {}
       }
     },
   });
