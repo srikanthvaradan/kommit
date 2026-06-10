@@ -75,7 +75,6 @@ export async function POST(request: NextRequest): Promise<Response> {
             ? "proceed"
             : "halt";
 
-        emit({ agent: "Gus Fring", category, decision: gatekeeperDecision });
 
         if (category === "crisis") {
           const country = getCountryFromHeaders(request.headers);
@@ -141,7 +140,9 @@ export async function POST(request: NextRequest): Promise<Response> {
           }
         }
         // All safety checks passed — emit Gus Fring
-        emit({ agent: "Gus Fring", category, decision: gatekeeperDecision });
+        const finalCategory = processText !== text ? classify(processText) : category;
+        const finalDecision = finalCategory === "safe" || finalCategory === "joyful" || finalCategory === "sensitive" ? "proceed" : "halt";
+        emit({ agent: "Gus Fring", category: finalCategory, decision: finalDecision });
 
         if (body.isVoice) emit({ agent: "Mike Ehrmantraut", decision: "Audio processed", detail: "Voice recording deleted from S3 after transcription. No audio data retained.", audioDeleted: true });
 

@@ -536,9 +536,10 @@ export default function Home() {
             Dashboard
           </a>
           {currentUser ? (
-            <a href="/dashboard" style={{ fontSize: "14px", fontWeight: 400, color: "#8a8a8a", textDecoration: "none", fontFamily: "Inter, sans-serif" }}>
-              {currentUser.email.split('@')[0]}
-            </a>
+            <>
+              <a href="/dashboard" style={{ fontSize: "14px", fontWeight: 400, color: "#8a8a8a", textDecoration: "none", fontFamily: "Inter, sans-serif" }}>Dashboard</a>
+              <button onClick={async () => { await fetch('/api/auth/logout', { method: 'POST' }); setCurrentUser(null); }} style={{ fontSize: "14px", fontWeight: 400, color: "#8a8a8a", background: "none", border: "none", cursor: "pointer", fontFamily: "Inter, sans-serif", padding: 0 }}>Logout</button>
+            </>
           ) : (
             <button onClick={() => setShowLoginModal(true)} style={{ fontSize: "14px", fontWeight: 400, color: "#8a8a8a", background: "none", border: "none", cursor: "pointer", fontFamily: "Inter, sans-serif", padding: 0 }}>
               Login
