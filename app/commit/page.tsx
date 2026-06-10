@@ -82,12 +82,6 @@ function CommitPageInner() {
   const forfeitDestination = 'KOMMIT pool member';
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && window.location.search.includes('truth=')) {
-      window.history.replaceState({}, '', window.location.pathname);
-    }
-  }, []);
-
-  useEffect(() => {
     const createCommitment = async () => {
       setApiError(null);
       try {
