@@ -159,6 +159,10 @@ function CommitPageInner() {
             </Elements>
           ) : (!apiError && <p style={{ color: '#9a9a9a', fontSize: '14px' }}>Preparing payment…</p>)}
         </div>
+
+      <div style={{ textAlign: 'center', padding: '24px', marginTop: '16px' }}>
+        <a href="mailto:hello@kommit.ai" style={{ fontSize: '12px', color: '#9a9a9a', textDecoration: 'none', fontFamily: 'Inter, sans-serif' }}>hello@kommit.ai</a>
+      </div>
       </div>
     </div>
   );

@@ -28,6 +28,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
+      <head>
+        <link rel="icon" type="image/svg+xml" href="/ko_icon_light.svg" />
+      </head>
       <body>{children}</body>
     </html>
   );
