@@ -76,6 +76,7 @@ function CommitPageInner() {
   // Read truth/commitment from sessionStorage (not URL — keeps data off back button)
   const [truth, setTruth] = useState('');
   const [commitment, setCommitment] = useState('');
+  const [dataLoaded, setDataLoaded] = useState(false);
   useEffect(() => {
     const pending = sessionStorage.getItem('kommit_pending');
     if (pending) {
@@ -84,6 +85,7 @@ function CommitPageInner() {
       setCommitment(c || '');
       sessionStorage.removeItem('kommit_pending');
     }
+    setDataLoaded(true);
   }, []);
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [stakeAmount, setStakeAmount] = useState<number>(stakeParam ? parseInt(stakeParam, 10) : 500);
@@ -92,13 +94,14 @@ function CommitPageInner() {
   const forfeitDestination = 'KOMMIT pool member';
 
   useEffect(() => {
+    if (!dataLoaded) return;
     const createCommitment = async () => {
       setApiError(null);
       try {
         const res = await fetch('/api/commitments/create', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ stakeAmount, forfeitDestination, commitmentText: commitment }),
+          body: JSON.stringify({ stakeAmount, forfeitDestination, commitmentText: commitment || 'Pending commitment' }),
         });
         if (!res.ok) {
           const data = await res.json().catch(() => ({}));
@@ -111,7 +114,7 @@ function CommitPageInner() {
       }
     };
     createCommitment();
-  }, []);
+  }, [dataLoaded]);
 
   const formattedStake = (stakeAmount / 100).toFixed(2);
 
@@ -168,11 +171,11 @@ function CommitPageInner() {
               <CheckoutForm stakeAmount={stakeAmount} forfeitDestination={forfeitDestination} searchParams={searchParams} joinPool={joinPool} />
             </Elements>
           ) : (!apiError && <p style={{ color: '#9a9a9a', fontSize: '14px' }}>Preparing payment…</p>)}
-        </div>
 
-      <div style={{ textAlign: 'center', padding: '24px', marginTop: '16px' }}>
-        <a href="mailto:hello@kommit.ai" style={{ fontSize: '12px', color: '#9a9a9a', textDecoration: 'none', fontFamily: 'Inter, sans-serif' }}>hello@kommit.ai</a>
-      </div>
+          <div style={{ borderTop: '1px solid #e4e4e4', marginTop: '40px', paddingTop: '20px', textAlign: 'center' as const }}>
+            <a href="mailto:hello@kommit.ai" style={{ fontSize: '12px', color: '#c0beb6', textDecoration: 'none', fontFamily: 'Inter, sans-serif' }}>hello@kommit.ai</a>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -885,8 +885,12 @@ export default function Home() {
 
 
       {showLoginModal && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 200, padding: '24px' }} onClick={(e) => { if (e.target === e.currentTarget) setShowLoginModal(false); }}>
-          <div style={{ background: '#fff', borderRadius: '12px', padding: '40px', maxWidth: '400px', width: '100%' }}>
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 200, padding: '24px' }}
+          onClick={(e) => { if (e.target === e.currentTarget) setShowLoginModal(false); }}
+          onKeyDown={(e) => { if (e.key === 'Escape') setShowLoginModal(false); }}
+          tabIndex={-1}>
+          <div style={{ background: '#fff', borderRadius: '12px', padding: '40px', maxWidth: '400px', width: '100%', position: 'relative' as const }}>
+            <button onClick={() => setShowLoginModal(false)} style={{ position: 'absolute' as const, top: '16px', right: '16px', background: 'none', border: 'none', cursor: 'pointer', fontSize: '20px', color: '#9a9a9a', lineHeight: 1, padding: '4px 8px' }}>×</button>
             <h2 style={{ fontSize: '22px', fontWeight: 700, color: '#1a1a1a', marginBottom: '8px' }}>Sign in</h2>
             <p style={{ fontSize: '14px', color: '#9a9a9a', marginBottom: '28px' }}>{"We'll send a 6-digit code to your email."}</p>
             {!loginOtpSent ? (

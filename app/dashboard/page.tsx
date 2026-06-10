@@ -106,8 +106,10 @@ export default function DashboardPage() {
   );
 
   if (loading) return (
-    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Inter, sans-serif' }}>
-      <p style={{ color: '#9a9a9a', fontSize: '14px' }}>Loading…</p>
+    <div style={{ minHeight: '100vh', backgroundColor: '#ffffff', fontFamily: 'Inter, sans-serif' }}>
+      <nav style={{ position: 'fixed', top: 0, left: 0, right: 0, height: '64px', background: '#fff', borderBottom: '1px solid #e4e4e4', display: 'flex', alignItems: 'center', padding: '0 40px', zIndex: 100 }}>
+        <img src="/ko_icon_light.svg" alt="KOMMIT" style={{ height: '44px', width: '44px' }} />
+      </nav>
     </div>
   );
 
