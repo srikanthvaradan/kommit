@@ -52,6 +52,7 @@ function SuccessPageInner() {
     }
 
     // Always save — use sessionStorage if available, fall back to URL params
+    console.log('SUCCESS URL:', window.location.search.slice(0, 200));
     const urlParams = new URLSearchParams(window.location.search);
     const cardToSave: KommitCard = parsed || {
       truth: urlParams.get("truth") || "",
