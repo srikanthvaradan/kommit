@@ -219,7 +219,8 @@ function CommitPageInner() {
 
       {showLoginModal && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 200, padding: '24px' }}>
-          <div style={{ background: '#fff', borderRadius: '12px', padding: '40px', maxWidth: '400px', width: '100%', position: 'relative' as const }}>
+          <div style={{ background: '#fff', borderRadius: '12px', padding: '40px', maxWidth: '400px', width: '100%', position: 'relative' as const }} onKeyDown={e => { if (e.key === 'Escape') { setShowLoginModal(false); window.location.href = '/'; } }} tabIndex={-1}>
+            <button onClick={() => { setShowLoginModal(false); window.location.href = '/'; }} style={{ position: 'absolute' as const, top: '16px', right: '16px', background: 'none', border: 'none', cursor: 'pointer', fontSize: '22px', color: '#9a9a9a', lineHeight: 1, padding: '4px 8px', fontFamily: 'Inter, sans-serif' }}>×</button>
             <h2 style={{ fontSize: '22px', fontWeight: 700, color: '#1a1a1a', marginBottom: '8px' }}>Sign in to commit</h2>
             <p style={{ fontSize: '14px', color: '#9a9a9a', marginBottom: '28px' }}>Your commitment needs a home. Sign in so you can track it.</p>
             {!loginOtpSent ? (
@@ -240,6 +241,7 @@ function CommitPageInner() {
                   style={{ width: '100%', padding: '14px', backgroundColor: '#ffde59', color: '#1a1a1a', border: 'none', borderRadius: '6px', fontSize: '14px', fontWeight: 600, fontFamily: 'Inter, sans-serif', cursor: loginVerifying || loginCode.length !== 6 ? 'not-allowed' : 'pointer', opacity: loginVerifying || loginCode.length !== 6 ? 0.5 : 1 }}>
                   {loginVerifying ? 'Verifying…' : 'Verify'}
                 </button>
+                <button onClick={() => { setLoginOtpSent(false); setLoginCode(''); setLoginError(null); }} style={{ width: '100%', padding: '10px', backgroundColor: 'transparent', color: '#9a9a9a', border: 'none', fontSize: '12px', fontFamily: 'Inter, sans-serif', cursor: 'pointer', marginTop: '4px' }}>Use a different email or resend code</button>
               </>
             )}
             {loginError && <p style={{ color: '#c0392b', fontSize: '13px', marginTop: '12px' }}>{loginError}</p>}

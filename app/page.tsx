@@ -584,6 +584,12 @@ export default function Home() {
             )}
           </div>
 
+          {/* Hint text */}
+          {!recording && !transcribing && status === 'idle' && (
+            <p style={{ fontSize: '12px', color: '#555', margin: '10px 0 0 0', textAlign: 'center', lineHeight: 1.6 }}>
+              A decision you&apos;ve been avoiding. A conversation you haven&apos;t had. Something you already know.
+            </p>
+          )}
           {/* Status text */}
           {recording && (
             <p style={{ fontSize: '14px', fontWeight: 400, color: '#c0392b', margin: '12px 0 0 0', textAlign: 'center', alignSelf: 'center' }}>
